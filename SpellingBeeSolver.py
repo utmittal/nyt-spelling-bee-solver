@@ -107,6 +107,46 @@ def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
 
     return valid_bee_words
 
+def preprocess_graph_solution(dictionary):
+    big_massive_dict = {}
+
+    for word in dictionary:
+        word_with_end = word + "$"  # gives us an ending character to know the word has finished
+        wl = len(word_with_end)
+        for i in range(1,wl):
+            prefix, next_char = word_with_end[:i], word_with_end[i]
+            if prefix not in big_massive_dict:
+                big_massive_dict[prefix] = {next_char}
+            else:
+                big_massive_dict[prefix].add(next_char)
+
+    return big_massive_dict
+
+def graph_recursion(prefix, valid_letters, big_dict):
+    bee_words = []
+
+    # print("Processing prefix - " + prefix)
+    if prefix in big_dict:
+        suffix_list = big_dict[prefix]
+        for suf in suffix_list:
+            new_char = suf[0]
+            if new_char in valid_letters:
+                bee_words.extend(graph_recursion(prefix+new_char,valid_letters,big_dict))
+            elif new_char == "$":
+                bee_words.append(prefix)
+
+    return bee_words
+
+def get_bee_words_graph(center, others, big_dict):
+    check_bee_words_args(center, others)
+
+    valid_bee_words = []
+    valid_letters = center+others
+    for c in valid_letters:
+        res = graph_recursion(c, valid_letters, big_dict)
+        valid_bee_words.extend(res)
+
+    return [w for w in valid_bee_words if center in w]
 
 def pretty_print_solution(sol_list, center, others, uncommon = False):
     sol_list.sort()
@@ -146,14 +186,18 @@ time_iters = 500
 today_center = 'o'
 today_others = "ctpnme"
 # solution_words = get_bee_words_naive(today_center,today_others,words)
+solution_words = measure_execution_time(get_bee_words_naive,today_center,today_others,words, iterations = time_iters)
 # pretty_print_solution(solution_words,today_center,today_others)
-measure_execution_time(get_bee_words_naive,today_center,today_others,words, iterations = time_iters)
 
 # bit_dictionary = preprocess_get_bit_to_word_dict(words)
 # negated_dictionary = preprocess_get_bit_to_negation_dict(words)
 # solution_words = get_bee_words_bitwise(today_center, today_others, bit_dictionary, negated_dictionary)
 # pretty_print_solution(solution_words, today_center, today_others)
-bit_dictionary = measure_execution_time(preprocess_get_bit_to_word_dict,words, iterations = time_iters)
-negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict,words, iterations = time_iters)
+bit_dictionary = measure_execution_time(preprocess_get_bit_to_word_dict,words)
+negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict,words)
 solution_words = measure_execution_time(get_bee_words_bitwise,today_center, today_others, bit_dictionary, negated_dictionary, iterations = time_iters)
+# pretty_print_solution(solution_words, today_center, today_others)
+
+letter_graph = measure_execution_time(preprocess_graph_solution,words)
+solution_words = measure_execution_time(get_bee_words_graph,today_center, today_others, letter_graph, iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
