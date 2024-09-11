@@ -55,8 +55,10 @@ def measure_execution_time(function, *args, iterations = 1):
 with open('dictionary/words_bee.txt') as f:
     words = f.read().splitlines()
 
-today_center = 'c'
-today_others = "ytildo"
+# note: this combo seems to be the combo with the highest number of words
+# in the history of nyt spelling bee
+today_center = 'o'
+today_others = "ctpnme"
 # solution_words = get_bee_words_naive(today_center,today_others,words)
 # pretty_print_solution(solution_words,today_center,today_others)
 
