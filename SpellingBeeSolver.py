@@ -22,7 +22,7 @@ def get_bee_words_naive(center, others, dictionary):
 
     return valid_bee_words
 
-def pretty_print_solution(sol_list, center, others):
+def pretty_print_solution(sol_list, center, others, uncommon = False):
     sol_list.sort()
 
     with open('dictionary/words_common_bee.txt') as reader:
@@ -34,8 +34,9 @@ def pretty_print_solution(sol_list, center, others):
     print("Spelling Bee Solution - [" + center.upper() + " | " + ' '.join(c.upper() for c in others) + "]:")
     print("\tCommon Words - " + str(len(common_sols)) + ":")
     print('\n'.join([str("\t\t" + sol) for sol in common_sols]))
-    print("\tOther Words - " + str(len(other_sols)) + ":")
-    print('\n'.join([str("\t\t" + sol) for sol in other_sols]))
+    if uncommon:
+        print("\tOther Words - " + str(len(other_sols)) + ":")
+        print('\n'.join([str("\t\t" + sol) for sol in other_sols]))
 
 with open('dictionary/words_bee.txt') as f:
     words = f.read().splitlines()
