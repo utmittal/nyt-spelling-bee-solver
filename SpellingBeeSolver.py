@@ -41,5 +41,7 @@ def pretty_print_solution(sol_list, center, others, uncommon = False):
 with open('dictionary/words_bee.txt') as f:
     words = f.read().splitlines()
 
-solution_words = get_bee_words_naive('e',"acfpty",words)
-pretty_print_solution(solution_words,'e','acfpty')
+today_center = 'e'
+today_others = "acfpty"
+solution_words = get_bee_words_naive(today_center,today_others,words)
+pretty_print_solution(solution_words,today_center,today_others)
