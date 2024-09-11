@@ -41,12 +41,16 @@ def pretty_print_solution(sol_list, center, others, uncommon = False):
         print("\tOther Words - " + str(len(other_sols)) + ":")
         print('\n'.join([str("\t\t" + sol) for sol in other_sols]))
 
-def measure_execution_time(function, *args):
-    start_time = time.time()
-    function(*args)
-    end_time = time.time()
+def measure_execution_time(function, *args, iterations = 1):
+    total_time = 0
+    for i in range(0,iterations):
+        start_time = time.time()
+        function(*args)
+        end_time = time.time()
 
-    print("Execution time: " + str(end_time-start_time) + " seconds")
+        total_time += (end_time - start_time)
+
+    print("Average execution time (" + str(iterations) + " iterations): " + str(total_time/iterations) + " seconds")
 
 with open('dictionary/words_bee.txt') as f:
     words = f.read().splitlines()
@@ -56,4 +60,4 @@ today_others = "ytildo"
 # solution_words = get_bee_words_naive(today_center,today_others,words)
 # pretty_print_solution(solution_words,today_center,today_others)
 
-measure_execution_time(get_bee_words_naive,today_center,today_others,words)
+measure_execution_time(get_bee_words_naive,today_center,today_others,words, iterations = 100)
