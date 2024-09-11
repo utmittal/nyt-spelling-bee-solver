@@ -65,20 +65,20 @@ def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
     """
     truth table where word refers to the word we are checking. Center must always be present in the word.
     Others should be optionally present in the word. We want the value to be greater than 0 if the word isnt valid.
-    
+
         word    center  others  result  minterms
         0       0       0       0
         0       0       1       0
         0       1       0       1       ((NOT word) AND center AND (NOT others))
         0       1       1       0   # technically should never happen, so we put 0 to reduce our sum of products
-        1       0       0       1       (word AND (NOT center) AND (NOT others))    
+        1       0       0       1       (word AND (NOT center) AND (NOT others))
         1       0       1       0
         1       1       0       0
         1       1       1       0   # technically should never happen, so we put 0 to reduce our sum of products
-        
+
         sop = ((NOT word) AND center AND (NOT others)) + (word AND (NOT center) AND (NOT others))
             = (~W C ~O) + (W ~C ~O)
-        
+
         This is why we calculate the negated words in advance, so that we don't have to waste time on it in this
         function. Because NOT in python is weird. Should probably figured out how it works actually.
     """
@@ -126,6 +126,7 @@ def pretty_print_solution(sol_list, center, others, uncommon = False):
 
 def measure_execution_time(function, *args, iterations = 1):
     total_time = 0
+    result = None
     for i in range(0,iterations):
         start_time = time.time()
         result = function(*args)
