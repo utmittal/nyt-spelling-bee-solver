@@ -1,6 +1,11 @@
+import string
 import time
-from turtledemo.penrose import start
 
+def check_bee_words_args(center, others):
+    if len(others) > len(set(others)):
+        raise ValueError("List of other characters cannot contain repeated characters.")
+    if center in others:
+        raise ValueError("Central character cannot be in list of other characters.")
 
 def get_bee_words_naive(center, others, dictionary):
     """
@@ -11,10 +16,7 @@ def get_bee_words_naive(center, others, dictionary):
     :param dictionary: list of words to search in
     :return: List of bee words
     """
-    if len(others) > len(set(others)):
-        raise ValueError("List of other characters cannot contain repeated characters.")
-    if center in others:
-        raise ValueError("Central character cannot be in list of other characters.")
+    check_bee_words_args(center, others)
 
     valid_bee_words = []
     letter_set = set(others+center)
