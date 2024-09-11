@@ -75,6 +75,10 @@ def analyze_dictionary(dictionary):
 # analyze_dictionary(words)
 
 # convert_categorized_json_to_wordlist_file()
-with open('dictionary/words_common.txt') as f:
+# with open('dictionary/words_common.txt') as f:
+#     words = f.read().splitlines()
+# gen_bee_dictionary(words,'dictionary/words_common_bee.txt')
+
+with open('dictionary/words_common_bee.txt') as f:
     words = f.read().splitlines()
-gen_bee_dictionary(words,'dictionary/words_common_bee.txt')
+analyze_dictionary(words)
