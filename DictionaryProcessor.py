@@ -1,4 +1,5 @@
 import collections
+import json
 
 def gen_bee_dictionary(dictionary):
     """
@@ -7,6 +8,16 @@ def gen_bee_dictionary(dictionary):
     bee_dictionary = [w for w in dictionary if len(w) > 3]
     with open('dictionary/words_bee.txt', 'w+') as writefile:
         writefile.writelines(word + '\n' for word in bee_dictionary)
+
+def convert_categorized_json_to_wordlist_file():
+    with open('dictionary/2of12id.json') as f:
+        json_words = json.load(f)
+    word_list = []
+    for key in json_words:
+        word_list.extend(json_words[key])
+
+    with open('dictionary/words_common.txt','w+') as writefile:
+        writefile.writelines(word + '\n' for word in word_list)
 
 def analyze_dictionary(dictionary):
     longest_words = []
@@ -62,3 +73,5 @@ def analyze_dictionary(dictionary):
 # gen_bee_dictionary(words)
 
 # analyze_dictionary(words)
+
+convert_categorized_json_to_wordlist_file()
