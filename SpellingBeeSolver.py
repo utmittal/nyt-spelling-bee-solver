@@ -1,5 +1,7 @@
 import string
 import time
+from doctest import master
+
 
 def check_bee_words_args(center, others):
     if len(others) > len(set(others)):
@@ -148,6 +150,43 @@ def get_bee_words_graph(center, others, big_dict):
 
     return [w for w in valid_bee_words if center in w]
 
+def preprocess_graph_inception_solution(word_list, curr_dict):
+    if word_list == ['']:
+        curr_dict["$"] = None
+        return curr_dict
+
+    for word in word_list:
+        first_char = word[0]
+
+        if first_char in curr_dict:
+            curr_dict[first_char] = preprocess_graph_inception_solution([word[1:]], curr_dict[first_char])
+        else:
+            curr_dict[first_char] = preprocess_graph_inception_solution([word[1:]],{})
+
+    return curr_dict
+
+def inception_graph_recursion(prefix, curr_dict, valid_letters):
+    valid_words = []
+    if "$" in curr_dict:
+        valid_words.append(prefix)
+
+    for c in valid_letters:
+        if c in curr_dict:
+            valid_words.extend(inception_graph_recursion(prefix+c,curr_dict[c],valid_letters))
+
+    return valid_words
+
+def get_bee_words_graph_inception(center, others, confusing_dict):
+    check_bee_words_args(center, others)
+
+    valid_bee_words = []
+    valid_letters = center + others
+    for c in valid_letters:
+        if c in valid_letters:
+            valid_bee_words.extend(inception_graph_recursion(c, confusing_dict[c], valid_letters))
+
+    return [w for w in valid_bee_words if center in w]
+
 def pretty_print_solution(sol_list, center, others, uncommon = False):
     sol_list.sort()
 
@@ -180,15 +219,17 @@ def measure_execution_time(function, *args, iterations = 1):
 with open('dictionary/words_bee.txt') as f:
     words = f.read().splitlines()
 
-time_iters = 500
+time_iters = 10000
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
 today_center = 'o'
 today_others = "ctpnme"
 # solution_words = get_bee_words_naive(today_center,today_others,words)
+print("Naive")
 solution_words = measure_execution_time(get_bee_words_naive,today_center,today_others,words, iterations = time_iters)
 # pretty_print_solution(solution_words,today_center,today_others)
 
+print("Bitwise")
 # bit_dictionary = preprocess_get_bit_to_word_dict(words)
 # negated_dictionary = preprocess_get_bit_to_negation_dict(words)
 # solution_words = get_bee_words_bitwise(today_center, today_others, bit_dictionary, negated_dictionary)
@@ -198,6 +239,12 @@ negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict,
 solution_words = measure_execution_time(get_bee_words_bitwise,today_center, today_others, bit_dictionary, negated_dictionary, iterations = time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
 
+print("Graph")
 letter_graph = measure_execution_time(preprocess_graph_solution,words)
 solution_words = measure_execution_time(get_bee_words_graph,today_center, today_others, letter_graph, iterations=time_iters)
+# pretty_print_solution(solution_words, today_center, today_others)
+
+print("Nested Graph")
+nested_dict = measure_execution_time(preprocess_graph_inception_solution,words,{})
+solution_words = measure_execution_time(get_bee_words_graph_inception, today_center, today_others, nested_dict, iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
