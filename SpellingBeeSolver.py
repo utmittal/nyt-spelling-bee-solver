@@ -47,12 +47,13 @@ def measure_execution_time(function, *args, iterations = 1):
     total_time = 0
     for i in range(0,iterations):
         start_time = time.time()
-        function(*args)
+        result = function(*args)
         end_time = time.time()
 
         total_time += (end_time - start_time)
 
     print("Average execution time (" + str(iterations) + " iterations): " + str(total_time/iterations) + " seconds")
+    return result
 
 with open('dictionary/words_bee.txt') as f:
     words = f.read().splitlines()
