@@ -1,12 +1,12 @@
 import collections
 import json
 
-def gen_bee_dictionary(dictionary):
+def gen_bee_dictionary(dictionary, path):
     """
     NYT spelling bee only allows words longer than 3 characters
     """
     bee_dictionary = [w for w in dictionary if len(w) > 3]
-    with open('dictionary/words_bee.txt', 'w+') as writefile:
+    with open(path, 'w+') as writefile:
         writefile.writelines(word + '\n' for word in bee_dictionary)
 
 def convert_categorized_json_to_wordlist_file():
@@ -74,4 +74,7 @@ def analyze_dictionary(dictionary):
 
 # analyze_dictionary(words)
 
-convert_categorized_json_to_wordlist_file()
+# convert_categorized_json_to_wordlist_file()
+with open('dictionary/words_common.txt') as f:
+    words = f.read().splitlines()
+gen_bee_dictionary(words,'dictionary/words_common_bee.txt')
