@@ -1,6 +1,6 @@
 import string
 import time
-from doctest import master
+import os
 
 
 def check_bee_words_args(center, others):
@@ -199,10 +199,16 @@ def get_bee_words_graph_inception(center, others, confusing_dict):
     return [w for w in valid_bee_words if center in w]
 
 
+def get_latest_custom_dictionary_path():
+    dics = os.listdir('dictionaries/custom')
+    dics.sort(reverse=True)
+    return 'dictionaries/custom/' + dics[0]
+
+
 def pretty_print_solution(sol_list, center, others, uncommon=False):
     sol_list.sort()
 
-    with open('dictionaries/processed/words_common_bee.txt') as reader:
+    with open(get_latest_custom_dictionary_path()) as reader:
         common_words = reader.read().splitlines()
 
     common_sols = [sol for sol in sol_list if sol in common_words]
