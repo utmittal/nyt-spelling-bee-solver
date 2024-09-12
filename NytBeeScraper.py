@@ -72,7 +72,7 @@ def answers_from_left_container(soup):
     2018 07 29 and before
     """
     # There are multiple divs with class answer-list so we first find top-container
-    top_container_div = soup.find(id="left-container")
+    top_container_div = soup.find(class_="left-container")
     if top_container_div is None:
         raise LookupError("Could not find element with id=top-container.")
     answer_list_div = top_container_div.find(id="answer-list")
