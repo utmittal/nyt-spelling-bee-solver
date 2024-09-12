@@ -67,13 +67,34 @@ def answers_from_top_container(soup):
     return get_answers_list_from_answers_div(answer_list_div)
 
 
+def answers_from_left_container(soup):
+    """
+    2018 07 29 and before
+    """
+    # There are multiple divs with class answer-list so we first find top-container
+    top_container_div = soup.find(id="left-container")
+    if top_container_div is None:
+        raise LookupError("Could not find element with id=top-container.")
+    answer_list_div = top_container_div.find(id="answer-list")
+    if answer_list_div is None:
+        raise LookupError("Could not find element with id=answer-list.")
+
+    return get_answers_list_from_answers_div(answer_list_div)
+
+
 def get_answer_list_from_nyt_page(raw_web_page):
     soup = BeautifulSoup(raw_web_page, "html.parser")
 
-    try:
-        answers = answers_from_main_answer_list(soup)
-    except LookupError:
-        answers = answers_from_top_container(soup)
+    # try strategies in order
+    strategies = [answers_from_main_answer_list, answers_from_top_container, answers_from_left_container]
+    answers = []
+    for strat in strategies:
+        try:
+            answers = strat(soup)
+        except LookupError:
+            continue
+    if len(answers) == 0:
+        raise LookupError("Could not find answers list using any of the current strategies.")
 
     # Verify our answer list
     pattern = r"Number of Answers: (\d+)"
