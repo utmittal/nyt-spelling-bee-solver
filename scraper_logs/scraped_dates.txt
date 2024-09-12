@@ -2230,3 +2230,4 @@
 20180801, https://nytbee.com/Bee_20180801.html
 20180731, https://nytbee.com/Bee_20180731.html
 20180730, https://nytbee.com/Bee_20180730.html
+20180729, https://nytbee.com/Bee_20180729.html
