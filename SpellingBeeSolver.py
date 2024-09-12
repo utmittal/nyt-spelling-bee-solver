@@ -241,9 +241,9 @@ with open('dictionaries/processed/words_bee.txt') as f:
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-time_iters = 10000
-today_center = 'o'
-today_others = "ctpnme"
+time_iters = 1
+today_center = 'b'
+today_others = "mlotha"
 
 # time_iters = 1
 # today_center = 'r'
@@ -268,4 +268,4 @@ print("Nested Graph")
 nested_dict = measure_execution_time(preprocess_graph_inception_solution, words, {})
 solution_words = measure_execution_time(get_bee_words_graph_inception, today_center, today_others, nested_dict,
                                         iterations=time_iters)
-# pretty_print_solution(solution_words, today_center, today_others, uncommon = True)
+pretty_print_solution(solution_words, today_center, today_others, uncommon=True)

@@ -30,4 +30,4 @@ def delete_words(words):
 
 
 add_new_words([])
-delete_words([])
+delete_words(["balboa"])
