@@ -7,7 +7,7 @@ import backoff
 
 @backoff.on_exception(backoff.expo,
                       HTTPError,
-                      max_tries=5)
+                      max_tries=10)
 def get_raw_page(url):
     req = Request(url)
 
@@ -51,9 +51,15 @@ def write_words_to_dictionary(word_list):
 
 # datetime(year=2024,month=9,day=12)
 date_object = datetime.now()
+unique_words_aim = 10237
+
 with open('scraper_logs/scraped_dates.txt','r') as f:
     already_scraped = f.read().splitlines()
 scraped_dates = [w.split(',')[0] for w in already_scraped]
+
+with open('dictionary/nytbee_dot_com_scraped_answers.txt','r') as f:
+    unique_words = set(f.read().splitlines())
+
 while True:
     date_object = date_object - timedelta(days=1)
     date_string = date_object.strftime('%Y%m%d')
@@ -69,6 +75,11 @@ while True:
 
     # Note: we don't dedupe the answers before writing. We just want all the answers.
     write_words_to_dictionary(answer_list)
+    unique_words.update(answer_list)
+    print("Unique word count - " + str(len(unique_words)))
+
+    if len(unique_words) == unique_words_aim:
+        print("Found all unique words. Terminating scraping.")
 
     with open('scraper_logs/scraped_dates.txt','a+') as afile:
         afile.write(date_string + ", " + current_url + "\n")
