@@ -18,19 +18,51 @@ def get_raw_page(url):
     return urlopen(req).read()
 
 
-def get_answer_list_from_nyt_page(raw_web_page):
-    soup = BeautifulSoup(raw_web_page, "html.parser")
+def get_answers_list_from_answers_div(answers_div):
+    # all_text can contain answers and ↗ (the symbol for the definition link on the nytbee page), so we need to filter
+    # it
+    all_text = answers_div.get_text(strip=True, separator=',')
+    answers = [w for w in all_text.split(sep=',') if w.isalpha()]
+    if len(answers) == 0:
+        raise LookupError("Found answer list of length 0.")
 
+    return answers
+
+
+def answers_from_main_answer_list(soup):
+    """
+    This seems to work from 2019 08 17 onwards
+    """
     # The list of answers seems to always be in a div with id=main-answer-list
     answer_list_div = soup.find(id="main-answer-list")
     if answer_list_div is None:
         raise LookupError("Could not find element with id=main-answer-list.")
 
-    # all_text should contain answers and ↗ (the symbol for the definition link on the nytbee page)
-    all_text = answer_list_div.get_text(strip=True, separator=',')
-    answers = [w for w in all_text.split(sep=',') if w.isalpha()]
-    if len(answers) == 0:
-        raise LookupError("Found answer list of length 0.")
+    return get_answers_list_from_answers_div(answer_list_div)
+
+
+def answers_from_top_container(soup):
+    """
+    2019 08 16 and before
+    """
+    # There are multiple divs with class answer-list so we first find top-container
+    top_container_div = soup.find(id="top-container")
+    if top_container_div is None:
+        raise LookupError("Could not find element with id=top-container.")
+    answer_list_div = top_container_div.find(class_="answer-list")
+    if answer_list_div is None:
+        raise LookupError("Could not find element with class=answer-list")
+
+    return get_answers_list_from_answers_div(answer_list_div)
+
+
+def get_answer_list_from_nyt_page(raw_web_page):
+    soup = BeautifulSoup(raw_web_page, "html.parser")
+
+    try:
+        answers = answers_from_main_answer_list(soup)
+    except LookupError:
+        answers = answers_from_top_container(soup)
 
     # Verify our answer list
     pattern = r"Number of Answers: (\d+)"
