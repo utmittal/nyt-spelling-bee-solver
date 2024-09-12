@@ -6,19 +6,19 @@ def gen_bee_dictionary(dictionary, path):
     """
     NYT spelling bee only allows words longer than 3 characters
     """
-    bee_dictionary = [w for w in dictionary if len(w) > 3]
+    bee_dictionary = set([w for w in dictionary if len(w) > 3])
     with open(path, 'w+') as writefile:
         writefile.writelines(word + '\n' for word in bee_dictionary)
 
 
 def convert_categorized_json_to_wordlist_file():
-    with open('dictionary/2of12id.json') as f:
+    with open('dictionaries/raw/2of12id.json') as f:
         json_words = json.load(f)
     word_list = []
     for key in json_words:
         word_list.extend(json_words[key])
 
-    with open('dictionary/words_common.txt', 'w+') as writefile:
+    with open('dictionaries/raw/words_common.txt', 'w+') as writefile:
         writefile.writelines(word + '\n' for word in word_list)
 
 
@@ -75,17 +75,21 @@ def analyze_dictionary(dictionary):
         '\n'.join([str("\t\t" + w) for w in words_with_most_repeated_letters[:10]])))
 
 
-# with open('dictionary/words_alpha.txt') as f:
+# with open('raw/words_alpha.txt') as f:
 #     words = f.read().splitlines()
 # gen_bee_dictionary(words)
 
 # analyze_dictionary(words)
 
 # convert_categorized_json_to_wordlist_file()
-# with open('dictionary/words_common.txt') as f:
+# with open('raw/words_common.txt') as f:
 #     words = f.read().splitlines()
-# gen_bee_dictionary(words,'dictionary/words_common_bee.txt')
+# gen_bee_dictionary(words,'raw/words_common_bee.txt')
 
-with open('dictionary/words_common_bee.txt') as f:
+# with open('dictionaries/processed/words_common_bee.txt') as f:
+#     words = f.read().splitlines()
+# analyze_dictionary(words)
+
+with open('dictionaries/raw/nytbee_dot_com_scraped_answers.txt') as f:
     words = f.read().splitlines()
-analyze_dictionary(words)
+gen_bee_dictionary(words, 'dictionaries/processed/nytbee_dot_com_unique.txt')

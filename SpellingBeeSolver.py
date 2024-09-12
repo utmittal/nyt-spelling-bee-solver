@@ -12,7 +12,7 @@ def check_bee_words_args(center, others):
 
 def get_bee_words_naive(center, others, dictionary):
     """
-    Naive approach. Simply iterate and check through whole dictionary.
+    Naive approach. Simply iterate and check through whole raw.
 
     :param center: Central character that must appear in word
     :param others: List of other characters that must appear in word
@@ -108,7 +108,7 @@ def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
     valid_bee_words = []
     for word_bits in dictionary:
         result = (word_to_negated_word[word_bits] & center_bits & other_bits_negated) | (
-                    word_bits & center_bits_negated & other_bits_negated)
+                word_bits & center_bits_negated & other_bits_negated)
         if result == 0:
             valid_bee_words.extend(dictionary[word_bits])
 
@@ -202,7 +202,7 @@ def get_bee_words_graph_inception(center, others, confusing_dict):
 def pretty_print_solution(sol_list, center, others, uncommon=False):
     sol_list.sort()
 
-    with open('dictionary/words_common_bee.txt') as reader:
+    with open('dictionaries/processed/words_common_bee.txt') as reader:
         common_words = reader.read().splitlines()
 
     common_sols = [sol for sol in sol_list if sol in common_words]
@@ -230,7 +230,7 @@ def measure_execution_time(function, *args, iterations=1):
     return result
 
 
-with open('dictionary/words_bee.txt') as f:
+with open('dictionaries/processed/words_bee.txt') as f:
     words = f.read().splitlines()
 
 # note: this combo seems to be the combo with the highest number of words
