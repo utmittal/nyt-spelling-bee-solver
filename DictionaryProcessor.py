@@ -1,6 +1,7 @@
 import collections
 import json
 
+
 def gen_bee_dictionary(dictionary, path):
     """
     NYT spelling bee only allows words longer than 3 characters
@@ -9,6 +10,7 @@ def gen_bee_dictionary(dictionary, path):
     with open(path, 'w+') as writefile:
         writefile.writelines(word + '\n' for word in bee_dictionary)
 
+
 def convert_categorized_json_to_wordlist_file():
     with open('dictionary/2of12id.json') as f:
         json_words = json.load(f)
@@ -16,14 +18,15 @@ def convert_categorized_json_to_wordlist_file():
     for key in json_words:
         word_list.extend(json_words[key])
 
-    with open('dictionary/words_common.txt','w+') as writefile:
+    with open('dictionary/words_common.txt', 'w+') as writefile:
         writefile.writelines(word + '\n' for word in word_list)
+
 
 def analyze_dictionary(dictionary):
     longest_words = []
     longest_len = 0
     shortest_words = []
-    shortest_len = 10000    # some big number
+    shortest_len = 10000  # some big number
     words_with_most_single_repeated_letter = []
     single_repeated_letter_count = 0
     words_with_most_repeated_letters = []
@@ -63,10 +66,14 @@ def analyze_dictionary(dictionary):
 
     print("Dictionary Analysis - Note: Max 10 sample words printed in each category")
     print("\tTotal Words: " + str(len(dictionary)))
-    print("\tShortest Words (" + str(shortest_len) + "):\n" + ('\n'.join([str("\t\t" + w) for w in shortest_words[:10]])))
+    print(
+        "\tShortest Words (" + str(shortest_len) + "):\n" + ('\n'.join([str("\t\t" + w) for w in shortest_words[:10]])))
     print("\tLongest Words (" + str(longest_len) + "):\n" + ('\n'.join([str("\t\t" + w) for w in longest_words[:10]])))
-    print("\tWords with most single repeating letter (" + str(single_repeated_letter_count) + "):\n" + ('\n'.join([str("\t\t" + w) for w in words_with_most_single_repeated_letter[:10]])))
-    print("\tWords with most total repeating letters (" + str(repeated_letters_count) + "):\n" + ('\n'.join([str("\t\t" + w) for w in words_with_most_repeated_letters[:10]])))
+    print("\tWords with most single repeating letter (" + str(single_repeated_letter_count) + "):\n" + (
+        '\n'.join([str("\t\t" + w) for w in words_with_most_single_repeated_letter[:10]])))
+    print("\tWords with most total repeating letters (" + str(repeated_letters_count) + "):\n" + (
+        '\n'.join([str("\t\t" + w) for w in words_with_most_repeated_letters[:10]])))
+
 
 # with open('dictionary/words_alpha.txt') as f:
 #     words = f.read().splitlines()

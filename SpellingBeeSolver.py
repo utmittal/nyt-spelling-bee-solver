@@ -9,6 +9,7 @@ def check_bee_words_args(center, others):
     if center in others:
         raise ValueError("Central character cannot be in list of other characters.")
 
+
 def get_bee_words_naive(center, others, dictionary):
     """
     Naive approach. Simply iterate and check through whole dictionary.
@@ -21,13 +22,14 @@ def get_bee_words_naive(center, others, dictionary):
     check_bee_words_args(center, others)
 
     valid_bee_words = []
-    letter_set = set(others+center)
+    letter_set = set(others + center)
     for word in dictionary:
         if center in word:
             if set(word) <= letter_set:
                 valid_bee_words.append(word)
 
     return valid_bee_words
+
 
 def preprocess_get_bit_to_word_dict(dictionary):
     bit_dict = {}
@@ -37,13 +39,14 @@ def preprocess_get_bit_to_word_dict(dictionary):
         for c in chars:
             bits[string.ascii_lowercase.index(c)] = "1"
 
-        bits = int(''.join(bits),2)
+        bits = int(''.join(bits), 2)
         if bits in bit_dict:
             bit_dict[bits].append(word)
         else:
             bit_dict[bits] = [word]
 
     return bit_dict
+
 
 def preprocess_get_bit_to_negation_dict(dictionary):
     negated_dict = {}
@@ -55,11 +58,12 @@ def preprocess_get_bit_to_negation_dict(dictionary):
             bits[string.ascii_lowercase.index(c)] = "1"
             negated[string.ascii_lowercase.index(c)] = "0"
 
-        bits = int(''.join(bits),2)
-        negated = int(''.join(negated),2)
+        bits = int(''.join(bits), 2)
+        negated = int(''.join(negated), 2)
         negated_dict[bits] = negated
 
     return negated_dict
+
 
 def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
     check_bee_words_args(center, others)
@@ -93,21 +97,23 @@ def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
     other_bits_negated = ['1'] * 26
     for o in others:
         other_bits_negated[string.ascii_lowercase.index(o)] = "0"
-    other_bits_negated = int(''.join(other_bits_negated),2)
+    other_bits_negated = int(''.join(other_bits_negated), 2)
     center_bits = ['0'] * 26
     center_bits_negated = ['1'] * 26
     center_bits[string.ascii_lowercase.index(center)] = "1"
     center_bits_negated[string.ascii_lowercase.index(center)] = "0"
-    center_bits = int(''.join(center_bits),2)
-    center_bits_negated = int(''.join(center_bits_negated),2)
+    center_bits = int(''.join(center_bits), 2)
+    center_bits_negated = int(''.join(center_bits_negated), 2)
 
     valid_bee_words = []
     for word_bits in dictionary:
-        result = (word_to_negated_word[word_bits] & center_bits & other_bits_negated) | (word_bits & center_bits_negated & other_bits_negated)
+        result = (word_to_negated_word[word_bits] & center_bits & other_bits_negated) | (
+                    word_bits & center_bits_negated & other_bits_negated)
         if result == 0:
             valid_bee_words.extend(dictionary[word_bits])
 
     return valid_bee_words
+
 
 def preprocess_graph_solution(dictionary):
     big_massive_dict = {}
@@ -115,7 +121,7 @@ def preprocess_graph_solution(dictionary):
     for word in dictionary:
         word_with_end = word + "$"  # gives us an ending character to know the word has finished
         wl = len(word_with_end)
-        for i in range(1,wl):
+        for i in range(1, wl):
             prefix, next_char = word_with_end[:i], word_with_end[i]
             if prefix not in big_massive_dict:
                 big_massive_dict[prefix] = {next_char}
@@ -123,6 +129,7 @@ def preprocess_graph_solution(dictionary):
                 big_massive_dict[prefix].add(next_char)
 
     return big_massive_dict
+
 
 def graph_recursion(prefix, valid_letters, big_dict):
     bee_words = []
@@ -133,22 +140,24 @@ def graph_recursion(prefix, valid_letters, big_dict):
         for suf in suffix_list:
             new_char = suf[0]
             if new_char in valid_letters:
-                bee_words.extend(graph_recursion(prefix+new_char,valid_letters,big_dict))
+                bee_words.extend(graph_recursion(prefix + new_char, valid_letters, big_dict))
             elif new_char == "$":
                 bee_words.append(prefix)
 
     return bee_words
 
+
 def get_bee_words_graph(center, others, big_dict):
     check_bee_words_args(center, others)
 
     valid_bee_words = []
-    valid_letters = center+others
+    valid_letters = center + others
     for c in valid_letters:
         res = graph_recursion(c, valid_letters, big_dict)
         valid_bee_words.extend(res)
 
     return [w for w in valid_bee_words if center in w]
+
 
 def preprocess_graph_inception_solution(word_list, curr_dict):
     if word_list == ['']:
@@ -161,9 +170,10 @@ def preprocess_graph_inception_solution(word_list, curr_dict):
         if first_char in curr_dict:
             curr_dict[first_char] = preprocess_graph_inception_solution([word[1:]], curr_dict[first_char])
         else:
-            curr_dict[first_char] = preprocess_graph_inception_solution([word[1:]],{})
+            curr_dict[first_char] = preprocess_graph_inception_solution([word[1:]], {})
 
     return curr_dict
+
 
 def inception_graph_recursion(prefix, curr_dict, valid_letters):
     valid_words = []
@@ -172,9 +182,10 @@ def inception_graph_recursion(prefix, curr_dict, valid_letters):
 
     for c in valid_letters:
         if c in curr_dict:
-            valid_words.extend(inception_graph_recursion(prefix+c,curr_dict[c],valid_letters))
+            valid_words.extend(inception_graph_recursion(prefix + c, curr_dict[c], valid_letters))
 
     return valid_words
+
 
 def get_bee_words_graph_inception(center, others, confusing_dict):
     check_bee_words_args(center, others)
@@ -187,7 +198,8 @@ def get_bee_words_graph_inception(center, others, confusing_dict):
 
     return [w for w in valid_bee_words if center in w]
 
-def pretty_print_solution(sol_list, center, others, uncommon = False):
+
+def pretty_print_solution(sol_list, center, others, uncommon=False):
     sol_list.sort()
 
     with open('dictionary/words_common_bee.txt') as reader:
@@ -203,18 +215,20 @@ def pretty_print_solution(sol_list, center, others, uncommon = False):
         print("\tOther Words - " + str(len(other_sols)) + ":")
         print('\n'.join([str("\t\t" + sol) for sol in other_sols]))
 
-def measure_execution_time(function, *args, iterations = 1):
+
+def measure_execution_time(function, *args, iterations=1):
     total_time = 0
     result = None
-    for i in range(0,iterations):
+    for i in range(0, iterations):
         start_time = time.time()
         result = function(*args)
         end_time = time.time()
 
         total_time += (end_time - start_time)
 
-    print("Average execution time (" + str(iterations) + " iterations): " + str(total_time/iterations) + " seconds")
+    print("Average execution time (" + str(iterations) + " iterations): " + str(total_time / iterations) + " seconds")
     return result
+
 
 with open('dictionary/words_bee.txt') as f:
     words = f.read().splitlines()
@@ -245,6 +259,7 @@ today_others = "ctpnme"
 # # pretty_print_solution(solution_words, today_center, today_others)
 
 print("Nested Graph")
-nested_dict = measure_execution_time(preprocess_graph_inception_solution,words,{})
-solution_words = measure_execution_time(get_bee_words_graph_inception, today_center, today_others, nested_dict, iterations=time_iters)
+nested_dict = measure_execution_time(preprocess_graph_inception_solution, words, {})
+solution_words = measure_execution_time(get_bee_words_graph_inception, today_center, today_others, nested_dict,
+                                        iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others, uncommon = True)
