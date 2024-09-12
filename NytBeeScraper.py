@@ -59,7 +59,10 @@ def answers_from_top_container(soup):
         raise LookupError("Could not find element with id=top-container.")
     answer_list_div = top_container_div.find(class_="answer-list")
     if answer_list_div is None:
-        raise LookupError("Could not find element with class=answer-list")
+        # this happens 2018 07 30 and before
+        answer_list_div = top_container_div.find(id="answer-list")
+        if answer_list_div is None:
+            raise LookupError("Could not find element with class or id=answer-list.")
 
     return get_answers_list_from_answers_div(answer_list_div)
 
