@@ -1,8 +1,13 @@
 from urllib.request import urlopen, Request
+from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 import re
 from datetime import datetime, timedelta
+import backoff
 
+@backoff.on_exception(backoff.expo,
+                      HTTPError,
+                      max_tries=5)
 def get_raw_page(url):
     req = Request(url)
 
@@ -64,6 +69,6 @@ while True:
 
     # Note: we don't dedupe the answers before writing. We just want all the answers.
     write_words_to_dictionary(answer_list)
-    
+
     with open('scraper_logs/scraped_dates.txt','a+') as afile:
         afile.write(date_string + ", " + current_url + "\n")
