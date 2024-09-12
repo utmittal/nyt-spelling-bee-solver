@@ -26,7 +26,8 @@ def get_answer_list_from_nyt_page(raw_web_page):
         raise LookupError("Found answer list of length 0.")
 
     # Verify our answer list
-    number_of_answers = re.search(">Number of Answers: \(+\\d\)",raw_web_page)
+    pattern = r"Number of Answers: (\d+)"
+    number_of_answers = re.search(pattern,raw_web_page.decode('utf-8'))
     groups = number_of_answers.groups()
     if len(groups) > 1:
         raise LookupError("Found more than one match for number of answers.")
@@ -43,8 +44,8 @@ def write_words_to_dictionary(word_list):
     with open('dictionary/nytbee_dot_com_scraped_answers.txt','a') as writefile:
         writefile.writelines(word + '\n' for word in word_list)
 
+date_object = datetime(year=2024,month=9,day=12)
 while True:
-    date_object = datetime(year=2024,month=9,day=12)
     date_object = date_object - timedelta(days=1)
     date_string = date_object.strftime('%Y%m%d')
     current_url = "https://nytbee.com/Bee_"+date_string+".html"
@@ -54,3 +55,5 @@ while True:
     print("Found " + str(len(answer_list)) + " words.")
     # Note: we don't dedupe the answers before writing. We just want all the answers.
     write_words_to_dictionary(answer_list)
+    with open('scraper_logs/scraped_dates.txt','a+') as afile:
+        afile.write(date_string + ", " + current_url + "\n")
