@@ -86,6 +86,15 @@ def write_words_to_dictionary(word_list):
         writefile.writelines(word + '\n' for word in word_list)
 
 
+def get_url_from_date(date):
+    return "https://nytbee.com/Bee_" + date.strftime('%Y%m%d') + ".html"
+
+
+def add_date_and_url_to_file(path, date):
+    with open(path, 'a+') as thefile:
+        thefile.write(date + ", " + get_url_from_date(date) + "\n")
+
+
 # datetime(year=2024,month=9,day=12)
 date_object = datetime.now()
 unique_words_aim = 10237
@@ -97,19 +106,29 @@ scraped_dates = [w.split(',')[0] for w in already_scraped]
 with open('dictionary/nytbee_dot_com_scraped_answers.txt', 'r') as f:
     unique_words = set(f.read().splitlines())
 
+consecutive_404 = False
 while True:
     date_object = date_object - timedelta(days=1)
     date_string = date_object.strftime('%Y%m%d')
     if date_string in scraped_dates:
         continue
-    # does not exist for some reason
-    if date_string == "20181223":
-        continue
 
-    current_url = "https://nytbee.com/Bee_" + date_string + ".html"
+    current_url = get_url_from_date(date_object)
 
     print("Processing - " + current_url)
-    raw_page = get_raw_page(current_url)
+    try:
+        raw_page = get_raw_page(current_url)
+    except HTTPError as e:
+        if e.code == 404 and consecutive_404 == False:
+            add_date_and_url_to_file('scraper_logs/missing_pages.txt', date_object)
+            print("Page doesn't exist. Continuing.")
+            consecutive_404 = True
+            continue
+        else:
+            raise e
+
+    consecutive_404 = True
+
     answer_list = get_answer_list_from_nyt_page(raw_page)
     print("Found " + str(len(answer_list)) + " words.")
 
@@ -121,5 +140,4 @@ while True:
     if len(unique_words) == unique_words_aim:
         print("Found all unique words. Terminating scraping.")
 
-    with open('scraper_logs/scraped_dates.txt', 'a+') as afile:
-        afile.write(date_string + ", " + current_url + "\n")
+    add_date_and_url_to_file('scraper_logs/scraped_dates.txt', date_object)
