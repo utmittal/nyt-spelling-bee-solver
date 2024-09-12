@@ -1,5 +1,6 @@
 import collections
 import json
+from datetime import datetime
 
 
 def gen_bee_dictionary(dictionary, path):
@@ -90,6 +91,13 @@ def analyze_dictionary(dictionary):
 #     words = f.read().splitlines()
 # analyze_dictionary(words)
 
-with open('dictionaries/raw/nytbee_dot_com_scraped_answers.txt') as f:
-    words = f.read().splitlines()
-gen_bee_dictionary(words, 'dictionaries/processed/nytbee_dot_com_unique.txt')
+# with open('dictionaries/raw/nytbee_dot_com_scraped_answers.txt') as f:
+#     words = f.read().splitlines()
+# gen_bee_dictionary(words, 'dictionaries/processed/nytbee_dot_com_unique.txt')
+
+with open('dictionaries/processed/nytbee_dot_com_unique.txt') as f:
+    nytbee_words = f.read().splitlines()
+with open('dictionaries/processed/words_common_bee.txt') as f:
+    common_words = f.read().splitlines()
+gen_bee_dictionary(nytbee_words + common_words,
+                   'dictionaries/custom/nyt_spelling_bee_dictionary_' + datetime.now().strftime('%Y%m%d'))
