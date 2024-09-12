@@ -102,6 +102,9 @@ while True:
     date_string = date_object.strftime('%Y%m%d')
     if date_string in scraped_dates:
         continue
+    # does not exist for some reason
+    if date_string == "20181223":
+        continue
 
     current_url = "https://nytbee.com/Bee_" + date_string + ".html"
 
