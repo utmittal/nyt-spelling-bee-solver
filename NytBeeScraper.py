@@ -6,9 +6,17 @@ from datetime import datetime, timedelta
 import backoff
 
 
+def fatal_code(excep):
+    if excep.code == 404:
+        return True
+    else:
+        return False
+
+
 @backoff.on_exception(backoff.expo,
                       HTTPError,
-                      max_tries=10)
+                      max_tries=10,
+                      giveup=fatal_code)
 def get_raw_page(url):
     req = Request(url)
 
@@ -86,13 +94,17 @@ def write_words_to_dictionary(word_list):
         writefile.writelines(word + '\n' for word in word_list)
 
 
+def get_date_string(date):
+    return date.strftime('%Y%m%d')
+
+
 def get_url_from_date(date):
-    return "https://nytbee.com/Bee_" + date.strftime('%Y%m%d') + ".html"
+    return "https://nytbee.com/Bee_" + get_date_string(date) + ".html"
 
 
 def add_date_and_url_to_file(path, date):
     with open(path, 'a+') as thefile:
-        thefile.write(date + ", " + get_url_from_date(date) + "\n")
+        thefile.write(get_date_string(date) + ", " + get_url_from_date(date) + "\n")
 
 
 # datetime(year=2024,month=9,day=12)
@@ -109,8 +121,9 @@ with open('dictionary/nytbee_dot_com_scraped_answers.txt', 'r') as f:
 consecutive_404 = False
 while True:
     date_object = date_object - timedelta(days=1)
-    date_string = date_object.strftime('%Y%m%d')
+    date_string = get_date_string(date_object)
     if date_string in scraped_dates:
+        consecutive_404 = False
         continue
 
     current_url = get_url_from_date(date_object)
@@ -127,7 +140,7 @@ while True:
         else:
             raise e
 
-    consecutive_404 = True
+    consecutive_404 = False
 
     answer_list = get_answer_list_from_nyt_page(raw_page)
     print("Found " + str(len(answer_list)) + " words.")
