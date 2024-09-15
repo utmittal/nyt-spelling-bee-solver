@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
-from SpellingBeeSolver import get_bee_words_graph_inception, preprocess_graph_inception_solution, \
-    get_latest_custom_dictionary_path
+from SpellingBeeSolver import get_bee_words_graph_inception, preprocess_graph_inception_solution
 
 
 def get_latest_custom_dictionary_path():
@@ -81,12 +80,10 @@ def prune_impossible_words():
 #      "vela", "villae", "viva"])
 # prune_impossible_words()
 
-# today_center = "m"
-# today_others = "ildgen"
-# with open(get_latest_custom_dictionary_path()) as reader:
-#     words = reader.read().splitlines()
-# nested_dict = preprocess_graph_inception_solution(words, {})
-# solution_words = get_bee_words_graph_inception(today_center, today_others, nested_dict)
-# interactive_edit(solution_words)
-
-add_new_words([])
+today_center = "m"
+today_others = "ildgen"
+with open(get_latest_custom_dictionary_path()) as reader:
+    words = reader.read().splitlines()
+nested_dict = preprocess_graph_inception_solution(words, {})
+solution_words = get_bee_words_graph_inception(today_center, today_others, nested_dict)
+interactive_edit(solution_words)
