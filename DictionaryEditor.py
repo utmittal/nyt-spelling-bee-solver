@@ -21,7 +21,7 @@ def add_new_words(new_words):
     updated_word_set.update(new_words)
     sorted_list = sorted(updated_word_set)
     with open('dictionaries/custom/nyt_spelling_bee_dictionary_' + datetime.now().strftime('%Y%m%d'), 'w+') as f:
-        f.writelines(word + '\n' for word in sorted_list if len(word) > 3)
+        f.writelines(word.lower() + '\n' for word in sorted_list if len(word) > 3)
 
 
 def delete_words(words):
@@ -79,6 +79,7 @@ def prune_impossible_words():
 # delete_words(
 #     ["gemmed", "gemming", "idem", "legmen", "limed", "liming", "meed", "middled", "aline", "aniline", "ilea", "ilia",
 #      "vela", "villae", "viva"])
+# prune_impossible_words()
 
 # today_center = "m"
 # today_others = "ildgen"
@@ -88,4 +89,4 @@ def prune_impossible_words():
 # solution_words = get_bee_words_graph_inception(today_center, today_others, nested_dict)
 # interactive_edit(solution_words)
 
-prune_impossible_words()
+add_new_words([])
