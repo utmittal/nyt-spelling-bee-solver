@@ -235,15 +235,14 @@ def measure_execution_time(function, *args, iterations=1):
     print("Average execution time (" + str(iterations) + " iterations): " + str(total_time / iterations) + " seconds")
     return result
 
-
-with open('dictionaries/processed/words_bee.txt') as f:
-    words = f.read().splitlines()
+# with open('dictionaries/processed/words_bee.txt') as f:
+#     words = f.read().splitlines()
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-time_iters = 1
-today_center = 'a'
-today_others = "eijlnv"
+# time_iters = 1
+# today_center = 'a'
+# today_others = "eijlnv"
 
 # time_iters = 1
 # today_center = 'r'
@@ -266,8 +265,8 @@ today_others = "eijlnv"
 # iterations=time_iters)
 # # pretty_print_solution(solution_words, today_center, today_others)
 
-print("Nested Graph")
-nested_dict = measure_execution_time(preprocess_graph_inception_solution, words, {})
-solution_words = measure_execution_time(get_bee_words_graph_inception, today_center, today_others, nested_dict,
-                                        iterations=time_iters)
-pretty_print_solution(solution_words, today_center, today_others, uncommon=True)
+# print("Nested Graph")
+# nested_dict = measure_execution_time(preprocess_graph_inception_solution, words, {})
+# solution_words = measure_execution_time(get_bee_words_graph_inception, today_center, today_others, nested_dict,
+#                                         iterations=time_iters)
+# pretty_print_solution(solution_words, today_center, today_others, uncommon=True)
