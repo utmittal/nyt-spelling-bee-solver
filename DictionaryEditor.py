@@ -19,19 +19,22 @@ def get_current_words():
 def add_new_words(new_words):
     updated_word_set = set(get_current_words())
     updated_word_set.update(new_words)
+    sorted_list = sorted(updated_word_set)
     with open('dictionaries/custom/nyt_spelling_bee_dictionary_' + datetime.now().strftime('%Y%m%d'), 'w+') as f:
-        f.writelines(word + '\n' for word in updated_word_set if len(word) > 3)
+        f.writelines(word + '\n' for word in sorted_list if len(word) > 3)
 
 
 def delete_words(words):
     updated_word_set = set(get_current_words())
     for word in words:
         updated_word_set.remove(word)
+    sorted_list = sorted(updated_word_set)
     with open('dictionaries/custom/nyt_spelling_bee_dictionary_' + datetime.now().strftime('%Y%m%d'), 'w+') as f:
-        f.writelines(word + '\n' for word in updated_word_set if len(word) > 3)
+        f.writelines(word + '\n' for word in sorted_list if len(word) > 3)
 
 
 def interactive_edit(solutions: list[str]):
+    solutions = sorted(solutions)
     add_list = []
     delete_list = []
 
@@ -68,8 +71,8 @@ def interactive_edit(solutions: list[str]):
 #     ["gemmed", "gemming", "idem", "legmen", "limed", "liming", "meed", "middled", "aline", "aniline", "ilea", "ilia",
 #      "vela", "villae", "viva"])
 
-today_center = "a"
-today_others = "eijlnv"
+today_center = "m"
+today_others = "ildgen"
 with open(get_latest_custom_dictionary_path()) as reader:
     words = reader.read().splitlines()
 nested_dict = preprocess_graph_inception_solution(words, {})
