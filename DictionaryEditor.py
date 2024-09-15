@@ -43,18 +43,10 @@ def interactive_edit(solutions: list[str]):
         ip = input(f"{sol} - ")
         if ip == "n":
             delete_list.append(sol)
+        elif len(ip) > 1:
+            add_list.append(ip)
         else:
             continue
-
-    print("\n Add new words? (y/n)")
-    ip = input()
-    if ip == "y":
-        print("Enter one word per line. Type q to stop.")
-        ip = "whatever"
-        while ip != "q":
-            ip = input()
-            if ip != "q":
-                add_list.append(ip)
 
     print("----------------------")
     print(f"Words to be added: {', '.join(add_list)}")
