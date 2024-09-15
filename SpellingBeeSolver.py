@@ -242,8 +242,8 @@ with open('dictionaries/processed/words_bee.txt') as f:
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
 time_iters = 1
-today_center = 'b'
-today_others = "mlotha"
+today_center = 'a'
+today_others = "eijlnv"
 
 # time_iters = 1
 # today_center = 'r'
@@ -256,12 +256,14 @@ today_others = "mlotha"
 # print("Bitwise")
 # bit_dictionary = measure_execution_time(preprocess_get_bit_to_word_dict,words)
 # negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict,words)
-# solution_words = measure_execution_time(get_bee_words_bitwise,today_center, today_others, bit_dictionary, negated_dictionary, iterations = time_iters)
+# solution_words = measure_execution_time(get_bee_words_bitwise,today_center, today_others, bit_dictionary,
+# negated_dictionary, iterations = time_iters)
 # # pretty_print_solution(solution_words, today_center, today_others)
 #
 # print("Graph")
 # letter_graph = measure_execution_time(preprocess_graph_solution,words)
-# solution_words = measure_execution_time(get_bee_words_graph,today_center, today_others, letter_graph, iterations=time_iters)
+# solution_words = measure_execution_time(get_bee_words_graph,today_center, today_others, letter_graph,
+# iterations=time_iters)
 # # pretty_print_solution(solution_words, today_center, today_others)
 
 print("Nested Graph")

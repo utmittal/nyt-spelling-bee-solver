@@ -29,5 +29,7 @@ def delete_words(words):
         f.writelines(word + '\n' for word in updated_word_set if len(word) > 3)
 
 
-add_new_words([])
-delete_words(["balboa"])
+add_new_words(["meme", "memed", "meming", "naan"])
+delete_words(
+    ["gemmed", "gemming", "idem", "legmen", "limed", "liming", "meed", "middled", "aline", "aniline", "ilea", "ilia",
+     "vela", "villae", "viva"])
