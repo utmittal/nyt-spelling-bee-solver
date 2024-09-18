@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from SpellingBeeSolver import get_bee_solutions_nested_graph, _preprocess_get_prefix_graph_inception
+from SpellingBeeSolver import get_bee_solutions_prefix_graph_nested, _preprocess_get_word_tree
 from dictionary_utils import get_latest_custom_dictionary_path
 
 
@@ -79,6 +79,6 @@ today_center = "o"
 today_others = "ctpnme"
 with open(get_latest_custom_dictionary_path()) as reader:
     words = reader.read().splitlines()
-nested_dict = _preprocess_get_prefix_graph_inception(words, {})
-solution_words = get_bee_solutions_nested_graph(today_center, today_others, nested_dict)
+nested_dict = _preprocess_get_word_tree(words, {})
+solution_words = get_bee_solutions_prefix_graph_nested(today_center, today_others, nested_dict)
 interactive_edit(solution_words)
