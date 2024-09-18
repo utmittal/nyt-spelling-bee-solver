@@ -168,7 +168,7 @@ def _preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
     return big_massive_dict
 
 
-def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | list[str],
+def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str],
                           prefix_tree: dict[str: set[str]]) -> list[str]:
     """
     Recursive function to traverse through prefix tree to find all words formed by the given letters.
@@ -189,8 +189,8 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | list[st
     if '$' in next_char_set and center in prefix:
         valid_words.append(prefix)
 
-    for letter in valid_letters:
-        if letter in next_char_set:
+    for letter in next_char_set:
+        if letter in valid_letters:
             valid_words.extend(_traverse_prefix_tree(prefix + letter, center, valid_letters, prefix_tree))
 
     return valid_words
@@ -209,7 +209,7 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
     """
     _validate_character_args(center, others)
 
-    return _traverse_prefix_tree('', center, center + others, prefix_tree)
+    return _traverse_prefix_tree('', center, set(center + others), prefix_tree)
 
 
 type NestedStrDict = dict[str: NestedStrDict | None]
