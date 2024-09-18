@@ -275,9 +275,6 @@ def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStr
     Uses a tree to find all valid words. Each node is a letter and each child is a valid succeeding letter that will
     eventually form a word.
 
-    Note: We don't check for the necessary character during the recursion itself because for some reason that is
-    slower? Instead, we just do a final pass at the end before returning the list.
-
     :param center: Central character that must appear in word. Length = 1
     :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
     :param radix_tree: word tree
