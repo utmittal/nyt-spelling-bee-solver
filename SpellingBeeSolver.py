@@ -3,7 +3,7 @@ import time
 import os
 
 
-def check_bee_words_args(center: str, others: str):
+def validate_character_args(center: str, others: str):
     if len(others) > len(set(others)):
         raise ValueError("List of other characters cannot contain repeated characters.")
     if len(set(others)) != 6:
@@ -14,16 +14,18 @@ def check_bee_words_args(center: str, others: str):
         raise ValueError("There can be only one center character.")
 
 
-def get_bee_words_naive(center, others, dictionary):
+def get_bee_solutions_naive(center: str, others: str, dictionary: list[str]) -> list[str]:
     """
-    Naive approach. Simply iterate and check through whole raw.
+    Naive approach. Simply iterate through whole dictionary and check if the word could be formed from the given
+    letters.
 
-    :param center: Central character that must appear in word
-    :param others: List of other characters that must appear in word
+    :param center: Central character that must appear in word. Expected to be of length = 1
+    :param others: List of other characters that must appear in word. Excludes center character and must be of length
+    = 6
     :param dictionary: list of words to search in
-    :return: List of bee words
+    :return: List of solutions
     """
-    check_bee_words_args(center, others)
+    validate_character_args(center, others)
 
     valid_bee_words = []
     letter_set = set(others + center)
@@ -70,7 +72,7 @@ def preprocess_get_bit_to_negation_dict(dictionary):
 
 
 def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
-    check_bee_words_args(center, others)
+    validate_character_args(center, others)
 
     """
     truth table where word refers to the word we are checking. Center must always be present in the word.
@@ -152,7 +154,7 @@ def graph_recursion(prefix, valid_letters, big_dict):
 
 
 def get_bee_words_graph(center, others, big_dict):
-    check_bee_words_args(center, others)
+    validate_character_args(center, others)
 
     valid_bee_words = []
     valid_letters = center + others
@@ -192,7 +194,7 @@ def inception_graph_recursion(prefix, curr_dict, valid_letters):
 
 
 def get_bee_words_graph_inception(center, others, confusing_dict):
-    check_bee_words_args(center, others)
+    validate_character_args(center, others)
 
     valid_bee_words = []
     valid_letters = center + others
