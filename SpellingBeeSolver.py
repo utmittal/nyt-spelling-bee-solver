@@ -133,13 +133,13 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     return valid_bee_words
 
 
-def _preprocess_get_prefix_graph(dictionary: list[str]) -> dict[str: [str]]:
+def _preprocess_get_prefix_graph(dictionary: list[str]) -> dict[str: set[str]]:
     """
     Converts the list of words into a directional graph where each node is a string prefix and each path represents a
     letter. I.e. Node 'ro' will have a path 'b' to 'rob' and a path 't' to 'rot' etc.
 
     This graph is represented as a prefix dictionary, where the keys are all possible prefixes and the values are the
-    list of possible next characters corresponding to that prefix.
+    set of possible next characters corresponding to that prefix.
 
     :param dictionary: list of words to use
     :return: dictionary of prefix to list of next characters
@@ -157,12 +157,12 @@ def _preprocess_get_prefix_graph(dictionary: list[str]) -> dict[str: [str]]:
                 big_massive_dict[prefix].add(next_char)
 
     # starting node
-    big_massive_dict[''] = list(string.ascii_lowercase)
+    big_massive_dict[''] = set(string.ascii_lowercase)
 
     return big_massive_dict
 
 
-def _traverse_prefix_graph(prefix: str, valid_letters: str | list[str], prefix_graph: dict[str: [str]]) -> list[str]:
+def _traverse_prefix_graph(prefix: str, valid_letters: str | list[str], prefix_graph: dict[str: set[str]]) -> list[str]:
     """
     Recursive function to traverse through prefix graph to find all words formed by the given letters.
 
@@ -173,8 +173,8 @@ def _traverse_prefix_graph(prefix: str, valid_letters: str | list[str], prefix_g
     """
     valid_words = []
 
-    next_char_list = prefix_graph[prefix]
-    for next_char in next_char_list:
+    next_char_set = prefix_graph[prefix]
+    for next_char in next_char_set:
         if next_char in valid_letters:
             valid_words.extend(_traverse_prefix_graph(prefix + next_char, valid_letters, prefix_graph))
         elif next_char == "$":
@@ -184,7 +184,8 @@ def _traverse_prefix_graph(prefix: str, valid_letters: str | list[str], prefix_g
     return valid_words
 
 
-def get_bee_solutions_prefix_graph(center: str, others: str | list[str], prefix_graph: dict[str: [str]]) -> list[str]:
+def get_bee_solutions_prefix_graph(center: str, others: str | list[str], prefix_graph: dict[str: set[str]]) -> list[
+    str]:
     """
     Uses a graph to find all valid words. Each node in the graph is a string prefix and each path is a valid letter
     that can succeed the prefix.
