@@ -4,11 +4,11 @@ import time
 
 def _validate_character_args(center: str, others: str):
     if len(others) > len(set(others)):
-        raise ValueError(f"List of other characters cannot contain repeated characters: {others}")
+        raise ValueError(f"List of other characters ({others}) cannot contain repeated characters.")
     if len(set(others)) != 6:
-        raise ValueError(f"There should be exactly 6 other characters: {others}")
+        raise ValueError(f"There should be exactly 6 other characters. Got {len(others)} - {others}.")
     if len(center) != 1:
-        raise ValueError(f"There can be only one center character: {center}")
+        raise ValueError(f"There can be only one center character. Got {len(center)} - {center}.")
     if center in others:
         raise ValueError(f"Central character ({center}) cannot be in list of other characters ({others}).")
 
