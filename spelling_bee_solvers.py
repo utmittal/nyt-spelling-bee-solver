@@ -1,17 +1,16 @@
 import string
 import time
-from dictionary_utils import get_latest_custom_dictionary_path
 
 
 def _validate_character_args(center: str, others: str):
     if len(others) > len(set(others)):
-        raise ValueError("List of other characters cannot contain repeated characters.")
+        raise ValueError(f"List of other characters cannot contain repeated characters: {others}")
     if len(set(others)) != 6:
-        raise ValueError("There should be exactly 6 other characters.")
+        raise ValueError(f"There should be exactly 6 other characters: {others}")
     if len(center) != 1:
-        raise ValueError("There can be only one center character.")
+        raise ValueError(f"There can be only one center character: {center}")
     if center in others:
-        raise ValueError("Central character cannot be in list of other characters.")
+        raise ValueError(f"Central character ({center}) cannot be in list of other characters ({others}).")
 
 
 def get_bee_solutions_naive(center: str, others: str | list[str], dictionary: list[str]) -> list[str]:
@@ -286,23 +285,6 @@ def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStr
     return valid_bee_words
 
 
-def pretty_print_solution(sol_list, center, others, uncommon=False):
-    sol_list.sort()
-
-    with open(get_latest_custom_dictionary_path()) as reader:
-        common_words = reader.read().splitlines()
-
-    common_sols = [sol for sol in sol_list if sol in common_words]
-    other_sols = [sol for sol in sol_list if sol not in common_words]
-
-    print("Spelling Bee Solution - [" + center.upper() + " | " + ' '.join(c.upper() for c in others) + "]:")
-    print("\tCommon Words - " + str(len(common_sols)) + ":")
-    print('\n'.join([str("\t\t" + sol) for sol in common_sols]))
-    if uncommon:
-        print("\tOther Words - " + str(len(other_sols)) + ":")
-        print('\n'.join([str("\t\t" + sol) for sol in other_sols]))
-
-
 def measure_execution_time(function, *args, iterations=1):
     total_time = 0
     result = None
@@ -315,39 +297,3 @@ def measure_execution_time(function, *args, iterations=1):
 
     print("Average execution time (" + str(iterations) + " iterations): " + str(total_time / iterations) + " seconds")
     return result
-
-
-with open('dictionaries/processed/words_bee.txt') as f:
-    words = f.read().splitlines()
-
-# note: this combo seems to be the combo with the highest number of words
-# in the history of nyt spelling bee
-time_iters = 10000
-today_center = 'o'
-today_others = "ctpnme"
-
-# time_iters = 1
-# today_center = 'r'
-# today_others = "inpbug"
-
-# print("Naive")
-# solution_words = measure_execution_time(get_bee_words_naive,today_center,today_others,words, iterations = time_iters)
-# # pretty_print_solution(solution_words,today_center,today_others)
-#
-# print("Bitwise")
-# bit_to_string_dict = measure_execution_time(_preprocess_get_bit_to_word_dict, words)
-# solution_words = measure_execution_time(get_bee_solutions_bitwise, today_center, today_others, bit_to_string_dict,
-#                                         iterations=time_iters)
-# pretty_print_solution(solution_words, today_center, today_others)
-#
-print("Graph")
-letter_graph = measure_execution_time(_preprocess_get_prefix_tree, words)
-solution_words = measure_execution_time(get_bee_solutions_prefix_tree, today_center, today_others, letter_graph,
-                                        iterations=time_iters)
-# pretty_print_solution(solution_words, today_center, today_others)
-
-print("Nested Graph")
-nested_dict = measure_execution_time(_preprocess_get_radix_tree, words, {})
-solution_words = measure_execution_time(get_bee_solutions_radix_tree, today_center, today_others, nested_dict,
-                                        iterations=time_iters)
-# pretty_print_solution(solution_words, today_center, today_others)
