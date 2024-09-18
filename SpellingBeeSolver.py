@@ -8,13 +8,13 @@ def _validate_character_args(center: str, others: str):
         raise ValueError("List of other characters cannot contain repeated characters.")
     if len(set(others)) != 6:
         raise ValueError("There should be exactly 6 other characters.")
-    if center in others:
-        raise ValueError("Central character cannot be in list of other characters.")
     if len(center) != 1:
         raise ValueError("There can be only one center character.")
+    if center in others:
+        raise ValueError("Central character cannot be in list of other characters.")
 
 
-def get_bee_solutions_naive(center: str, others: str, dictionary: list[str]) -> list[str]:
+def get_bee_solutions_naive(center: str, others: str | list[str], dictionary: list[str]) -> list[str]:
     """
     Naive approach. Simply iterate through whole dictionary and check if the word could be formed from the given
     letters.
