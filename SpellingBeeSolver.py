@@ -230,13 +230,13 @@ def _preprocess_get_word_tree(suffix_list: list[str], curr_dict: NestedStrDict) 
         curr_dict['$'] = None  # '$' character to indicate end of word
         return curr_dict
 
-    for word in suffix_list:
-        first_char = word[0]
+    for suffix in suffix_list:
+        first_char = suffix[0]
 
         if first_char in curr_dict:
-            curr_dict[first_char] = _preprocess_get_word_tree([word[1:]], curr_dict[first_char])
+            curr_dict[first_char] = _preprocess_get_word_tree([suffix[1:]], curr_dict[first_char])
         else:
-            curr_dict[first_char] = _preprocess_get_word_tree([word[1:]], {})
+            curr_dict[first_char] = _preprocess_get_word_tree([suffix[1:]], {})
 
     return curr_dict
 
@@ -318,7 +318,7 @@ with open('dictionaries/processed/words_bee.txt') as f:
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-time_iters = 10000
+time_iters = 1000
 today_center = 'o'
 today_others = "ctpnme"
 
