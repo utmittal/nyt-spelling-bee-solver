@@ -96,14 +96,15 @@ def analyze_dictionary(dictionary: list[str]) -> None:
             words_with_most_repeated_letters.append(word)
 
     print("Dictionary Analysis - Note: Max 10 sample words printed in each category")
-    print("\tTotal Words: " + str(len(dictionary)))
+    print(f"\tTotal Words: {str(len(dictionary))}")
+    print(f"\tShortest Words ({str(shortest_len)}):\n{'\n'.join([str("\t\t" + w) for w in shortest_words[:10]])}")
+    print(f"\tLongest Words ({str(longest_len)}):\n{'\n'.join([str("\t\t" + w) for w in longest_words[:10]])}")
     print(
-        "\tShortest Words (" + str(shortest_len) + "):\n" + ('\n'.join([str("\t\t" + w) for w in shortest_words[:10]])))
-    print("\tLongest Words (" + str(longest_len) + "):\n" + ('\n'.join([str("\t\t" + w) for w in longest_words[:10]])))
-    print("\tWords with most single repeating letter (" + str(single_repeated_letter_count) + "):\n" + (
-        '\n'.join([str("\t\t" + w) for w in words_with_most_single_repeated_letter[:10]])))
-    print("\tWords with most total repeating letters (" + str(repeated_letters_count) + "):\n" + (
-        '\n'.join([str("\t\t" + w) for w in words_with_most_repeated_letters[:10]])))
+        f"\tWords with most single repeating letter ({str(single_repeated_letter_count)}):\n"
+        f"{'\n'.join([str("\t\t" + w) for w in words_with_most_single_repeated_letter[:10]])}")
+    print(
+        f"\tWords with most total repeating letters ({str(repeated_letters_count)}):\n"
+        f"{'\n'.join([str("\t\t" + w) for w in words_with_most_repeated_letters[:10]])}")
 
 
 def _convert_categorized_json_to_wordlist_file() -> None:
