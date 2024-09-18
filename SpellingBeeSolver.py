@@ -133,12 +133,18 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     return valid_bee_words
 
 
-def _preprocess_get_prefix_graph(dictionary: list[str]) -> dict[str: set[str]]:
+def _preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
     """
-    Converts the list of words into a directional graph where each node is a string prefix and each path represents a
-    letter. I.e. Node 'ro' will have a path 'b' to 'rob' and a path 't' to 'rot' etc.
+    Converts the list of words into a prefix tree (trie) where each node is a string prefix and each child represents
+    a prefix that can be formed by adding a letter to the parent. I.e. Node 'ro' will have a path to 'rob' and a
+    path to 'rot' etc. Small sample of the tree:
+            r
+          /  \\
+       ro     ra
+     /   \\     \\
+    rot   rob    rat
 
-    This graph is represented as a prefix dictionary, where the keys are all possible prefixes and the values are the
+    This tree is represented as a prefix dictionary, where the keys are all possible prefixes and the values are the
     set of possible next characters corresponding to that prefix.
 
     :param dictionary: list of words to use
@@ -162,47 +168,44 @@ def _preprocess_get_prefix_graph(dictionary: list[str]) -> dict[str: set[str]]:
     return big_massive_dict
 
 
-def _traverse_prefix_graph(prefix: str, valid_letters: str | list[str], prefix_graph: dict[str: set[str]]) -> list[str]:
+def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | list[str],
+                          prefix_tree: dict[str: set[str]]) -> list[str]:
     """
-    Recursive function to traverse through prefix graph to find all words formed by the given letters.
+    Recursive function to traverse through prefix tree to find all words formed by the given letters.
 
     :param prefix: Current prefix string.
+    :param center: Central letter that must appear in a valid word
     :param valid_letters: List of letters that we are trying to form words from.
-    :param prefix_graph: Prefix graph as a dict of prefixes to valid next characters
+    :param prefix_tree: Prefix tree as a dict of prefixes to valid next characters
     :return:
     """
     valid_words = []
 
-    next_char_set = prefix_graph[prefix]
+    next_char_set = prefix_tree[prefix]
     for next_char in next_char_set:
         if next_char in valid_letters:
-            valid_words.extend(_traverse_prefix_graph(prefix + next_char, valid_letters, prefix_graph))
-        elif next_char == "$":
+            valid_words.extend(_traverse_prefix_tree(prefix + next_char, center, valid_letters, prefix_tree))
+        elif next_char == "$" and center in prefix:
             valid_words.append(prefix)
         # else: do nothing
 
     return valid_words
 
 
-def get_bee_solutions_prefix_graph(center: str, others: str | list[str], prefix_graph: dict[str: set[str]]) -> list[
+def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_tree: dict[str: set[str]]) -> list[
     str]:
     """
-    Uses a graph to find all valid words. Each node in the graph is a string prefix and each path is a valid letter
+    Uses a prefix tree to find all valid words. Each node in the tree is a string prefix and each path is a valid letter
     that can succeed the prefix.
-
-    Note: We don't check for the necessary character during the recursion itself because for some reason that is
-    slower? Instead, we just do a final pass at the end before returning the list.
 
     :param center: Central character that must appear in word. Length = 1
     :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
-    :param prefix_graph: dict of prefix strings to corresponding valid succeeding characters
+    :param prefix_tree: dict of prefix strings to corresponding valid succeeding characters
     :return: list of solutions
     """
     _validate_character_args(center, others)
 
-    valid_bee_words = _traverse_prefix_graph('', center + others, prefix_graph)
-
-    return [w for w in valid_bee_words if center in w]
+    return _traverse_prefix_tree('', center, center + others, prefix_tree)
 
 
 type NestedStrDict = dict[str: NestedStrDict | None]
@@ -212,11 +215,11 @@ def _preprocess_get_word_tree(suffix_list: list[str], curr_dict: NestedStrDict) 
     """
     Converts the list of words into a tree where each node is a letter and each child is a valid succeeding
     letter that will eventually form a word. A small sample of this tree might look like this:
-        r
-       /
-      o
-     / \
-    t   b
+         r
+        /
+       o
+     /  \\
+    t     b
 
     The tree is represented by a nested dictionary where the key is a letter and the corresponding value is a
     dictionary whose keys are the possible next letters. The end of a word is represented by the character '$' and
@@ -262,7 +265,7 @@ def _traverse_word_tree(current_prefix: str, curr_dict: NestedStrDict, center, v
     return valid_words
 
 
-def get_bee_solutions_prefix_graph_nested(center: str, others: str, word_tree: NestedStrDict) -> list[str]:
+def get_bee_solutions_prefix_tree_nested(center: str, others: str, word_tree: NestedStrDict) -> list[str]:
     """
     Uses a tree to find all valid words. Each node is a letter and each child is a valid succeeding letter that will
     eventually form a word.
@@ -318,7 +321,7 @@ with open('dictionaries/processed/words_bee.txt') as f:
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-time_iters = 1000
+time_iters = 10000
 today_center = 'o'
 today_others = "ctpnme"
 
@@ -344,6 +347,6 @@ today_others = "ctpnme"
 
 print("Nested Graph")
 nested_dict = measure_execution_time(_preprocess_get_word_tree, words, {})
-solution_words = measure_execution_time(get_bee_solutions_prefix_graph_nested, today_center, today_others, nested_dict,
+solution_words = measure_execution_time(get_bee_solutions_prefix_tree_nested, today_center, today_others, nested_dict,
                                         iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
