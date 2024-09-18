@@ -180,14 +180,14 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | list[st
     :return:
     """
     valid_words = []
-
     next_char_set = prefix_tree[prefix]
-    for next_char in next_char_set:
-        if next_char in valid_letters:
-            valid_words.extend(_traverse_prefix_tree(prefix + next_char, center, valid_letters, prefix_tree))
-        elif next_char == "$" and center in prefix:
-            valid_words.append(prefix)
-        # else: do nothing
+
+    if '$' in next_char_set and center in prefix:
+        valid_words.append(prefix)
+
+    for letter in valid_letters:
+        if letter in next_char_set:
+            valid_words.extend(_traverse_prefix_tree(prefix + letter, center, valid_letters, prefix_tree))
 
     return valid_words
 
@@ -339,10 +339,10 @@ today_others = "ctpnme"
 #                                         iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
 #
-# print("Graph")
-# letter_graph = measure_execution_time(_preprocess_get_prefix_graph, words)
-# solution_words = measure_execution_time(get_bee_solutions_prefix_graph, today_center, today_others, letter_graph,
-#                                         iterations=time_iters)
+print("Graph")
+letter_graph = measure_execution_time(_preprocess_get_prefix_tree, words)
+solution_words = measure_execution_time(get_bee_solutions_prefix_tree, today_center, today_others, letter_graph,
+                                        iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
 
 print("Nested Graph")
