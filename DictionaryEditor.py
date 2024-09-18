@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from SpellingBeeSolver import get_bee_words_graph_inception, preprocess_graph_inception_solution
+from dictionary_utils import get_latest_custom_dictionary_path
 
 
 def get_current_words():
