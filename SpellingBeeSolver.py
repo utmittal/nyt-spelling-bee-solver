@@ -39,6 +39,14 @@ def get_bee_solutions_naive(center: str, others: str | list[str], dictionary: li
 
 
 def _preprocess_get_bit_to_word_dict(dictionary: list[str]) -> dict[int: [str]]:
+    """
+    Generates a dictionary where the keys are the bit representation of the word (as an integer) and the values are
+    a list of corresponding words. Bit representations ignore letter ordering and letter duplicates. So a single bit
+    representation may have multiple corresponding words.
+
+    :param dictionary: list of words
+    :return: dict of bit representation to list of words
+    """
     bit_dict = {}
     for word in dictionary:
         word_bits = ['0'] * 26
@@ -125,13 +133,23 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     return valid_bee_words
 
 
-def _preprocess_graph_solution(dictionary: list[str]) -> dict[str: [str]]:
+def _preprocess_get_prefix_graph(dictionary: list[str]) -> dict[str: [str]]:
+    """
+    Converts the list of words into a directional graph where each node is a string prefix and each path represents a
+    letter. I.e. Node 'ro' will have a path 'b' to 'rob' and a path 't' to 'rot' etc.
+
+    This graph is represented as a prefix dictionary, where the keys are all possible prefixes and the values are the
+    list of possible next characters corresponding to that prefix.
+
+    :param dictionary: list of words to use
+    :return: dictionary of prefix to list of next characters
+    """
     big_massive_dict = {}
 
     for word in dictionary:
         word_with_end = word + "$"  # gives us an ending character to know the word has finished
-        wl = len(word_with_end)
-        for i in range(1, wl):
+        word_length = len(word_with_end)
+        for i in range(1, word_length):
             prefix, next_char = word_with_end[:i], word_with_end[i]
             if prefix not in big_massive_dict:
                 big_massive_dict[prefix] = {next_char}
@@ -245,7 +263,7 @@ with open('dictionaries/processed/words_bee.txt') as f:
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-time_iters = 1000
+time_iters = 100
 today_center = 'o'
 today_others = "ctpnme"
 
@@ -264,10 +282,10 @@ today_others = "ctpnme"
 # pretty_print_solution(solution_words, today_center, today_others)
 #
 print("Graph")
-letter_graph = measure_execution_time(_preprocess_graph_solution, words)
+letter_graph = measure_execution_time(_preprocess_get_prefix_graph, words)
 solution_words = measure_execution_time(get_bee_words_graph, today_center, today_others, letter_graph,
                                         iterations=time_iters)
-# # pretty_print_solution(solution_words, today_center, today_others)
+pretty_print_solution(solution_words, today_center, today_others)
 
 # print("Nested Graph")
 # nested_dict = measure_execution_time(preprocess_graph_inception_solution, words, {})
