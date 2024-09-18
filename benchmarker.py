@@ -55,3 +55,15 @@ print(tabulate([['Naive', naive_min, naive_min / naive_min], ['Bitwise', bitwise
                 ['Prefix Tree', prefix_tree_min, naive_min / prefix_tree_min],
                 ['Radix Tree', radix_tree_min, naive_min / radix_tree_min]],
                headers=['Strategy', 'Min Time (s)', 'Speedup']))
+
+"""
+Iterations:		10000
+Repetitions:	5
+
+Strategy       Min Time (s)    Speedup
+-----------  --------------  ---------
+Naive           0.0578143      1
+Bitwise         0.0132765      4.35462
+Prefix Tree     0.000579531   99.7605
+Radix Tree      0.000454482  127.209
+"""
