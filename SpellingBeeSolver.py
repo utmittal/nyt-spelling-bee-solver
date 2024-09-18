@@ -271,12 +271,12 @@ def measure_execution_time(function, *args, iterations=1):
     return result
 
 
-with open(get_latest_custom_dictionary_path()) as r:
-    words = r.read().splitlines()
+with open('dictionaries/processed/words_bee.txt') as f:
+    words = f.read().splitlines()
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-time_iters = 100
+time_iters = 1000
 today_center = 'o'
 today_others = "ctpnme"
 
@@ -293,7 +293,7 @@ bit_to_string_dict = measure_execution_time(preprocess_get_bit_to_word_dict, wor
 negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict, words)
 solution_words = measure_execution_time(get_bee_solutions_bitwise, today_center, today_others, bit_to_string_dict,
                                         negated_dictionary, iterations=time_iters)
-pretty_print_solution(solution_words, today_center, today_others)
+# pretty_print_solution(solution_words, today_center, today_others)
 #
 # print("Graph")
 # letter_graph = measure_execution_time(preprocess_graph_solution,words)
