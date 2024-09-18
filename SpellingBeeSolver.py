@@ -118,32 +118,25 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
         1   1   1   0   Letter present in word, center and others. Not possible, so R=0 to reduce the number of terms.
 
     SoP = ((not W) and C and (not O)) OR (W and (not C) and (not O))
-        = (~W . C . ~O) + (W . ~C . ~O)
-
-    This is why we calculate the negated words in advance, so that we don't have to waste time on it in this
-    function. Because NOT in python is weird. Should probably figured out how it works actually.
+        = (~W & C & ~O) | (W & ~C & ~O)
+        = ~O & ((~W & C) | (W & ~C))
     """
 
-    # We need to perform the bit operation [word OR (NOT letters)] to get the right answers
-    # However, bitwise not in python is weird because ints can be arbitrarily long
-    # Instead of figuring out how the not works, we just generate the NOT of letters and center
-    # in the first place. We have to do that work anyway, so this doesn't take extra time
-    # If anything, it takes less time.
-    other_bits_negated = ['1'] * 26
-    for o in others:
-        other_bits_negated[string.ascii_lowercase.index(o)] = "0"
-    other_bits_negated = int(''.join(other_bits_negated), 2)
+    not_mask = 67108863  # int representation of binary number with 26 1s
+
     center_bits = ['0'] * 26
-    center_bits_negated = ['1'] * 26
-    center_bits[string.ascii_lowercase.index(center)] = "1"
-    center_bits_negated[string.ascii_lowercase.index(center)] = "0"
+    center_bits[string.ascii_lowercase.index(center)] = '1'
     center_bits = int(''.join(center_bits), 2)
-    center_bits_negated = int(''.join(center_bits_negated), 2)
+    # ints in python are infinite precision, so ~ gives us an infinite number of leading 1s at the front. We fix this
+    # by ANDing with a mask of 26 1s
+    center_bits_negated = ~center_bits & not_mask
+    other_bits_negated = ['0' if l in others else '1' for l in string.ascii_lowercase]
+    other_bits_negated = int(''.join(other_bits_negated), 2)
 
     valid_bee_words = []
     for word_bits in bit_dictionary:
-        result = (word_to_negated_word[word_bits] & center_bits & other_bits_negated) | (
-                word_bits & center_bits_negated & other_bits_negated)
+        word_bits_negated = ~word_bits & not_mask
+        result = other_bits_negated & ((word_bits_negated & center_bits) | word_bits & center_bits_negated)
         if result == 0:
             valid_bee_words.extend(bit_dictionary[word_bits])
 
