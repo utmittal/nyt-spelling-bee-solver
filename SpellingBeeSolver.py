@@ -3,7 +3,7 @@ import time
 import os
 
 
-def validate_character_args(center: str, others: str):
+def _validate_character_args(center: str, others: str):
     if len(others) > len(set(others)):
         raise ValueError("List of other characters cannot contain repeated characters.")
     if len(set(others)) != 6:
@@ -25,7 +25,7 @@ def get_bee_solutions_naive(center: str, others: str, dictionary: list[str]) -> 
     :param dictionary: list of words to search in
     :return: List of solutions
     """
-    validate_character_args(center, others)
+    _validate_character_args(center, others)
 
     valid_bee_words = []
     letter_set = set(others + center)
@@ -72,7 +72,7 @@ def preprocess_get_bit_to_negation_dict(dictionary):
 
 
 def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
-    validate_character_args(center, others)
+    _validate_character_args(center, others)
 
     """
     truth table where word refers to the word we are checking. Center must always be present in the word.
@@ -154,7 +154,7 @@ def graph_recursion(prefix, valid_letters, big_dict):
 
 
 def get_bee_words_graph(center, others, big_dict):
-    validate_character_args(center, others)
+    _validate_character_args(center, others)
 
     valid_bee_words = []
     valid_letters = center + others
@@ -194,7 +194,7 @@ def inception_graph_recursion(prefix, curr_dict, valid_letters):
 
 
 def get_bee_words_graph_inception(center, others, confusing_dict):
-    validate_character_args(center, others)
+    _validate_character_args(center, others)
 
     valid_bee_words = []
     valid_letters = center + others
