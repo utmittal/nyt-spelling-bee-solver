@@ -3,11 +3,15 @@ import time
 import os
 
 
-def check_bee_words_args(center, others):
+def check_bee_words_args(center: str, others: str):
     if len(others) > len(set(others)):
         raise ValueError("List of other characters cannot contain repeated characters.")
+    if len(set(others)) != 6:
+        raise ValueError("There should be exactly 6 other characters.")
     if center in others:
         raise ValueError("Central character cannot be in list of other characters.")
+    if len(center) != 1:
+        raise ValueError("There can be only one center character.")
 
 
 def get_bee_words_naive(center, others, dictionary):
