@@ -36,13 +36,17 @@ def get_dictionary_from_path(path: str) -> str:
     return f'{PROJECT_ROOT_PATH}/dictionaries/{path}'
 
 
-def write_words_to_dictionary(word_list: list[str], path: str) -> None:
+def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> None:
     """
     Writes lowercase words in sorted order to specified file.
+
+    Also removes any words smaller than 4 letters and any words that have more than 7 unique letters.
 
     :param word_list: List of words to write
     :param path: Path relative to dictionary directory
     """
+    word_list = _remove_small_words(word_list)
+    word_list = _remove_impossible_words(word_list)
     with open(f'{PROJECT_ROOT_PATH}/dictionaries/{path}', 'w+') as writefile:
         writefile.writelines(word.lower() + '\n' for word in sorted(word_list))
 
@@ -122,3 +126,10 @@ def _remove_small_words(dictionary: list[str]) -> list[str]:
     Removes words smaller than 4 letters since NYT doesn't allow them.
     """
     return [w for w in dictionary if len(w) > 3]
+
+
+def _remove_impossible_words(dictionary: list[str]) -> list[str]:
+    """
+    Removes any words with more than 7 unique letters since that's impossible for a NYT Spelling Bee puzzle.
+    """
+    return [w for w in dictionary if len(set(w)) <= 7]
