@@ -1,26 +1,4 @@
 import collections
-import json
-from datetime import datetime
-
-
-def gen_bee_dictionary(dictionary, path):
-    """
-    NYT spelling bee only allows words longer than 3 characters
-    """
-    bee_dictionary = set([w for w in dictionary if len(w) > 3])
-    with open(path, 'w+') as writefile:
-        writefile.writelines(word + '\n' for word in bee_dictionary)
-
-
-def convert_categorized_json_to_wordlist_file():
-    with open('dictionaries/raw/2of12id.json') as f:
-        json_words = json.load(f)
-    word_list = []
-    for key in json_words:
-        word_list.extend(json_words[key])
-
-    with open('dictionaries/raw/words_common.txt', 'w+') as writefile:
-        writefile.writelines(word + '\n' for word in word_list)
 
 
 def analyze_dictionary(dictionary):
@@ -75,7 +53,6 @@ def analyze_dictionary(dictionary):
     print("\tWords with most total repeating letters (" + str(repeated_letters_count) + "):\n" + (
         '\n'.join([str("\t\t" + w) for w in words_with_most_repeated_letters[:10]])))
 
-
 # with open('raw/words_alpha.txt') as f:
 #     words = f.read().splitlines()
 # gen_bee_dictionary(words)
@@ -95,9 +72,9 @@ def analyze_dictionary(dictionary):
 #     words = f.read().splitlines()
 # gen_bee_dictionary(words, 'dictionaries/processed/nytbee_dot_com_unique.txt')
 
-with open('dictionaries/processed/nytbee_dot_com_unique.txt') as f:
-    nytbee_words = f.read().splitlines()
-with open('dictionaries/processed/words_common_bee.txt') as f:
-    common_words = f.read().splitlines()
-gen_bee_dictionary(nytbee_words + common_words,
-                   'dictionaries/custom/nyt_spelling_bee_dictionary_' + datetime.now().strftime('%Y%m%d'))
+# with open('dictionaries/processed/nytbee_dot_com_unique.txt') as f:
+#     nytbee_words = f.read().splitlines()
+# with open('dictionaries/processed/words_common_bee.txt') as f:
+#     common_words = f.read().splitlines()
+# gen_bee_dictionary(nytbee_words + common_words,
+#                    'dictionaries/custom/nyt_spelling_bee_dictionary_' + datetime.now().strftime('%Y%m%d'))
