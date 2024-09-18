@@ -263,8 +263,8 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     if '$' in curr_dict and center in current_prefix:
         valid_words.append(current_prefix)
 
-    for letter in valid_letters:
-        if letter in curr_dict:
+    for letter in curr_dict:
+        if letter in valid_letters:
             valid_words.extend(_traverse_radix_tree(current_prefix + letter, curr_dict[letter], center, valid_letters))
 
     return valid_words
