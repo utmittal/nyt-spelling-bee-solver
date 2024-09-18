@@ -241,7 +241,7 @@ def _preprocess_get_word_tree(suffix_list: list[str], curr_dict: NestedStrDict) 
     return curr_dict
 
 
-def _traverse_word_tree(current_prefix: str, curr_dict: NestedStrDict, valid_letters: str | list[str]) -> \
+def _traverse_word_tree(current_prefix: str, curr_dict: NestedStrDict, center, valid_letters: str | list[str]) -> \
         list[str]:
     """
     Recursive function to traverse through the tree as represented by a NestedStrDict.
@@ -252,12 +252,12 @@ def _traverse_word_tree(current_prefix: str, curr_dict: NestedStrDict, valid_let
     :return: list of valid words formed from the letters
     """
     valid_words = []
-    if '$' in curr_dict:
+    if '$' in curr_dict and center in current_prefix:
         valid_words.append(current_prefix)
 
     for letter in valid_letters:
         if letter in curr_dict:
-            valid_words.extend(_traverse_word_tree(current_prefix + letter, curr_dict[letter], valid_letters))
+            valid_words.extend(_traverse_word_tree(current_prefix + letter, curr_dict[letter], center, valid_letters))
 
     return valid_words
 
@@ -277,9 +277,9 @@ def get_bee_solutions_prefix_graph_nested(center: str, others: str, word_tree: N
     """
     _validate_character_args(center, others)
 
-    valid_bee_words = _traverse_word_tree('', word_tree, center + others)
+    valid_bee_words = _traverse_word_tree('', word_tree, center, center + others)
 
-    return [w for w in valid_bee_words if center in w]
+    return valid_bee_words
 
 
 def pretty_print_solution(sol_list, center, others, uncommon=False):
@@ -318,7 +318,7 @@ with open('dictionaries/processed/words_bee.txt') as f:
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-time_iters = 1000
+time_iters = 10000
 today_center = 'o'
 today_others = "ctpnme"
 
