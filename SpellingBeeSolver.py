@@ -71,28 +71,56 @@ def preprocess_get_bit_to_negation_dict(dictionary):
     return negated_dict
 
 
-def get_bee_solutions_bitwise(center: str, others: str, dictionary, word_to_negated_word):
+def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int: str], word_to_negated_word) -> list[
+    str]:
+    """
+    Uses bit operations to check if a word is valid.
+
+    Each word is a bit array of 26 bits, where each bit represents a letter from the alphabet. The central character
+    and other characters are also represented in this manner. We can then derive a bit equation to check whether the
+    word is valid. Given the high number of comparisons that we need to perform, this should be faster than the naive
+    approach.
+
+    Note: Python doesn't have a native bit class/type. We could use a list of booleans but bit operations in integers
+    is much faster in python (and supported directly).
+
+    :param center: Central character that must appear in word. Length = 1
+    :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
+    :param bit_dictionary: Dictionary of words to look in, where the keys are the bit representations of the word and
+    the values are the string representation of the words
+    :param word_to_negated_word:
+    :return: list of solutions
+    """
     _validate_character_args(center, others)
 
     """
-    truth table where word refers to the word we are checking. Center must always be present in the word.
-    Others should be optionally present in the word. We want the value to be greater than 0 if the word isn't valid.
+    Truth table to derive a SoP equation. SoP is better than PoS here I think because we have more 0 terms (though I 
+    guess I could always flip that if I was using PoS). 
+    
+    Note: This truth table is for the individual bits. Each bit can be thought of as a letter where 0 means the letter
+    is absent and 1 means it's present
+    
+    W: word we are checking
+    C: center letter that must always be present in the word
+    O: other letters that should be optionally present in the word
+    R: result where we want the value to be 1 if this combination invalidates the word
 
-        word    center  others  result  minterms
-        0       0       0       0
-        0       0       1       0
-        0       1       0       1       ((NOT word) AND center AND (NOT others))
-        0       1       1       0           # technically should never happen, so we put 0 to reduce our sum of products
-        1       0       0       1       (word AND (NOT center) AND (NOT others))
-        1       0       1       0
-        1       1       0       0
-        1       1       1       0           # technically should never happen, so we put 0 to reduce our sum of products
+        W   C   O   R   notes
+        ---------------------
+        0   0   0   0   Letter absent in word, center and others. Word is valid.
+        0   0   1   0   Letter present only in others. Word is valid.
+        0   1   0   1   Letter present only in center. Hence, word is not valid
+        0   1   1   0   Letter present in center and others. Not possible, so R=0 to reduce the number of terms.
+        1   0   0   1   Letter present in word but not in center or others. Word is invalid.
+        1   0   1   0   Letter present in word and in others. Word is valid.
+        1   1   0   0   Letter present in word and in center. Word is valid.
+        1   1   1   0   Letter present in word, center and others. Not possible, so R=0 to reduce the number of terms.
 
-        sop = ((NOT word) AND center AND (NOT others)) + (word AND (NOT center) AND (NOT others))
-            = (~W C ~O) + (W ~C ~O)
+    SoP = ((not W) and C and (not O)) OR (W and (not C) and (not O))
+        = (~W . C . ~O) + (W . ~C . ~O)
 
-        This is why we calculate the negated words in advance, so that we don't have to waste time on it in this
-        function. Because NOT in python is weird. Should probably figured out how it works actually.
+    This is why we calculate the negated words in advance, so that we don't have to waste time on it in this
+    function. Because NOT in python is weird. Should probably figured out how it works actually.
     """
 
     # We need to perform the bit operation [word OR (NOT letters)] to get the right answers
@@ -112,11 +140,11 @@ def get_bee_solutions_bitwise(center: str, others: str, dictionary, word_to_nega
     center_bits_negated = int(''.join(center_bits_negated), 2)
 
     valid_bee_words = []
-    for word_bits in dictionary:
+    for word_bits in bit_dictionary:
         result = (word_to_negated_word[word_bits] & center_bits & other_bits_negated) | (
                 word_bits & center_bits_negated & other_bits_negated)
         if result == 0:
-            valid_bee_words.extend(dictionary[word_bits])
+            valid_bee_words.extend(bit_dictionary[word_bits])
 
     return valid_bee_words
 
