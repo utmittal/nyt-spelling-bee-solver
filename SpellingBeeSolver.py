@@ -182,6 +182,10 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | list[st
     valid_words = []
     next_char_set = prefix_tree[prefix]
 
+    # can't form a valid word
+    if center not in prefix and center not in next_char_set:
+        return valid_words
+
     if '$' in next_char_set and center in prefix:
         valid_words.append(prefix)
 
