@@ -31,21 +31,27 @@ radix_tree_solution_stmt = """
 get_bee_solutions_radix_tree(benchmark_center, benchmark_others, radix_tree)
 """
 
-iterations = 10
+iterations = 10000
+repetitions = 5  # default
 
-naive_results = timeit.repeat(stmt=naive_solution_stmt, number=iterations, globals=globals())
+naive_results = timeit.repeat(stmt=naive_solution_stmt, number=iterations, repeat=repetitions, globals=globals())
 naive_min = min([r / iterations for r in naive_results])
 
-bitwise_results = timeit.repeat(stmt=bitwise_solution_stmt, number=iterations, globals=globals())
+bitwise_results = timeit.repeat(stmt=bitwise_solution_stmt, number=iterations, repeat=repetitions, globals=globals())
 bitwise_min = min([r / iterations for r in bitwise_results])
 
-prefix_tree_results = timeit.repeat(stmt=prefix_tree_solution_stmt, number=iterations, globals=globals())
+prefix_tree_results = timeit.repeat(stmt=prefix_tree_solution_stmt, number=iterations, repeat=repetitions,
+                                    globals=globals())
 prefix_tree_min = min([r / iterations for r in prefix_tree_results])
 
-radix_tree_results = timeit.repeat(stmt=radix_tree_solution_stmt, number=iterations, globals=globals())
+radix_tree_results = timeit.repeat(stmt=radix_tree_solution_stmt, number=iterations, repeat=repetitions,
+                                   globals=globals())
 radix_tree_min = min([r / iterations for r in radix_tree_results])
 
+print(f"Iterations:\t\t{iterations}")
+print(f"Repetitions:\t{repetitions}")
+print()
 print(tabulate([['Naive', naive_min, naive_min / naive_min], ['Bitwise', bitwise_min, naive_min / bitwise_min],
                 ['Prefix Tree', prefix_tree_min, naive_min / prefix_tree_min],
                 ['Radix Tree', radix_tree_min, naive_min / radix_tree_min]],
-               headers=['Strategy', 'Min Time', 'Speedup']))
+               headers=['Strategy', 'Min Time (s)', 'Speedup']))
