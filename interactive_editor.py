@@ -1,5 +1,5 @@
 from datetime import datetime
-from spelling_bee_solvers import get_bee_solutions_radix_tree, _preprocess_get_radix_tree
+from spelling_bee_solvers import get_bee_solutions_radix_tree, preprocess_get_radix_tree
 from dictionary_utils import get_latest_custom_dictionary, write_words_to_dictionary
 
 
@@ -53,6 +53,6 @@ def interactive_edit(solutions: list[str]) -> None:
 
 today_center = "o"
 today_others = "ctpnme"
-nested_dict = _preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
+nested_dict = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
 solution_words = get_bee_solutions_radix_tree(today_center, today_others, nested_dict)
 interactive_edit(solution_words)

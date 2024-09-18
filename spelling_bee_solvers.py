@@ -1,5 +1,4 @@
 import string
-import time
 
 
 def _validate_character_args(center: str, others: str):
@@ -36,7 +35,7 @@ def get_bee_solutions_naive(center: str, others: str | list[str], dictionary: li
     return valid_bee_words
 
 
-def _preprocess_get_bit_to_word_dict(dictionary: list[str]) -> dict[int: [str]]:
+def preprocess_get_bit_to_word_dict(dictionary: list[str]) -> dict[int: [str]]:
     """
     Generates a dictionary where the keys are the bit representation of the word (as an integer) and the values are
     a list of corresponding words. Bit representations ignore letter ordering and letter duplicates. So a single bit
@@ -131,7 +130,7 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     return valid_bee_words
 
 
-def _preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
+def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
     """
     Converts the list of words into a prefix tree (trie) where each node is a string prefix and each child represents
     a prefix that can be formed by adding a letter to the parent. I.e. Node 'ro' will have a path to 'rob' and a
@@ -213,7 +212,7 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
 type NestedStrDict = dict[str: NestedStrDict | None]
 
 
-def _preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
+def preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
     """
     Converts the list of words into a tree where each node is a letter and each child is a valid succeeding
     letter that will eventually form a word. This is essentially a radix tree. A small sample of this tree might look
@@ -240,9 +239,9 @@ def _preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict)
         first_char = suffix[0]
 
         if first_char in curr_dict:
-            curr_dict[first_char] = _preprocess_get_radix_tree([suffix[1:]], curr_dict[first_char])
+            curr_dict[first_char] = preprocess_get_radix_tree([suffix[1:]], curr_dict[first_char])
         else:
-            curr_dict[first_char] = _preprocess_get_radix_tree([suffix[1:]], {})
+            curr_dict[first_char] = preprocess_get_radix_tree([suffix[1:]], {})
 
     return curr_dict
 
@@ -283,17 +282,3 @@ def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStr
     valid_bee_words = _traverse_radix_tree('', radix_tree, center, center + others)
 
     return valid_bee_words
-
-
-def measure_execution_time(function, *args, iterations=1):
-    total_time = 0
-    result = None
-    for i in range(0, iterations):
-        start_time = time.time()
-        result = function(*args)
-        end_time = time.time()
-
-        total_time += (end_time - start_time)
-
-    print("Average execution time (" + str(iterations) + " iterations): " + str(total_time / iterations) + " seconds")
-    return result
