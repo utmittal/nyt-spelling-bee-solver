@@ -38,42 +38,25 @@ def get_bee_solutions_naive(center: str, others: str | list[str], dictionary: li
     return valid_bee_words
 
 
-def preprocess_get_bit_to_word_dict(dictionary):
+def _preprocess_get_bit_to_word_dict(dictionary: list[str]) -> dict[int: [str]]:
     bit_dict = {}
     for word in dictionary:
-        bits = ['0'] * 26
-        chars = set(word)
-        for c in chars:
-            bits[string.ascii_lowercase.index(c)] = "1"
+        word_bits = ['0'] * 26
+        letters = set(word)
+        for c in letters:
+            word_bits[string.ascii_lowercase.index(c)] = '1'
+        word_bits = int(''.join(word_bits), 2)
 
-        bits = int(''.join(bits), 2)
-        if bits in bit_dict:
-            bit_dict[bits].append(word)
+        # anagrams and words with repeated letters will have the same bit representation
+        if word_bits in bit_dict:
+            bit_dict[word_bits].append(word)
         else:
-            bit_dict[bits] = [word]
+            bit_dict[word_bits] = [word]
 
     return bit_dict
 
 
-def preprocess_get_bit_to_negation_dict(dictionary):
-    negated_dict = {}
-    for word in dictionary:
-        bits = ['0'] * 26
-        negated = ['1'] * 26
-        chars = set(word)
-        for c in chars:
-            bits[string.ascii_lowercase.index(c)] = "1"
-            negated[string.ascii_lowercase.index(c)] = "0"
-
-        bits = int(''.join(bits), 2)
-        negated = int(''.join(negated), 2)
-        negated_dict[bits] = negated
-
-    return negated_dict
-
-
-def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int: str], word_to_negated_word) -> list[
-    str]:
+def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int: str]) -> list[str]:
     """
     Uses bit operations to check if a word is valid.
 
@@ -89,7 +72,6 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
     :param bit_dictionary: Dictionary of words to look in, where the keys are the bit representations of the word and
     the values are the string representation of the words
-    :param word_to_negated_word:
     :return: list of solutions
     """
     _validate_character_args(center, others)
@@ -276,10 +258,9 @@ today_others = "ctpnme"
 # # pretty_print_solution(solution_words,today_center,today_others)
 #
 print("Bitwise")
-bit_to_string_dict = measure_execution_time(preprocess_get_bit_to_word_dict, words)
-negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict, words)
+bit_to_string_dict = measure_execution_time(_preprocess_get_bit_to_word_dict, words)
 solution_words = measure_execution_time(get_bee_solutions_bitwise, today_center, today_others, bit_to_string_dict,
-                                        negated_dictionary, iterations=time_iters)
+                                        iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
 #
 # print("Graph")
