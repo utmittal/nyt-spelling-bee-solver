@@ -215,10 +215,11 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
 type NestedStrDict = dict[str: NestedStrDict | None]
 
 
-def _preprocess_get_word_tree(suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
+def _preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
     """
     Converts the list of words into a tree where each node is a letter and each child is a valid succeeding
-    letter that will eventually form a word. A small sample of this tree might look like this:
+    letter that will eventually form a word. This is essentially a radix tree. A small sample of this tree might look
+    like this:
          r
         /
        o
@@ -241,17 +242,17 @@ def _preprocess_get_word_tree(suffix_list: list[str], curr_dict: NestedStrDict) 
         first_char = suffix[0]
 
         if first_char in curr_dict:
-            curr_dict[first_char] = _preprocess_get_word_tree([suffix[1:]], curr_dict[first_char])
+            curr_dict[first_char] = _preprocess_get_radix_tree([suffix[1:]], curr_dict[first_char])
         else:
-            curr_dict[first_char] = _preprocess_get_word_tree([suffix[1:]], {})
+            curr_dict[first_char] = _preprocess_get_radix_tree([suffix[1:]], {})
 
     return curr_dict
 
 
-def _traverse_word_tree(current_prefix: str, curr_dict: NestedStrDict, center, valid_letters: str | list[str]) -> \
+def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, valid_letters: str | list[str]) -> \
         list[str]:
     """
-    Recursive function to traverse through the tree as represented by a NestedStrDict.
+    Recursive function to traverse through the radix tree as represented by a NestedStrDict.
 
     :param current_prefix: Current prefix string
     :param curr_dict: Current NestedStrDict representing all possible next characters for the current prefix
@@ -264,12 +265,12 @@ def _traverse_word_tree(current_prefix: str, curr_dict: NestedStrDict, center, v
 
     for letter in valid_letters:
         if letter in curr_dict:
-            valid_words.extend(_traverse_word_tree(current_prefix + letter, curr_dict[letter], center, valid_letters))
+            valid_words.extend(_traverse_radix_tree(current_prefix + letter, curr_dict[letter], center, valid_letters))
 
     return valid_words
 
 
-def get_bee_solutions_prefix_tree_nested(center: str, others: str, word_tree: NestedStrDict) -> list[str]:
+def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStrDict) -> list[str]:
     """
     Uses a tree to find all valid words. Each node is a letter and each child is a valid succeeding letter that will
     eventually form a word.
@@ -279,12 +280,12 @@ def get_bee_solutions_prefix_tree_nested(center: str, others: str, word_tree: Ne
 
     :param center: Central character that must appear in word. Length = 1
     :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
-    :param word_tree: word tree
+    :param radix_tree: word tree
     :return: list of solutions
     """
     _validate_character_args(center, others)
 
-    valid_bee_words = _traverse_word_tree('', word_tree, center, center + others)
+    valid_bee_words = _traverse_radix_tree('', radix_tree, center, center + others)
 
     return valid_bee_words
 
@@ -350,7 +351,7 @@ solution_words = measure_execution_time(get_bee_solutions_prefix_tree, today_cen
 # pretty_print_solution(solution_words, today_center, today_others)
 
 print("Nested Graph")
-nested_dict = measure_execution_time(_preprocess_get_word_tree, words, {})
-solution_words = measure_execution_time(get_bee_solutions_prefix_tree_nested, today_center, today_others, nested_dict,
+nested_dict = measure_execution_time(_preprocess_get_radix_tree, words, {})
+solution_words = measure_execution_time(get_bee_solutions_radix_tree, today_center, today_others, nested_dict,
                                         iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
