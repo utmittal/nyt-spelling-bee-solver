@@ -234,12 +234,6 @@ def get_bee_words_graph_inception(center, others, confusing_dict):
     return [w for w in valid_bee_words if center in w]
 
 
-def get_latest_custom_dictionary_path():
-    dics = os.listdir('dictionaries/custom')
-    dics.sort(reverse=True)
-    return 'dictionaries/custom/' + dics[0]
-
-
 def pretty_print_solution(sol_list, center, others, uncommon=False):
     sol_list.sort()
 
