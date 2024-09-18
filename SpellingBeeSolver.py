@@ -71,22 +71,22 @@ def preprocess_get_bit_to_negation_dict(dictionary):
     return negated_dict
 
 
-def get_bee_words_bitwise(center, others, dictionary, word_to_negated_word):
+def get_bee_solutions_bitwise(center: str, others: str, dictionary, word_to_negated_word):
     _validate_character_args(center, others)
 
     """
     truth table where word refers to the word we are checking. Center must always be present in the word.
-    Others should be optionally present in the word. We want the value to be greater than 0 if the word isnt valid.
+    Others should be optionally present in the word. We want the value to be greater than 0 if the word isn't valid.
 
         word    center  others  result  minterms
         0       0       0       0
         0       0       1       0
         0       1       0       1       ((NOT word) AND center AND (NOT others))
-        0       1       1       0   # technically should never happen, so we put 0 to reduce our sum of products
+        0       1       1       0           # technically should never happen, so we put 0 to reduce our sum of products
         1       0       0       1       (word AND (NOT center) AND (NOT others))
         1       0       1       0
         1       1       0       0
-        1       1       1       0   # technically should never happen, so we put 0 to reduce our sum of products
+        1       1       1       0           # technically should never happen, so we put 0 to reduce our sum of products
 
         sop = ((NOT word) AND center AND (NOT others)) + (word AND (NOT center) AND (NOT others))
             = (~W C ~O) + (W ~C ~O)
