@@ -189,6 +189,9 @@ def get_bee_solutions_prefix_graph(center: str, others: str | list[str], prefix_
     Uses a graph to find all valid words. Each node in the graph is a string prefix and each path is a valid letter
     that can succeed the prefix.
 
+    Note: We don't check for the necessary character during the recursion itself because for some reason that is
+    slower? Instead, we just do a final pass at the end before returning the list.
+
     :param center: Central character that must appear in word. Length = 1
     :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
     :param prefix_graph: dict of prefix strings to corresponding valid succeeding characters
