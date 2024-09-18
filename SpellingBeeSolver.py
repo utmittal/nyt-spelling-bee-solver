@@ -156,33 +156,47 @@ def _preprocess_get_prefix_graph(dictionary: list[str]) -> dict[str: [str]]:
             else:
                 big_massive_dict[prefix].add(next_char)
 
+    # starting node
+    big_massive_dict[''] = list(string.ascii_lowercase)
+
     return big_massive_dict
 
 
-def _graph_recursion(prefix: str, valid_letters: str | list[str], big_dict: dict[str: [str]]) -> list[str]:
-    bee_words = []
+def _traverse_prefix_graph(prefix: str, valid_letters: str | list[str], prefix_graph: dict[str: [str]]) -> list[str]:
+    """
+    Recursive function to traverse through prefix graph to find all words formed by the given letters.
 
-    # print("Processing prefix - " + prefix)
-    if prefix in big_dict:
-        suffix_list = big_dict[prefix]
-        for suf in suffix_list:
-            new_char = suf[0]
-            if new_char in valid_letters:
-                bee_words.extend(_graph_recursion(prefix + new_char, valid_letters, big_dict))
-            elif new_char == "$":
-                bee_words.append(prefix)
+    :param prefix: Current prefix string.
+    :param valid_letters: List of letters that we are trying to form words from.
+    :param prefix_graph: Prefix graph as a dict of prefixes to valid next characters
+    :return:
+    """
+    valid_words = []
 
-    return bee_words
+    next_char_list = prefix_graph[prefix]
+    for next_char in next_char_list:
+        if next_char in valid_letters:
+            valid_words.extend(_traverse_prefix_graph(prefix + next_char, valid_letters, prefix_graph))
+        elif next_char == "$":
+            valid_words.append(prefix)
+        # else: do nothing
+
+    return valid_words
 
 
-def get_bee_words_graph(center: str, others: str | list[str], big_dict: dict[str: [str]]) -> list[str]:
+def get_bee_solutions_prefix_graph(center: str, others: str | list[str], prefix_graph: dict[str: [str]]) -> list[str]:
+    """
+    Uses a graph to find all valid words. Each node in the graph is a string prefix and each path is a valid letter
+    that can succeed the prefix.
+
+    :param center: Central character that must appear in word. Length = 1
+    :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
+    :param prefix_graph: dict of prefix strings to corresponding valid succeeding characters
+    :return: list of solutions
+    """
     _validate_character_args(center, others)
 
-    valid_bee_words = []
-    valid_letters = center + others
-    for c in valid_letters:
-        res = _graph_recursion(c, valid_letters, big_dict)
-        valid_bee_words.extend(res)
+    valid_bee_words = _traverse_prefix_graph('', center + others, prefix_graph)
 
     return [w for w in valid_bee_words if center in w]
 
@@ -283,7 +297,7 @@ today_others = "ctpnme"
 #
 print("Graph")
 letter_graph = measure_execution_time(_preprocess_get_prefix_graph, words)
-solution_words = measure_execution_time(get_bee_words_graph, today_center, today_others, letter_graph,
+solution_words = measure_execution_time(get_bee_solutions_prefix_graph, today_center, today_others, letter_graph,
                                         iterations=time_iters)
 pretty_print_solution(solution_words, today_center, today_others)
 
