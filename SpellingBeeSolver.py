@@ -1,6 +1,7 @@
 import string
 import time
 import os
+from dictionary_utils import get_latest_custom_dictionary_path
 
 
 def _validate_character_args(center: str, others: str):
@@ -269,14 +270,15 @@ def measure_execution_time(function, *args, iterations=1):
     print("Average execution time (" + str(iterations) + " iterations): " + str(total_time / iterations) + " seconds")
     return result
 
-# with open('dictionaries/processed/words_bee.txt') as f:
-#     words = f.read().splitlines()
+
+with open(get_latest_custom_dictionary_path()) as r:
+    words = r.read().splitlines()
 
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
-# time_iters = 1
-# today_center = 'a'
-# today_others = "eijlnv"
+time_iters = 100
+today_center = 'a'
+today_others = "eijlnv"
 
 # time_iters = 1
 # today_center = 'r'
@@ -286,12 +288,12 @@ def measure_execution_time(function, *args, iterations=1):
 # solution_words = measure_execution_time(get_bee_words_naive,today_center,today_others,words, iterations = time_iters)
 # # pretty_print_solution(solution_words,today_center,today_others)
 #
-# print("Bitwise")
-# bit_dictionary = measure_execution_time(preprocess_get_bit_to_word_dict,words)
-# negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict,words)
-# solution_words = measure_execution_time(get_bee_words_bitwise,today_center, today_others, bit_dictionary,
-# negated_dictionary, iterations = time_iters)
-# # pretty_print_solution(solution_words, today_center, today_others)
+print("Bitwise")
+bit_to_string_dict = measure_execution_time(preprocess_get_bit_to_word_dict, words)
+negated_dictionary = measure_execution_time(preprocess_get_bit_to_negation_dict, words)
+solution_words = measure_execution_time(get_bee_solutions_bitwise, today_center, today_others, bit_to_string_dict,
+                                        negated_dictionary, iterations=time_iters)
+pretty_print_solution(solution_words, today_center, today_others)
 #
 # print("Graph")
 # letter_graph = measure_execution_time(preprocess_graph_solution,words)

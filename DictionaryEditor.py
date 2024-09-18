@@ -3,12 +3,6 @@ from datetime import datetime
 from SpellingBeeSolver import get_bee_words_graph_inception, preprocess_graph_inception_solution
 
 
-def get_latest_custom_dictionary_path():
-    dics = os.listdir('dictionaries/custom')
-    dics.sort(reverse=True)
-    return 'dictionaries/custom/' + dics[0]
-
-
 def get_current_words():
     with open(get_latest_custom_dictionary_path(), 'r') as f:
         words = f.read().splitlines()
