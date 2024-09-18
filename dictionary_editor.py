@@ -1,11 +1,11 @@
 import os
 from datetime import datetime
 from spelling_bee_solvers import get_bee_solutions_radix_tree, _preprocess_get_radix_tree
-from dictionary_utils import get_latest_custom_dictionary_path
+from dictionary_utils import get_latest_custom_dictionary
 
 
 def get_current_words():
-    with open(get_latest_custom_dictionary_path(), 'r') as f:
+    with open(get_latest_custom_dictionary(), 'r') as f:
         words = f.read().splitlines()
     return words
 
@@ -52,7 +52,7 @@ def interactive_edit(solutions: list[str]):
 
 
 def prune_impossible_words():
-    with open(get_latest_custom_dictionary_path()) as r:
+    with open(get_latest_custom_dictionary()) as r:
         all_words = r.read().splitlines()
 
     print("Words to delete:")
@@ -77,7 +77,7 @@ def prune_impossible_words():
 
 today_center = "o"
 today_others = "ctpnme"
-with open(get_latest_custom_dictionary_path()) as reader:
+with open(get_latest_custom_dictionary()) as reader:
     words = reader.read().splitlines()
 nested_dict = _preprocess_get_radix_tree(words, {})
 solution_words = get_bee_solutions_radix_tree(today_center, today_others, nested_dict)
