@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from SpellingBeeSolver import get_bee_solutions_radix_tree, _preprocess_get_radix_tree
+from spelling_bee_solvers import get_bee_solutions_radix_tree, _preprocess_get_radix_tree
 from dictionary_utils import get_latest_custom_dictionary_path
 
 

@@ -1,6 +1,5 @@
 import string
 import time
-import os
 from dictionary_utils import get_latest_custom_dictionary_path
 
 
