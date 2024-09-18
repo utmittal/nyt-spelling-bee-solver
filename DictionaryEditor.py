@@ -75,7 +75,7 @@ def prune_impossible_words():
 # prune_impossible_words()
 
 today_center = "o"
-today_others = "cdrkab"
+today_others = "ctpnme"
 with open(get_latest_custom_dictionary_path()) as reader:
     words = reader.read().splitlines()
 nested_dict = preprocess_graph_inception_solution(words, {})

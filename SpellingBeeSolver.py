@@ -277,8 +277,8 @@ with open(get_latest_custom_dictionary_path()) as r:
 # note: this combo seems to be the combo with the highest number of words
 # in the history of nyt spelling bee
 time_iters = 100
-today_center = 'a'
-today_others = "eijlnv"
+today_center = 'o'
+today_others = "ctpnme"
 
 # time_iters = 1
 # today_center = 'r'
