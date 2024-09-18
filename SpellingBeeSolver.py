@@ -125,7 +125,7 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     return valid_bee_words
 
 
-def preprocess_graph_solution(dictionary):
+def _preprocess_graph_solution(dictionary: list[str]) -> dict[str: [str]]:
     big_massive_dict = {}
 
     for word in dictionary:
@@ -141,7 +141,7 @@ def preprocess_graph_solution(dictionary):
     return big_massive_dict
 
 
-def graph_recursion(prefix, valid_letters, big_dict):
+def _graph_recursion(prefix: str, valid_letters: str | list[str], big_dict: dict[str: [str]]) -> list[str]:
     bee_words = []
 
     # print("Processing prefix - " + prefix)
@@ -150,20 +150,20 @@ def graph_recursion(prefix, valid_letters, big_dict):
         for suf in suffix_list:
             new_char = suf[0]
             if new_char in valid_letters:
-                bee_words.extend(graph_recursion(prefix + new_char, valid_letters, big_dict))
+                bee_words.extend(_graph_recursion(prefix + new_char, valid_letters, big_dict))
             elif new_char == "$":
                 bee_words.append(prefix)
 
     return bee_words
 
 
-def get_bee_words_graph(center, others, big_dict):
+def get_bee_words_graph(center: str, others: str | list[str], big_dict: dict[str: [str]]) -> list[str]:
     _validate_character_args(center, others)
 
     valid_bee_words = []
     valid_letters = center + others
     for c in valid_letters:
-        res = graph_recursion(c, valid_letters, big_dict)
+        res = _graph_recursion(c, valid_letters, big_dict)
         valid_bee_words.extend(res)
 
     return [w for w in valid_bee_words if center in w]
@@ -257,16 +257,16 @@ today_others = "ctpnme"
 # solution_words = measure_execution_time(get_bee_words_naive,today_center,today_others,words, iterations = time_iters)
 # # pretty_print_solution(solution_words,today_center,today_others)
 #
-print("Bitwise")
-bit_to_string_dict = measure_execution_time(_preprocess_get_bit_to_word_dict, words)
-solution_words = measure_execution_time(get_bee_solutions_bitwise, today_center, today_others, bit_to_string_dict,
-                                        iterations=time_iters)
+# print("Bitwise")
+# bit_to_string_dict = measure_execution_time(_preprocess_get_bit_to_word_dict, words)
+# solution_words = measure_execution_time(get_bee_solutions_bitwise, today_center, today_others, bit_to_string_dict,
+#                                         iterations=time_iters)
 # pretty_print_solution(solution_words, today_center, today_others)
 #
-# print("Graph")
-# letter_graph = measure_execution_time(preprocess_graph_solution,words)
-# solution_words = measure_execution_time(get_bee_words_graph,today_center, today_others, letter_graph,
-# iterations=time_iters)
+print("Graph")
+letter_graph = measure_execution_time(_preprocess_graph_solution, words)
+solution_words = measure_execution_time(get_bee_words_graph, today_center, today_others, letter_graph,
+                                        iterations=time_iters)
 # # pretty_print_solution(solution_words, today_center, today_others)
 
 # print("Nested Graph")
