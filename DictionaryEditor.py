@@ -80,8 +80,8 @@ def prune_impossible_words():
 #      "vela", "villae", "viva"])
 # prune_impossible_words()
 
-today_center = "m"
-today_others = "ildgen"
+today_center = "o"
+today_others = "cdrkab"
 with open(get_latest_custom_dictionary_path()) as reader:
     words = reader.read().splitlines()
 nested_dict = preprocess_graph_inception_solution(words, {})
