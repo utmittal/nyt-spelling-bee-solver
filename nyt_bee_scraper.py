@@ -5,6 +5,10 @@ import re
 from datetime import datetime, timedelta
 import backoff
 
+"""
+Simple web scraping script to download all known correct answers from nytbee.com.
+"""
+
 
 def fatal_code(excep):
     if excep.code == 404:
@@ -17,10 +21,11 @@ def fatal_code(excep):
                       HTTPError,
                       max_tries=10,
                       giveup=fatal_code)
-def get_raw_page(url):
+def get_raw_page(url: str):
     req = Request(url)
 
-    user_agent_header = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+    user_agent_header = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
+                         'Chrome/103.0.0.0 Safari/537.36')
     req.add_header('user-agent', user_agent_header)
 
     return urlopen(req).read()
@@ -131,7 +136,6 @@ def add_date_and_url_to_file(path, date):
         thefile.write(get_date_string(date) + ", " + get_url_from_date(date) + "\n")
 
 
-# datetime(year=2024,month=9,day=12)
 date_object = datetime.now()
 unique_words_aim = 10237
 
