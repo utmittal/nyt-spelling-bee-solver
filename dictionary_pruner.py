@@ -21,8 +21,8 @@ with open(f'{PROJECT_ROOT_PATH}/dictionaries/raw/nytbee_dot_com_scraped_answers.
 current_letters = set()
 current_words = set()
 probable_center = set()
-total_add = []
-total_delete = []
+total_add = set()
+total_delete = set()
 for word in nyt_bee_answers:
     letter_set = set(word)
 
@@ -30,7 +30,7 @@ for word in nyt_bee_answers:
         if len(current_letters) == 7:
             if len(probable_center) != 1:
                 # Add all words but don't delete anything
-                total_add.extend(current_words)
+                total_add.update(current_words)
                 print(f"Could not find center for letter set: {current_letters}.")
                 current_letters = set()
                 current_words = set()
@@ -42,9 +42,9 @@ for word in nyt_bee_answers:
             our_answers = set(_get_bee_sols(center, list(current_letters)))
 
             words_to_delete = our_answers - current_words
-            total_delete.extend(words_to_delete)
+            total_delete.update(words_to_delete)
             words_to_add = current_words - our_answers
-            total_add.extend(words_to_add)
+            total_add.update(words_to_add)
             # print(f"center: {center}")
             # print(f"others: {current_letters}")
             # print(f"nyt bee words: {current_words}")
@@ -69,5 +69,5 @@ for word in nyt_bee_answers:
 print(total_add)
 print(total_delete)
 
-add_new_words(total_add)
-delete_words(total_add)
+add_new_words(list(total_add))
+delete_words(list(total_delete))
