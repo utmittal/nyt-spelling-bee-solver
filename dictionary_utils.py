@@ -51,6 +51,13 @@ def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> Non
         writefile.writelines(word.lower() + '\n' for word in sorted(word_list))
 
 
+def write_words_to_custom_dictionary(word_list: list[str] | set[str]) -> None:
+    """
+    Writes words to the custom NYT spelling bee dictionary.
+    """
+    write_words_to_dictionary(word_list, f'custom/nyt_spelling_bee_dictionary.txt')
+
+
 def analyze_dictionary(dictionary: list[str]) -> None:
     """
     Prints various stats for a given list of words. Useful for analyzing different dictionaries to figure out which
