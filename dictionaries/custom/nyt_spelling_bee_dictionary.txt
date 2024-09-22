@@ -15094,7 +15094,6 @@ enormous
 enormousness
 enough
 enoughs
-enow
 enplane
 enplaned
 enplanes
@@ -51298,7 +51297,6 @@ weekends
 weeklies
 weekly
 weeks
-ween
 weened
 weenie
 weenier
