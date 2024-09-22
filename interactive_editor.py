@@ -45,8 +45,8 @@ def interactive_edit(solutions: list[str]) -> None:
         delete_words(delete_list)
 
 
-today_center = "e"
-today_others = "bgilty"
+today_center = "n"
+today_others = "cfiort"
 nested_dict = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
 solution_words = get_bee_solutions_radix_tree(today_center, today_others, nested_dict)
 interactive_edit(solution_words)
