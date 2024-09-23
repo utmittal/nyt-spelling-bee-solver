@@ -1,12 +1,13 @@
 """
 Simple web scraping script to download all known correct answers from nytbee.com.
 """
-from urllib.request import urlopen, Request
-from urllib.error import HTTPError
-from bs4 import BeautifulSoup
 import re
 from datetime import datetime, timedelta
+from urllib.error import HTTPError
+from urllib.request import urlopen, Request
+
 import backoff
+from bs4 import BeautifulSoup
 
 from util.project_path import project_path
 

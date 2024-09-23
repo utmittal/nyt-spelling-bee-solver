@@ -1,6 +1,6 @@
-import os
-import json
 import collections
+import json
+import os
 from pathlib import Path
 
 from util.project_path import project_path
