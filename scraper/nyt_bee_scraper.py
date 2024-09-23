@@ -119,7 +119,7 @@ def get_answer_list_from_nyt_page(raw_web_page):
 def write_words_to_dictionary(word_list):
     # Note: we specifically open in append mode so that if for some reason the file doesn't exist, the program fails.
     # I want to know if the file is gone (because something has gone wrong)
-    with open('dictionaries/raw/nytbee_dot_com_scraped_answers.txt', 'a') as writefile:
+    with open('../dictionaries/raw/nytbee_dot_com_scraped_answers.txt', 'a') as writefile:
         writefile.writelines(word + '\n' for word in word_list)
 
 
@@ -139,11 +139,11 @@ def add_date_and_url_to_file(path, date):
 date_object = datetime.now()
 unique_words_aim = 10237
 
-with open('scraper_logs/scraped_dates.txt', 'r') as f:
+with open('logs/scraped_dates.txt', 'r') as f:
     already_scraped = f.read().splitlines()
 scraped_dates = [w.split(',')[0] for w in already_scraped]
 
-with open('dictionaries/raw/nytbee_dot_com_scraped_answers.txt', 'r') as f:
+with open('../dictionaries/raw/nytbee_dot_com_scraped_answers.txt', 'r') as f:
     unique_words = set(f.read().splitlines())
 
 consecutive_404 = False
@@ -161,7 +161,7 @@ while True:
         raw_page = get_raw_page(current_url)
     except HTTPError as e:
         if e.code == 404 and consecutive_404 == False:
-            add_date_and_url_to_file('scraper_logs/missing_pages.txt', date_object)
+            add_date_and_url_to_file('logs/missing_pages.txt', date_object)
             print("Page doesn't exist. Continuing.")
             consecutive_404 = True
             continue
@@ -181,4 +181,4 @@ while True:
     if len(unique_words) == unique_words_aim:
         print("Found all unique words. Terminating scraping.")
 
-    add_date_and_url_to_file('scraper_logs/scraped_dates.txt', date_object)
+    add_date_and_url_to_file('logs/scraped_dates.txt', date_object)
