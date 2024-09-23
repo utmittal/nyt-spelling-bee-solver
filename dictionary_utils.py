@@ -46,6 +46,7 @@ def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> Non
     :param path: Path relative to dictionary directory
     """
     word_list = _remove_small_words(word_list)
+    word_list = _remove_long_words(word_list)
     word_list = _remove_impossible_words(word_list)
     with open(f'{PROJECT_ROOT_PATH}/dictionaries/{path}', 'w+') as writefile:
         writefile.writelines(word.lower() + '\n' for word in sorted(word_list))
@@ -133,6 +134,13 @@ def _remove_small_words(dictionary: list[str]) -> list[str]:
     Removes words smaller than 4 letters since NYT doesn't allow them.
     """
     return [w for w in dictionary if len(w) > 3]
+
+
+def _remove_long_words(dictionary: list[str]) -> list[str]:
+    """
+    Removes words longer than 19 letters since NYT doesn't allow them.
+    """
+    return [w for w in dictionary if len(w) < 20]
 
 
 def _remove_impossible_words(dictionary: list[str]) -> list[str]:
