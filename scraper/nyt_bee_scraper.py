@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 import backoff
 
 
-def fatal_code(excep):
-    if excep.code == 404:
+def fatal_code(excep: Exception):
+    if isinstance(excep, HTTPError) and excep.code == 404:
         return True
     else:
         return False
