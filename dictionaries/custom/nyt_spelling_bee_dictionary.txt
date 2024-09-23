@@ -12366,6 +12366,8 @@ dialogs
 dials
 dialyses
 dialysis
+dialyze
+dialyzed
 diameter
 diamond
 diamonded
