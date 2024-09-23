@@ -1,13 +1,12 @@
+"""
+Simple web scraping script to download all known correct answers from nytbee.com.
+"""
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError
 from bs4 import BeautifulSoup
 import re
 from datetime import datetime, timedelta
 import backoff
-
-"""
-Simple web scraping script to download all known correct answers from nytbee.com.
-"""
 
 
 def fatal_code(excep):
