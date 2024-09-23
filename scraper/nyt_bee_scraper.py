@@ -8,6 +8,8 @@ import re
 from datetime import datetime, timedelta
 import backoff
 
+from util.project_path import project_path
+
 
 def fatal_code(excep: Exception):
     if isinstance(excep, HTTPError) and excep.code == 404:
@@ -118,7 +120,7 @@ def get_answer_list_from_nyt_page(raw_web_page):
 def write_words_to_dictionary(word_list):
     # Note: we specifically open in append mode so that if for some reason the file doesn't exist, the program fails.
     # I want to know if the file is gone (because something has gone wrong)
-    with open('../dictionaries/raw/nytbee_dot_com_scraped_answers.txt', 'a') as writefile:
+    with open(project_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'a') as writefile:
         writefile.writelines(word + '\n' for word in word_list)
 
 
@@ -131,18 +133,18 @@ def get_url_from_date(date):
 
 
 def add_date_and_url_to_file(path, date):
-    with open(path, 'a+') as thefile:
+    with open(project_path(path), 'a+') as thefile:
         thefile.write(get_date_string(date) + ", " + get_url_from_date(date) + "\n")
 
 
 date_object = datetime.now()
 unique_words_aim = 10237
 
-with open('logs/scraped_dates.txt', 'r') as f:
+with open(project_path('scraper/logs/scraped_dates.txt'), 'r') as f:
     already_scraped = f.read().splitlines()
 scraped_dates = [w.split(',')[0] for w in already_scraped]
 
-with open('../dictionaries/raw/nytbee_dot_com_scraped_answers.txt', 'r') as f:
+with open(project_path('/dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'r') as f:
     unique_words = set(f.read().splitlines())
 
 consecutive_404 = False
