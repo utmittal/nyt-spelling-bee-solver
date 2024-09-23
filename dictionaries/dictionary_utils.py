@@ -1,19 +1,18 @@
 import os
 import json
 import collections
+from pathlib import Path
 
-from util.project_path import PROJECT_ROOT
+from util.project_path import project_path
 
 
 def get_latest_custom_dictionary() -> list[str]:
     """
     :return: list of words from latest custom dictionary
     """
-    dicts = os.listdir(f'{PROJECT_ROOT}/dictionaries/custom')
+    dicts = os.listdir(project_path('dictionaries/custom'))
     dicts.sort(reverse=True)
-    with open(f'{PROJECT_ROOT}/dictionaries/custom/{dicts[0]}', 'r') as f:
-        words = f.read().splitlines()
-    return words
+    return get_dictionary_from_path(f'dictionaries/custom/{dicts[0]}')
 
 
 def get_benchmarking_dictionary() -> list[str]:
@@ -21,18 +20,17 @@ def get_benchmarking_dictionary() -> list[str]:
     :return: list of words from dictionary used for benchmarking
     """
     # Use the biggest dictionary for benchmarking
-    with open(f'{PROJECT_ROOT}/dictionaries/raw/words_alpha.txt', 'r') as f:
-        words = f.read().splitlines()
-    return words
+    return get_dictionary_from_path('dictionaries/raw/words_alpha.txt')
 
 
-def get_dictionary_from_path(path: str) -> str:
+def get_dictionary_from_path(path: str | Path) -> list[str]:
     """
     Returns a list of words from the file specified by path.
-    :param path: Path relative to dictionaries folder.
+    :param path: Path relative to project root.
     :return: List of words
     """
-    return f'{PROJECT_ROOT}/dictionaries/{path}'
+    with open(project_path(path), 'r') as f:
+        return f.read().splitlines()
 
 
 def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> None:
@@ -42,12 +40,12 @@ def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> Non
     Also removes any words smaller than 4 letters and any words that have more than 7 unique letters.
 
     :param word_list: List of words to write
-    :param path: Path relative to dictionary directory
+    :param path: Path relative to project root
     """
     word_list = _remove_small_words(word_list)
     word_list = _remove_long_words(word_list)
     word_list = _remove_impossible_words(word_list)
-    with open(f'{PROJECT_ROOT}/dictionaries/{path}', 'w+') as writefile:
+    with open(project_path(path), 'w+') as writefile:
         writefile.writelines(word.lower() + '\n' for word in sorted(word_list))
 
 
@@ -55,7 +53,7 @@ def write_words_to_custom_dictionary(word_list: list[str] | set[str]) -> None:
     """
     Writes words to the custom NYT spelling bee dictionary.
     """
-    write_words_to_dictionary(word_list, f'custom/nyt_spelling_bee_dictionary.txt')
+    write_words_to_dictionary(word_list, f'dictionaries/custom/nyt_spelling_bee_dictionary.txt')
 
 
 def analyze_dictionary(dictionary: list[str]) -> None:
@@ -119,13 +117,13 @@ def analyze_dictionary(dictionary: list[str]) -> None:
 
 
 def _convert_categorized_json_to_wordlist_file() -> None:
-    with open(f'{PROJECT_ROOT}/dictionaries/raw/2of12id.json') as f:
+    with open(project_path('dictionaries/raw/2of12id.json'), 'r') as f:
         json_words = json.load(f)
     word_list = []
     for key in json_words:
         word_list.extend(json_words[key])
 
-    write_words_to_dictionary(word_list, 'raw/words_common.txt')
+    write_words_to_dictionary(word_list, 'dictionaries/raw/words_common.txt')
 
 
 def _remove_small_words(dictionary: list[str]) -> list[str]:
