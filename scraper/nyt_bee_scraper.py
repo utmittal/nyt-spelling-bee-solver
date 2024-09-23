@@ -3,11 +3,12 @@ Simple web scraping script to download all known correct answers from nytbee.com
 """
 import re
 from datetime import datetime, timedelta
+from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import urlopen, Request
 
 import backoff
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString, Tag
 
 from util.project_path import project_path
 
@@ -23,7 +24,7 @@ def fatal_code(excep: Exception):
                       HTTPError,
                       max_tries=10,
                       giveup=fatal_code)
-def get_raw_page(url: str):
+def get_raw_page(url: str) -> bytes:
     req = Request(url)
 
     user_agent_header = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -33,7 +34,7 @@ def get_raw_page(url: str):
     return urlopen(req).read()
 
 
-def get_answers_list_from_answers_div(answers_div):
+def get_answers_list_from_answers_div(answers_div: BeautifulSoup | Tag | NavigableString) -> list[str]:
     # all_text can contain answers and ↗ (the symbol for the definition link on the nytbee page), so we need to filter
     # it
     all_text = answers_div.get_text(strip=True, separator=',')
@@ -44,7 +45,7 @@ def get_answers_list_from_answers_div(answers_div):
     return answers
 
 
-def answers_from_main_answer_list(soup):
+def answers_from_main_answer_list(soup: BeautifulSoup) -> list[str]:
     """
     This seems to work from 2019 08 17 onwards
     """
@@ -56,7 +57,7 @@ def answers_from_main_answer_list(soup):
     return get_answers_list_from_answers_div(answer_list_div)
 
 
-def answers_from_top_container(soup):
+def answers_from_top_container(soup: BeautifulSoup) -> list[str]:
     """
     2019 08 16 and before
     """
@@ -74,7 +75,7 @@ def answers_from_top_container(soup):
     return get_answers_list_from_answers_div(answer_list_div)
 
 
-def answers_from_left_container(soup):
+def answers_from_left_container(soup: BeautifulSoup) -> list[str]:
     """
     2018 07 29 and before
     """
@@ -89,7 +90,7 @@ def answers_from_left_container(soup):
     return get_answers_list_from_answers_div(answer_list_div)
 
 
-def get_answer_list_from_nyt_page(raw_web_page):
+def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
     soup = BeautifulSoup(raw_web_page, "html.parser")
 
     # try strategies in order
@@ -118,22 +119,22 @@ def get_answer_list_from_nyt_page(raw_web_page):
     return answers
 
 
-def write_words_to_dictionary(word_list):
+def write_words_to_dictionary(word_list: list[str]) -> None:
     # Note: we specifically open in append mode so that if for some reason the file doesn't exist, the program fails.
     # I want to know if the file is gone (because something has gone wrong)
     with open(project_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'a') as writefile:
         writefile.writelines(word + '\n' for word in word_list)
 
 
-def get_date_string(date):
+def get_date_string(date: datetime) -> str:
     return date.strftime('%Y%m%d')
 
 
-def get_url_from_date(date):
+def get_url_from_date(date: datetime) -> str:
     return "https://nytbee.com/Bee_" + get_date_string(date) + ".html"
 
 
-def add_date_and_url_to_file(path, date):
+def add_date_and_url_to_file(path: str | Path, date: datetime) -> None:
     with open(project_path(path), 'a+') as thefile:
         thefile.write(get_date_string(date) + ", " + get_url_from_date(date) + "\n")
 
@@ -145,7 +146,7 @@ with open(project_path('scraper/logs/scraped_dates.txt'), 'r') as f:
     already_scraped = f.read().splitlines()
 scraped_dates = [w.split(',')[0] for w in already_scraped]
 
-with open(project_path('/dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'r') as f:
+with open(project_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'r') as f:
     unique_words = set(f.read().splitlines())
 
 consecutive_404 = False
