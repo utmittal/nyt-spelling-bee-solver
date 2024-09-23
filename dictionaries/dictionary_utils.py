@@ -1,18 +1,17 @@
 import os
-from pathlib import Path
 import json
 import collections
 
-PROJECT_ROOT_PATH = str(Path(__file__).parent)
+from util.project_path import PROJECT_ROOT
 
 
 def get_latest_custom_dictionary() -> list[str]:
     """
     :return: list of words from latest custom dictionary
     """
-    dicts = os.listdir(f'{PROJECT_ROOT_PATH}/dictionaries/custom')
+    dicts = os.listdir(f'{PROJECT_ROOT}/dictionaries/custom')
     dicts.sort(reverse=True)
-    with open(f'{PROJECT_ROOT_PATH}/dictionaries/custom/{dicts[0]}', 'r') as f:
+    with open(f'{PROJECT_ROOT}/dictionaries/custom/{dicts[0]}', 'r') as f:
         words = f.read().splitlines()
     return words
 
@@ -22,7 +21,7 @@ def get_benchmarking_dictionary() -> list[str]:
     :return: list of words from dictionary used for benchmarking
     """
     # Use the biggest dictionary for benchmarking
-    with open(f'{PROJECT_ROOT_PATH}/dictionaries/raw/words_alpha.txt', 'r') as f:
+    with open(f'{PROJECT_ROOT}/dictionaries/raw/words_alpha.txt', 'r') as f:
         words = f.read().splitlines()
     return words
 
@@ -33,7 +32,7 @@ def get_dictionary_from_path(path: str) -> str:
     :param path: Path relative to dictionaries folder.
     :return: List of words
     """
-    return f'{PROJECT_ROOT_PATH}/dictionaries/{path}'
+    return f'{PROJECT_ROOT}/dictionaries/{path}'
 
 
 def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> None:
@@ -48,7 +47,7 @@ def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> Non
     word_list = _remove_small_words(word_list)
     word_list = _remove_long_words(word_list)
     word_list = _remove_impossible_words(word_list)
-    with open(f'{PROJECT_ROOT_PATH}/dictionaries/{path}', 'w+') as writefile:
+    with open(f'{PROJECT_ROOT}/dictionaries/{path}', 'w+') as writefile:
         writefile.writelines(word.lower() + '\n' for word in sorted(word_list))
 
 
@@ -120,7 +119,7 @@ def analyze_dictionary(dictionary: list[str]) -> None:
 
 
 def _convert_categorized_json_to_wordlist_file() -> None:
-    with open(f'{PROJECT_ROOT_PATH}/dictionaries/raw/2of12id.json') as f:
+    with open(f'{PROJECT_ROOT}/dictionaries/raw/2of12id.json') as f:
         json_words = json.load(f)
     word_list = []
     for key in json_words:

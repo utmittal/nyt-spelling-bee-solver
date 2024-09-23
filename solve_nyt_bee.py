@@ -1,6 +1,6 @@
 import argparse
 
-from dictionary_utils import get_latest_custom_dictionary
+from dictionaries.dictionary_utils import get_latest_custom_dictionary
 from spelling_bee_solvers import preprocess_get_radix_tree, get_bee_solutions_radix_tree
 
 parser = argparse.ArgumentParser(

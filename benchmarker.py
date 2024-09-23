@@ -2,9 +2,9 @@ import timeit
 
 from tabulate import tabulate
 
-from dictionary_utils import get_benchmarking_dictionary
-from spelling_bee_solvers import get_bee_solutions_naive, preprocess_get_bit_to_word_dict, preprocess_get_prefix_tree, \
-    preprocess_get_radix_tree, get_bee_solutions_bitwise, get_bee_solutions_prefix_tree, get_bee_solutions_radix_tree
+from dictionaries.dictionary_utils import get_benchmarking_dictionary
+from spelling_bee_solvers import preprocess_get_bit_to_word_dict, preprocess_get_prefix_tree, \
+    preprocess_get_radix_tree
 
 # NYT Spelling Bee Puzzle from 2019/06/08 which had the most official solutions
 benchmark_center = 'o'

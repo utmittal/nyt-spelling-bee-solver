@@ -1,5 +1,5 @@
 from spelling_bee_solvers import get_bee_solutions_radix_tree, preprocess_get_radix_tree
-from dictionary_utils import get_latest_custom_dictionary, write_words_to_custom_dictionary
+from dictionaries.dictionary_utils import get_latest_custom_dictionary, write_words_to_custom_dictionary
 
 
 def add_new_words(new_words: list[str]) -> None:
