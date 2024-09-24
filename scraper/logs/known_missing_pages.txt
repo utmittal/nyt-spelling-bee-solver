@@ -3,11 +3,6 @@
 20181103, https://nytbee.com/Bee_20181103.html
 20180912, https://nytbee.com/Bee_20180912.html
 20180728, https://nytbee.com/Bee_20180728.html
-20181223, https://nytbee.com/Bee_20181223.html
-20181117, https://nytbee.com/Bee_20181117.html
-20181103, https://nytbee.com/Bee_20181103.html
-20180912, https://nytbee.com/Bee_20180912.html
-20180728, https://nytbee.com/Bee_20180728.html
 20180727, https://nytbee.com/Bee_20180727.html
 20180726, https://nytbee.com/Bee_20180726.html
 20180725, https://nytbee.com/Bee_20180725.html

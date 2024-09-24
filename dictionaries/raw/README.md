@@ -10,5 +10,4 @@ categories.
 
 ### nytbee_dot_com_scraped_answers.txt
 
-List of all official answers as per the website nytbee.com as of 12-09-2024. Words are repeated in this list, but in
-total there should be around ~10000 unique words.
+List of all official answers as per the website nytbee.com as of 12-09-2024. There should be around ~10000 unique words.

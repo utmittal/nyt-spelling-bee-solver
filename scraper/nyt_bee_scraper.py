@@ -126,14 +126,34 @@ def add_words_to_raw_scraped_dictionary(word_list: list[str]) -> None:
         writefile.writelines(word + '\n' for word in word_list)
 
 
-def _get_date_string(date: datetime) -> str:
+def get_date_string(date: datetime) -> str:
     return date.strftime('%Y%m%d')
 
 
 def get_url_from_date(date: datetime) -> str:
-    return "https://nytbee.com/Bee_" + _get_date_string(date) + ".html"
+    return "https://nytbee.com/Bee_" + get_date_string(date) + ".html"
 
 
 def add_date_and_url_to_file(path: str | Path, date: datetime) -> None:
     with open(project_path(path), 'a+') as thefile:
-        thefile.write(_get_date_string(date) + ", " + get_url_from_date(date) + "\n")
+        thefile.write(get_date_string(date) + ", " + get_url_from_date(date) + "\n")
+
+
+def get_url_date_dict_from_logfile(path: str | Path) -> dict[str, str]:
+    with open(project_path(path), 'r') as f:
+        lines = f.read().splitlines()
+
+    url_date = {}
+    for line in lines:
+        date, url = line.split(',')
+        # Why reverse for the dictionary? Because it makes checking easier and I can't be bothered rewriting the logs
+        # to be url,date
+        url_date[url.strip()] = date.strip()
+
+    return url_date
+
+
+def write_url_date_dict_to_logfile(url_date: dict[str, str], path: str | Path) -> None:
+    with open(project_path(path), 'w') as writefile:
+        for url in sorted(url_date, key=url_date.get, reverse=True):
+            writefile.write(f"{url_date[url].strip()}, {url.strip()}\n")
