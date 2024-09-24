@@ -52,8 +52,11 @@ try:
         print("Found " + str(len(answer_list)) + " words.")
 
         # Only used for determining the puzzle for today.
-        non_official_answers = get_non_official_answers_from_nyt_page(raw_page)
-        print(f"Found {str(len(non_official_answers))} non-official words.")
+        non_official_answers = []
+        # nytbee.com didn't publish non-official words before this date.
+        if date_object > datetime(year=2019, month=1, day=13):
+            non_official_answers = get_non_official_answers_from_nyt_page(raw_page)
+            print(f"Found {str(len(non_official_answers))} non-official words.")
 
         todays_letter_set = set()
         todays_center = set()
@@ -100,8 +103,14 @@ try:
 
         scraped_urls[current_url] = get_date_string(date_object)
 finally:
-    write_words_to_dictionary(unique_words, 'dictionaries/raw/nytbee_dot_com_scraped_answers.txt')
-    write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
-    write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
-    add_new_words(words_to_add)
-    delete_words(words_to_delete)
+    try:
+        write_words_to_dictionary(unique_words, 'dictionaries/raw/nytbee_dot_com_scraped_answers.txt')
+        write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
+        write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
+        add_new_words(words_to_add)
+        delete_words(words_to_delete)
+    except Exception:
+        print('-------------------------')
+        print(
+            f"Unique Words: {unique_words}\nScraped URLs: {scraped_urls}\nKnown Missing URLs: "
+            f"{known_missing_urls}\nWords to add: {words_to_add}\nWords to delete: {words_to_delete}")
