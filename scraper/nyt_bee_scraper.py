@@ -128,8 +128,11 @@ def get_url_from_date(date: datetime) -> str:
 
 
 def get_url_date_dict_from_logfile(path: str | Path) -> dict[str, str]:
-    with open(project_path(path), 'r') as f:
-        lines = f.read().splitlines()
+    try:
+        with open(project_path(path), 'r') as f:
+            lines = f.read().splitlines()
+    except FileNotFoundError:
+        return {}
 
     url_date = {}
     for line in lines:
