@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 from util.project_path import project_path
 
 
-def fatal_code(excep: Exception):
+def _fatal_code(excep: Exception):
     if isinstance(excep, HTTPError) and excep.code == 404:
         return True
     else:
@@ -23,7 +23,7 @@ def fatal_code(excep: Exception):
 @backoff.on_exception(backoff.expo,
                       HTTPError,
                       max_tries=10,
-                      giveup=fatal_code)
+                      giveup=_fatal_code)
 def get_raw_page(url: str) -> bytes:
     req = Request(url)
 
@@ -34,7 +34,7 @@ def get_raw_page(url: str) -> bytes:
     return urlopen(req).read()
 
 
-def get_answers_list_from_answers_div(answers_div: BeautifulSoup | Tag | NavigableString) -> list[str]:
+def _get_answers_list_from_answers_div(answers_div: BeautifulSoup | Tag | NavigableString) -> list[str]:
     # all_text can contain answers and ↗ (the symbol for the definition link on the nytbee page), so we need to filter
     # it
     all_text = answers_div.get_text(strip=True, separator=',')
@@ -45,7 +45,7 @@ def get_answers_list_from_answers_div(answers_div: BeautifulSoup | Tag | Navigab
     return answers
 
 
-def answers_from_main_answer_list(soup: BeautifulSoup) -> list[str]:
+def _answers_from_main_answer_list(soup: BeautifulSoup) -> list[str]:
     """
     This seems to work from 2019 08 17 onwards
     """
@@ -54,10 +54,10 @@ def answers_from_main_answer_list(soup: BeautifulSoup) -> list[str]:
     if answer_list_div is None:
         raise LookupError("Could not find element with id=main-answer-list.")
 
-    return get_answers_list_from_answers_div(answer_list_div)
+    return _get_answers_list_from_answers_div(answer_list_div)
 
 
-def answers_from_top_container(soup: BeautifulSoup) -> list[str]:
+def _answers_from_top_container(soup: BeautifulSoup) -> list[str]:
     """
     2019 08 16 and before
     """
@@ -72,10 +72,10 @@ def answers_from_top_container(soup: BeautifulSoup) -> list[str]:
         if answer_list_div is None:
             raise LookupError("Could not find element with class or id=answer-list.")
 
-    return get_answers_list_from_answers_div(answer_list_div)
+    return _get_answers_list_from_answers_div(answer_list_div)
 
 
-def answers_from_left_container(soup: BeautifulSoup) -> list[str]:
+def _answers_from_left_container(soup: BeautifulSoup) -> list[str]:
     """
     2018 07 29 and before
     """
@@ -87,14 +87,14 @@ def answers_from_left_container(soup: BeautifulSoup) -> list[str]:
     if answer_list_div is None:
         raise LookupError("Could not find element with id=answer-list.")
 
-    return get_answers_list_from_answers_div(answer_list_div)
+    return _get_answers_list_from_answers_div(answer_list_div)
 
 
 def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
     soup = BeautifulSoup(raw_web_page, "html.parser")
 
     # try strategies in order
-    strategies = [answers_from_main_answer_list, answers_from_top_container, answers_from_left_container]
+    strategies = [_answers_from_main_answer_list, _answers_from_top_container, _answers_from_left_container]
     answers = []
     for strat in strategies:
         try:
@@ -119,69 +119,21 @@ def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
     return answers
 
 
-def write_words_to_dictionary(word_list: list[str]) -> None:
+def add_words_to_raw_scraped_dictionary(word_list: list[str]) -> None:
     # Note: we specifically open in append mode so that if for some reason the file doesn't exist, the program fails.
     # I want to know if the file is gone (because something has gone wrong)
     with open(project_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'a') as writefile:
         writefile.writelines(word + '\n' for word in word_list)
 
 
-def get_date_string(date: datetime) -> str:
+def _get_date_string(date: datetime) -> str:
     return date.strftime('%Y%m%d')
 
 
 def get_url_from_date(date: datetime) -> str:
-    return "https://nytbee.com/Bee_" + get_date_string(date) + ".html"
+    return "https://nytbee.com/Bee_" + _get_date_string(date) + ".html"
 
 
 def add_date_and_url_to_file(path: str | Path, date: datetime) -> None:
     with open(project_path(path), 'a+') as thefile:
-        thefile.write(get_date_string(date) + ", " + get_url_from_date(date) + "\n")
-
-
-date_object = datetime.now()
-unique_words_aim = 10237
-
-with open(project_path('scraper/logs/scraped_dates.txt'), 'r') as f:
-    already_scraped = f.read().splitlines()
-scraped_dates = [w.split(',')[0] for w in already_scraped]
-
-with open(project_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'r') as f:
-    unique_words = set(f.read().splitlines())
-
-consecutive_404 = False
-while True:
-    date_object = date_object - timedelta(days=1)
-    date_string = get_date_string(date_object)
-    if date_string in scraped_dates:
-        consecutive_404 = False
-        continue
-
-    current_url = get_url_from_date(date_object)
-
-    print("Processing - " + current_url)
-    try:
-        raw_page = get_raw_page(current_url)
-    except HTTPError as e:
-        if e.code == 404 and consecutive_404 == False:
-            add_date_and_url_to_file('logs/missing_pages.txt', date_object)
-            print("Page doesn't exist. Continuing.")
-            consecutive_404 = True
-            continue
-        else:
-            raise e
-
-    consecutive_404 = False
-
-    answer_list = get_answer_list_from_nyt_page(raw_page)
-    print("Found " + str(len(answer_list)) + " words.")
-
-    # Note: we don't dedupe the answers before writing. We just want all the answers.
-    write_words_to_dictionary(answer_list)
-    unique_words.update(answer_list)
-    print("Unique word count - " + str(len(unique_words)))
-
-    if len(unique_words) == unique_words_aim:
-        print("Found all unique words. Terminating scraping.")
-
-    add_date_and_url_to_file('logs/scraped_dates.txt', date_object)
+        thefile.write(_get_date_string(date) + ", " + get_url_from_date(date) + "\n")
