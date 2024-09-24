@@ -22,8 +22,8 @@ unique_words = set(get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scr
 
 radix_tree = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
 
-words_to_add = []
-words_to_delete = []
+words_to_add = set()
+words_to_delete = set()
 try:
     consecutive_404 = False
     while True:
@@ -80,7 +80,7 @@ try:
             solutions = set(get_bee_solutions_radix_tree(center_letter, ''.join(other_letters), radix_tree))
             print(f"Our solver found {len(solutions)} words.")
 
-            extra_words = solutions - set(answer_list)
+            extra_words = solutions - set(answer_list) - words_to_delete
             print(f"\t{extra_words} to be deleted.")
             filtered_extra_words = []
             # Handle the corner case that NYT started accepting words later that it didn't accept before. Since we
@@ -89,13 +89,13 @@ try:
             for w in extra_words:
                 if w not in unique_words:
                     filtered_extra_words.append(w)
-            words_to_delete.extend(filtered_extra_words)
+            words_to_delete.update(filtered_extra_words)
             if len(extra_words) > len(filtered_extra_words):
                 print(f"\t\tOnly {filtered_extra_words} will be deleted.")
 
-            new_words = set(answer_list) - solutions
+            new_words = set(answer_list) - solutions - words_to_add
             print(f"\t{new_words} to be added.")
-            words_to_add.extend(new_words)
+            words_to_add.update(new_words)
 
         # Note: we don't dedupe the answers before writing. We just want all the answers.
         unique_words.update(answer_list)
