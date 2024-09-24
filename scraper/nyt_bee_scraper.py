@@ -119,6 +119,17 @@ def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
     return answers
 
 
+def get_max_unique_words(url: str) -> int:
+    raw_page = get_raw_page(url)
+    pattern = r"with\s+([\d,]+)\s+unique\s+words\."
+    matches = re.search(pattern, raw_page.decode('utf-8'))
+    if len(matches.groups()) > 1:
+        raise LookupError("Found more than one match for max unique words.")
+    else:
+        max_unique_words = matches.groups()[0]
+        return int(max_unique_words.replace(',', ''))
+
+
 def get_date_string(date: datetime) -> str:
     return date.strftime('%Y%m%d')
 
