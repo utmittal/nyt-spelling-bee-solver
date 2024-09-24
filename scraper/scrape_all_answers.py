@@ -11,7 +11,7 @@ unique_words_aim = 10237
 
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
-unique_words = get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt')
+unique_words = set(get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'))
 
 try:
     consecutive_404 = False
@@ -41,7 +41,7 @@ try:
         print("Found " + str(len(answer_list)) + " words.")
 
         # Note: we don't dedupe the answers before writing. We just want all the answers.
-        unique_words.extend(answer_list)
+        unique_words.update(answer_list)
         print("Unique word count - " + str(len(unique_words)))
 
         if len(unique_words) >= unique_words_aim:
