@@ -146,3 +146,22 @@ def _remove_impossible_words(dictionary: list[str]) -> list[str]:
     Removes any words with more than 7 unique letters since that's impossible for a NYT Spelling Bee puzzle.
     """
     return [w for w in dictionary if len(set(w)) <= 7]
+
+
+def add_new_words(new_words: list[str] | set[str]) -> None:
+    """
+    Adds words to custom dictionary.
+    """
+    updated_word_set = set(get_latest_custom_dictionary())
+    updated_word_set.update(new_words)
+    write_words_to_custom_dictionary(updated_word_set)
+
+
+def delete_words(delete_list: list[str] | set[str]):
+    """
+    Deletes words from custom dictionary.
+    """
+    updated_word_set = set(get_latest_custom_dictionary())
+    for word in delete_list:
+        updated_word_set.remove(word)
+    write_words_to_custom_dictionary(updated_word_set)

@@ -1,24 +1,7 @@
-from dictionaries.dictionary_utils import get_latest_custom_dictionary, write_words_to_custom_dictionary
+from dictionaries.dictionary_utils import (get_latest_custom_dictionary, write_words_to_custom_dictionary,
+                                           add_new_words, \
+    delete_words)
 from spelling_bee_solvers import get_bee_solutions_radix_tree, preprocess_get_radix_tree
-
-
-def add_new_words(new_words: list[str]) -> None:
-    """
-    Adds words to custom dictionary.
-    """
-    updated_word_set = set(get_latest_custom_dictionary())
-    updated_word_set.update(new_words)
-    write_words_to_custom_dictionary(updated_word_set)
-
-
-def delete_words(delete_list: list[str]):
-    """
-    Deletes words from custom dictionary.
-    """
-    updated_word_set = set(get_latest_custom_dictionary())
-    for word in delete_list:
-        updated_word_set.remove(word)
-    write_words_to_custom_dictionary(updated_word_set)
 
 
 def interactive_edit(solutions: list[str]) -> None:
