@@ -1,6 +1,3 @@
-"""
-Simple web scraping script to download all known correct answers from nytbee.com.
-"""
 import re
 from datetime import datetime
 from pathlib import Path
@@ -90,7 +87,7 @@ def _answers_from_left_container(soup: BeautifulSoup) -> list[str]:
     return _get_answers_list_from_answers_div(answer_list_div)
 
 
-def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
+def get_answer_list_from_nyt_page(raw_web_page: bytes) -> list[str]:
     soup = BeautifulSoup(raw_web_page, "html.parser")
 
     # try strategies in order
@@ -115,6 +112,32 @@ def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
         if web_page_answers_count != len(answers):
             raise LookupError("Number of answers as per page is " + str(
                 web_page_answers_count) + " but the scraper only found " + str(len(answers)) + " answers.")
+
+    return answers
+
+
+def _non_official_answers_from_div(soup: BeautifulSoup) -> list[str]:
+    # The list of answers seems to always be in a div with id=not_official
+    answer_list_div = soup.find(id="not_official")
+    if answer_list_div is None:
+        raise LookupError("Could not find element with id=not_official.")
+
+    return _get_answers_list_from_answers_div(answer_list_div)
+
+
+def get_non_official_answers_from_nyt_page(raw_web_page: bytes) -> list[str]:
+    soup = BeautifulSoup(raw_web_page, "html.parser")
+
+    # try strategies in order
+    strategies = [_non_official_answers_from_div]
+    answers = []
+    for strat in strategies:
+        try:
+            answers = strat(soup)
+        except LookupError:
+            continue
+    if len(answers) == 0:
+        raise LookupError("Could not find non-official answers using any of the current strategies.")
 
     return answers
 
