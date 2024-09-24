@@ -105,7 +105,7 @@ def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
         raise LookupError("Could not find answers list using any of the current strategies.")
 
     # Verify our answer list
-    pattern = r"Number of Answers: (\d+)"
+    pattern = r"Number\s+of\s+Answers:\s+(\d+)"
     number_of_answers = re.search(pattern, raw_web_page.decode('utf-8'))
     groups = number_of_answers.groups()
     if len(groups) > 1:
