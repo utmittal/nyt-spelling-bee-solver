@@ -42,6 +42,7 @@ def write_words_to_dictionary(word_list: list[str] | set[str], path: str) -> Non
     :param word_list: List of words to write
     :param path: Path relative to project root
     """
+    word_list = list(set(word_list))  # remove dupes
     word_list = _remove_small_words(word_list)
     word_list = _remove_long_words(word_list)
     word_list = _remove_impossible_words(word_list)
