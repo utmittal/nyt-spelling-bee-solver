@@ -44,7 +44,6 @@ try:
         answer_list = get_answer_list_from_nyt_page(raw_page)
         print("Found " + str(len(answer_list)) + " words.")
 
-        # Note: we don't dedupe the answers before writing. We just want all the answers.
         unique_words.update(answer_list)
         print("Unique word count - " + str(len(unique_words)))
 

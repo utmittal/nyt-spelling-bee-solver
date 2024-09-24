@@ -99,7 +99,6 @@ try:
             print(f"\t{new_words} to be added.")
             words_to_add.update(new_words)
 
-        # Note: we don't dedupe the answers before writing. We just want all the answers.
         unique_words.update(answer_list)
         print("Unique word count - " + str(len(unique_words)))
 
