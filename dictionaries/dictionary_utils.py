@@ -162,6 +162,5 @@ def delete_words(delete_list: list[str] | set[str]):
     Deletes words from custom dictionary.
     """
     updated_word_set = set(get_latest_custom_dictionary())
-    for word in delete_list:
-        updated_word_set.remove(word)
+    updated_word_set = updated_word_set - set(delete_list)
     write_words_to_custom_dictionary(updated_word_set)
