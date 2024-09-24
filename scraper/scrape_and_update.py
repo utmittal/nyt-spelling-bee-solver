@@ -12,8 +12,9 @@ from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_
 from spelling_bee_solvers import preprocess_get_radix_tree, get_bee_solutions_radix_tree
 
 date_object = datetime.now()
-unique_words_aim = get_max_unique_words(get_url_from_date(date_object))
-print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(date_object)}")
+starting_date = date_object - timedelta(days=1)
+unique_words_aim = get_max_unique_words(get_url_from_date(starting_date))
+print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(starting_date)}")
 
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
@@ -70,7 +71,7 @@ try:
         elif len(todays_center) < 1:
             raise Exception("Found no center letter based on answer list. Wtf?")
         else:
-            other_letters = todays_letter_set.intersection(todays_center)
+            other_letters = todays_letter_set - todays_center
             center_letter = todays_center.pop()
 
             solutions = set(get_bee_solutions_radix_tree(center_letter, ''.join(other_letters), radix_tree))
