@@ -18916,9 +18916,7 @@ girt
 girted
 girth
 girthed
-girthing
 girths
-girting
 girts
 gismo
 gismos
@@ -22072,7 +22070,6 @@ hyenas
 hygiene
 hygienes
 hygienic
-hying
 hymen
 hymeneal
 hymens
@@ -29719,7 +29716,6 @@ nights
 nightshirt
 nightshirts
 nighttime
-nighty
 nigiri
 nihilism
 nihilisms
@@ -35253,7 +35249,6 @@ quint
 quintain
 quintet
 quintets
-quintette
 quintettes
 quints
 quip
@@ -37855,7 +37850,6 @@ ring
 ringed
 ringer
 ringers
-ringgit
 ringgits
 ringing
 ringlet
@@ -46914,6 +46908,7 @@ toolboxes
 tooled
 tooling
 toolkit
+toolroom
 tools
 toon
 toonie
@@ -47491,7 +47486,6 @@ triggered
 triggering
 triggers
 triggest
-trigging
 trigram
 trigs
 trike
@@ -47846,7 +47840,6 @@ tunnels
 tunnies
 tuns
 tupelo
-tuque
 tuques
 turban
 turbans
