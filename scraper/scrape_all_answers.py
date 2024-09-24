@@ -1,13 +1,17 @@
+"""
+Simple web scraping script to download all known correct answers from nytbee.com.
+"""
 from datetime import datetime, timedelta
 from urllib.error import HTTPError
 
 from dictionaries.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary
 from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, \
     get_answer_list_from_nyt_page, get_url_date_dict_from_logfile, \
-    write_url_date_dict_to_logfile
+    write_url_date_dict_to_logfile, get_max_unique_words
 
 date_object = datetime.now()
-unique_words_aim = 10237
+unique_words_aim = get_max_unique_words(get_url_from_date(date_object))
+print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(date_object)}")
 
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
