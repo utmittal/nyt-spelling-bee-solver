@@ -18,6 +18,7 @@ print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(start
 
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
+undetermined_center_urls = get_url_date_dict_from_logfile('scraper/logs/undetermined_center_pages.txt')
 unique_words = set(get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'))
 
 radix_tree = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
@@ -26,7 +27,7 @@ words_to_add = set()
 words_to_delete = set()
 try:
     consecutive_404 = False
-    while True:
+    while date_object > datetime(year=2018, month=7, day=28):  # oldest nytbee.com page
         date_object = date_object - timedelta(days=1)
 
         current_url = get_url_from_date(date_object)
@@ -54,7 +55,7 @@ try:
         # Only used for determining the puzzle for today.
         non_official_answers = []
         # nytbee.com didn't publish non-official words before this date.
-        if date_object > datetime(year=2019, month=1, day=13):
+        if date_object > datetime(year=2019, month=11, day=13):
             non_official_answers = get_non_official_answers_from_nyt_page(raw_page)
             print(f"Found {str(len(non_official_answers))} non-official words.")
 
@@ -71,6 +72,7 @@ try:
             raise Exception("Found more than 7 letters based on answer list. Wtf?")
         elif len(todays_center) > 1:
             print(f"Could not determine center letter. Current candidates: {todays_center}")
+            undetermined_center_urls[current_url] = get_date_string(date_object)
         elif len(todays_center) < 1:
             raise Exception("Found no center letter based on answer list. Wtf?")
         else:
@@ -107,10 +109,12 @@ finally:
         write_words_to_dictionary(unique_words, 'dictionaries/raw/nytbee_dot_com_scraped_answers.txt')
         write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
         write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
+        write_url_date_dict_to_logfile(undetermined_center_urls, 'scraper/logs/undetermined_center_pages.txt')
         add_new_words(words_to_add)
         delete_words(words_to_delete)
     except Exception:
         print('-------------------------')
         print(
             f"Unique Words: {unique_words}\nScraped URLs: {scraped_urls}\nKnown Missing URLs: "
-            f"{known_missing_urls}\nWords to add: {words_to_add}\nWords to delete: {words_to_delete}")
+            f"{known_missing_urls}\nUndetermined center URLs: {undetermined_center_urls}\nWords to add: "
+            f"{words_to_add}\nWords to delete: {words_to_delete}")

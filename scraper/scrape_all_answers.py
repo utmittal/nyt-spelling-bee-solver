@@ -19,7 +19,7 @@ unique_words = set(get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scr
 
 try:
     consecutive_404 = False
-    while True:
+    while date_object > datetime(year=2018, month=7, day=28):  # oldest nytbee.com page
         date_object = date_object - timedelta(days=1)
 
         current_url = get_url_from_date(date_object)
