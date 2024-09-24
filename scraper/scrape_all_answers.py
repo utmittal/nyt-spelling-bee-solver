@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from urllib.error import HTTPError
 
 from dictionaries.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary
-from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, add_date_and_url_to_file, \
-    get_answer_list_from_nyt_page, add_words_to_raw_scraped_dictionary, get_url_date_dict_from_logfile, \
+from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, \
+    get_answer_list_from_nyt_page, get_url_date_dict_from_logfile, \
     write_url_date_dict_to_logfile
 
 date_object = datetime.now()

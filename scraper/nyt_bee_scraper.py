@@ -2,7 +2,7 @@
 Simple web scraping script to download all known correct answers from nytbee.com.
 """
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import urlopen, Request
@@ -119,24 +119,12 @@ def get_answer_list_from_nyt_page(raw_web_page) -> list[str]:
     return answers
 
 
-def add_words_to_raw_scraped_dictionary(word_list: list[str]) -> None:
-    # Note: we specifically open in append mode so that if for some reason the file doesn't exist, the program fails.
-    # I want to know if the file is gone (because something has gone wrong)
-    with open(project_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'), 'a') as writefile:
-        writefile.writelines(word + '\n' for word in word_list)
-
-
 def get_date_string(date: datetime) -> str:
     return date.strftime('%Y%m%d')
 
 
 def get_url_from_date(date: datetime) -> str:
     return "https://nytbee.com/Bee_" + get_date_string(date) + ".html"
-
-
-def add_date_and_url_to_file(path: str | Path, date: datetime) -> None:
-    with open(project_path(path), 'a+') as thefile:
-        thefile.write(get_date_string(date) + ", " + get_url_from_date(date) + "\n")
 
 
 def get_url_date_dict_from_logfile(path: str | Path) -> dict[str, str]:
