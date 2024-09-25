@@ -153,6 +153,7 @@ admin
 admiral
 admit
 admitted
+admitting
 admonition
 adobe
 adobo
@@ -2649,11 +2650,14 @@ dairymaid
 dally
 damage
 damaged
+damaging
 dame
 dammed
+damming
 dammit
 damn
 damnation
+damning
 damp
 damped
 dance
@@ -5543,6 +5547,7 @@ intimacy
 intimate
 intimating
 intimation
+intimidating
 intimidation
 into
 intonating
@@ -6480,6 +6485,7 @@ manatee
 mancala
 mandala
 mandarin
+mandating
 mandator
 mandolin
 mane
