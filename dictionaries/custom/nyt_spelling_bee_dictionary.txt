@@ -20181,7 +20181,6 @@ gyro
 gyros
 gyved
 gyves
-gyving
 haberdasher
 haberdashers
 habit
