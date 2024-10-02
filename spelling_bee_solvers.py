@@ -165,7 +165,7 @@ def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
     return big_massive_dict
 
 
-def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str],
+def _traverse_prefix_tree(prefix: str, center: str, valid_letters: set[str],
                           prefix_tree: dict[str: set[str]]) -> list[str]:
     """
     Recursive function to traverse through prefix tree to find all words formed by the given letters.
@@ -246,7 +246,7 @@ def preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) 
     return curr_dict
 
 
-def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, valid_letters: str | list[str]) -> \
+def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, valid_letters: set[str]) -> \
         list[str]:
     """
     Recursive function to traverse through the radix tree as represented by a NestedStrDict.
@@ -279,6 +279,6 @@ def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStr
     """
     _validate_character_args(center, others)
 
-    valid_bee_words = _traverse_radix_tree('', radix_tree, center, center + others)
+    valid_bee_words = _traverse_radix_tree('', radix_tree, center, set(center + others))
 
     return valid_bee_words
