@@ -1,4 +1,5 @@
 import string
+import time
 
 
 def _validate_character_args(center: str, others: str):
@@ -165,8 +166,16 @@ def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
     return big_massive_dict
 
 
+prefix_leaf_nodes_touched = [0]
+prefix_aborted_early = [0]
+prefix_max_depth = [0]
+prefix_find_next_chars = [0]
+prefix_abort_early_time = [0]
+prefix_add_words = [0]
+
+
 def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str],
-                          prefix_tree: dict[str: set[str]]) -> list[str]:
+                          prefix_tree: dict[str: set[str]], depth_counter: int) -> list[str]:
     """
     Recursive function to traverse through prefix tree to find all words formed by the given letters.
 
@@ -176,19 +185,38 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
     :param prefix_tree: Prefix tree as a dict of prefixes to valid next characters
     :return:
     """
+    global prefix_max_depth
+    global prefix_leaf_nodes_touched
+    global prefix_aborted_early
+    depth_counter += 1
+    if depth_counter > prefix_max_depth[0]:
+        prefix_max_depth[0] = depth_counter
+
     valid_words = []
+    start = time.time()
     next_char_set = prefix_tree[prefix]
+    end = time.time()
+    prefix_find_next_chars[0] += (end - start)
 
     # can't form a valid word
+    start = time.time()
     if center not in prefix and center not in next_char_set:
+        prefix_aborted_early[0] += 1
         return valid_words
+    end = time.time()
+    prefix_abort_early_time[0] += (end - start)
 
+    start = time.time()
     if '$' in next_char_set and center in prefix:
+        prefix_leaf_nodes_touched[0] += 1
         valid_words.append(prefix)
+    end = time.time()
+    prefix_add_words[0] += (end - start)
 
     for letter in next_char_set:
         if letter in valid_letters:
-            valid_words.extend(_traverse_prefix_tree(prefix + letter, center, valid_letters, prefix_tree))
+            valid_words.extend(
+                _traverse_prefix_tree(prefix + letter, center, valid_letters, prefix_tree, depth_counter))
 
     return valid_words
 
@@ -206,7 +234,7 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
     """
     _validate_character_args(center, others)
 
-    return _traverse_prefix_tree('', center, set(center + others), prefix_tree)
+    return _traverse_prefix_tree('', center, set(center + others), prefix_tree, 0)
 
 
 type NestedStrDict = dict[str: NestedStrDict | None]
@@ -246,7 +274,14 @@ def preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) 
     return curr_dict
 
 
-def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, valid_letters: str | list[str]) -> \
+radix_leaf_nodes_touched = [0]
+radix_aborted_early = [0]
+radix_max_depth = [0]
+radix_add_words = [0]
+
+
+def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, valid_letters: str | list[str],
+                         depth_counter: int) -> \
         list[str]:
     """
     Recursive function to traverse through the radix tree as represented by a NestedStrDict.
@@ -256,13 +291,25 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     :param valid_letters: The list of valid letters from which we can form words
     :return: list of valid words formed from the letters
     """
+    global radix_max_depth
+    global radix_leaf_nodes_touched
+    global radix_aborted_early
+    depth_counter += 1
+    if depth_counter > radix_max_depth[0]:
+        radix_max_depth[0] = depth_counter
+
+    start = time.time()
     valid_words = []
     if '$' in curr_dict and center in current_prefix:
+        radix_leaf_nodes_touched[0] += 1
         valid_words.append(current_prefix)
+    end = time.time()
+    radix_add_words[0] += (end - start)
 
     for letter in curr_dict:
         if letter in valid_letters:
-            valid_words.extend(_traverse_radix_tree(current_prefix + letter, curr_dict[letter], center, valid_letters))
+            valid_words.extend(
+                _traverse_radix_tree(current_prefix + letter, curr_dict[letter], center, valid_letters, depth_counter))
 
     return valid_words
 
@@ -279,6 +326,6 @@ def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStr
     """
     _validate_character_args(center, others)
 
-    valid_bee_words = _traverse_radix_tree('', radix_tree, center, center + others)
+    valid_bee_words = _traverse_radix_tree('', radix_tree, center, center + others, 0)
 
     return valid_bee_words
