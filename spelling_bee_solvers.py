@@ -253,6 +253,7 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     :return: list of valid words formed from the letters
     """
     valid_words = []
+    
     if '$' in curr_dict and center in current_prefix:
         valid_words.append(current_prefix)
 
@@ -275,6 +276,4 @@ def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStr
     """
     _validate_character_args(center, others)
 
-    valid_bee_words = _traverse_radix_tree('', radix_tree, center, set(center + others))
-
-    return valid_bee_words
+    return _traverse_radix_tree('', radix_tree, center, set(center + others))
