@@ -109,10 +109,10 @@ performed once regardless of the puzzle, such as generating the radix tree or pr
 
 | Algorithm   | Time (s)    | Speedup |
 |-------------|-------------|---------|
-| Naive       | 0.0578143   | 1.00    |
-| Bitwise     | 0.0132765   | 4.35    |
-| Prefix Tree | 0.000579531 | 99.76   |
-| Radix Tree  | 0.000454482 | 127.20  |
+| Naive       | 0.0556735   | 1.00    |
+| Bitwise     | 0.0133129   | 4.18    |
+| Prefix Tree | 0.00074135  | 75.10   |
+| Radix Tree  | 0.000483715 | 115.10  |
 
 ## Note on dictionaries
 

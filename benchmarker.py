@@ -64,8 +64,8 @@ Repetitions:	5
 
 Strategy       Min Time (s)    Speedup
 -----------  --------------  ---------
-Naive           0.0578143      1
-Bitwise         0.0132765      4.35462
-Prefix Tree     0.000579531   99.7605
-Radix Tree      0.000454482  127.209
+Naive           0.0556735      1
+Bitwise         0.0133129      4.18194
+Prefix Tree     0.00074135    75.0975
+Radix Tree      0.000483715  115.096
 """
