@@ -100,7 +100,8 @@ This is mostly supposed to be a space optimization, but it turned out to be sign
 
 ### Algorithm Benchmarks
 
-For benchmarking, a [large dictionary](data/raw/words_alpha.txt) of words was used (370104 unique words). Each
+For benchmarking, a [large dictionary](data/raw_word_lists/words_alpha.txt) of words was used (370104 unique words).
+Each
 algorithm was run 10,000 times and the runtime was averaged across these runs. Each run of 10,000 iterations was
 repeated 5 times and the lowest value was taken (in line with best practices from the `timeit` library).
 

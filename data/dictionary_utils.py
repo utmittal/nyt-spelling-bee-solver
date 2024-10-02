@@ -1,18 +1,13 @@
-import collections
-import json
-import os
 from pathlib import Path
 
 from util.project_path import project_path
 
 
-def get_latest_custom_dictionary() -> list[str]:
+def get_custom_dictionary() -> list[str]:
     """
-    :return: list of words from latest custom dictionary
+    :return: list of words from custom dictionary
     """
-    dicts = os.listdir(project_path('data/custom'))
-    dicts.sort(reverse=True)
-    return get_dictionary_from_path(f'data/custom/{dicts[0]}')
+    return get_dictionary_from_path(f'data/custom/nyt_spelling_bee_dictionary.txt')
 
 
 def get_benchmarking_dictionary() -> list[str]:
@@ -20,7 +15,7 @@ def get_benchmarking_dictionary() -> list[str]:
     :return: list of words from dictionary used for benchmarking
     """
     # Use the biggest dictionary for benchmarking
-    return get_dictionary_from_path('data/raw/words_alpha.txt')
+    return get_dictionary_from_path('data/raw_word_lists/words_alpha.txt')
 
 
 def get_dictionary_from_path(path: str | Path) -> list[str]:
@@ -57,76 +52,6 @@ def write_words_to_custom_dictionary(word_list: list[str] | set[str]) -> None:
     write_words_to_dictionary(word_list, f'data/custom/nyt_spelling_bee_dictionary.txt')
 
 
-def analyze_dictionary(dictionary: list[str]) -> None:
-    """
-    Prints various stats for a given list of words. Useful for analyzing different data to figure out which
-    to use in the project.
-
-    :param dictionary: list of words
-    """
-    longest_words = []
-    longest_len = 0
-    shortest_words = []
-    shortest_len = 10000  # some big number
-    words_with_most_single_repeated_letter = []
-    single_repeated_letter_count = 0
-    words_with_most_repeated_letters = []
-    repeated_letters_count = 0
-    for word in dictionary:
-        wl = len(word)
-        if wl > longest_len:
-            longest_words = [word]
-            longest_len = wl
-        elif wl == longest_len:
-            longest_words.append(word)
-
-        if wl < shortest_len:
-            shortest_words = [word]
-            shortest_len = wl
-        elif wl == shortest_len:
-            shortest_words.append(word)
-
-        char_counter = collections.Counter(word)
-        for key in char_counter:
-            if char_counter[key] > single_repeated_letter_count:
-                words_with_most_single_repeated_letter = [word]
-                single_repeated_letter_count = char_counter[key]
-            elif char_counter[key] == single_repeated_letter_count:
-                words_with_most_single_repeated_letter.append(word)
-
-        total_repeated_letters = 0
-        for key in char_counter:
-            # Only interested in repeating letters
-            if char_counter[key] > 1:
-                total_repeated_letters += char_counter[key]
-        if total_repeated_letters > repeated_letters_count:
-            words_with_most_repeated_letters = [word]
-            repeated_letters_count = total_repeated_letters
-        elif total_repeated_letters == repeated_letters_count:
-            words_with_most_repeated_letters.append(word)
-
-    print("Dictionary Analysis - Note: Max 10 sample words printed in each category")
-    print(f"\tTotal Words: {str(len(dictionary))}")
-    print(f"\tShortest Words ({str(shortest_len)}):\n{'\n'.join([str("\t\t" + w) for w in shortest_words[:10]])}")
-    print(f"\tLongest Words ({str(longest_len)}):\n{'\n'.join([str("\t\t" + w) for w in longest_words[:10]])}")
-    print(
-        f"\tWords with most single repeating letter ({str(single_repeated_letter_count)}):\n"
-        f"{'\n'.join([str("\t\t" + w) for w in words_with_most_single_repeated_letter[:10]])}")
-    print(
-        f"\tWords with most total repeating letters ({str(repeated_letters_count)}):\n"
-        f"{'\n'.join([str("\t\t" + w) for w in words_with_most_repeated_letters[:10]])}")
-
-
-def _convert_categorized_json_to_wordlist_file() -> None:
-    with open(project_path('data/raw/2of12id.json'), 'r') as f:
-        json_words = json.load(f)
-    word_list = []
-    for key in json_words:
-        word_list.extend(json_words[key])
-
-    write_words_to_dictionary(word_list, 'data/raw/words_common.txt')
-
-
 def _remove_small_words(dictionary: list[str]) -> list[str]:
     """
     Removes words smaller than 4 letters since NYT doesn't allow them.
@@ -148,19 +73,19 @@ def _remove_impossible_words(dictionary: list[str]) -> list[str]:
     return [w for w in dictionary if len(set(w)) <= 7]
 
 
-def add_new_words(new_words: list[str] | set[str]) -> None:
+def add_words_to_custom(new_words: list[str] | set[str]) -> None:
     """
     Adds words to custom dictionary.
     """
-    updated_word_set = set(get_latest_custom_dictionary())
+    updated_word_set = set(get_custom_dictionary())
     updated_word_set.update(new_words)
     write_words_to_custom_dictionary(updated_word_set)
 
 
-def delete_words(delete_list: list[str] | set[str]):
+def delete_words_from_custom(delete_list: list[str] | set[str]):
     """
     Deletes words from custom dictionary.
     """
-    updated_word_set = set(get_latest_custom_dictionary())
+    updated_word_set = set(get_custom_dictionary())
     updated_word_set = updated_word_set - set(delete_list)
     write_words_to_custom_dictionary(updated_word_set)

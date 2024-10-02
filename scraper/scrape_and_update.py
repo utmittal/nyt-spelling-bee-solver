@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from urllib.error import HTTPError
 
 from data.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary, \
-    get_latest_custom_dictionary, add_new_words, delete_words
+    get_custom_dictionary, add_words_to_custom, delete_words_from_custom
 from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, \
     get_answer_list_from_nyt_page, get_url_date_dict_from_logfile, \
     write_url_date_dict_to_logfile, get_max_unique_words, get_non_official_answers_from_nyt_page
@@ -19,9 +19,9 @@ print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(start
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
 undetermined_center_urls = get_url_date_dict_from_logfile('scraper/logs/undetermined_center_pages.txt')
-unique_words = set(get_dictionary_from_path('data/raw/nytbee_dot_com_scraped_answers.txt'))
+unique_words = set(get_dictionary_from_path('data/raw_word_lists/nytbee_dot_com_scraped_answers.txt'))
 
-radix_tree = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
+radix_tree = preprocess_get_radix_tree(get_custom_dictionary(), {})
 
 words_to_add = set()
 words_to_delete = set()
@@ -105,12 +105,12 @@ try:
         scraped_urls[current_url] = get_date_string(date_object)
 finally:
     try:
-        write_words_to_dictionary(unique_words, 'data/raw/nytbee_dot_com_scraped_answers.txt')
+        write_words_to_dictionary(unique_words, 'data/raw_word_lists/nytbee_dot_com_scraped_answers.txt')
         write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
         write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
         write_url_date_dict_to_logfile(undetermined_center_urls, 'scraper/logs/undetermined_center_pages.txt')
-        add_new_words(words_to_add)
-        delete_words(words_to_delete)
+        add_words_to_custom(words_to_add)
+        delete_words_from_custom(words_to_delete)
     except Exception:
         print('-------------------------')
         print(

@@ -15,7 +15,7 @@ print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(date_
 
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
-unique_words = set(get_dictionary_from_path('data/raw/nytbee_dot_com_scraped_answers.txt'))
+unique_words = set(get_dictionary_from_path('data/raw_word_lists/nytbee_dot_com_scraped_answers.txt'))
 
 try:
     consecutive_404 = False
@@ -53,6 +53,6 @@ try:
 
         scraped_urls[current_url] = get_date_string(date_object)
 finally:
-    write_words_to_dictionary(unique_words, 'data/raw/nytbee_dot_com_scraped_answers.txt')
+    write_words_to_dictionary(unique_words, 'data/raw_word_lists/nytbee_dot_com_scraped_answers.txt')
     write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
     write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')

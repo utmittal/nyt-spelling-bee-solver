@@ -1,6 +1,6 @@
 import argparse
 
-from data.dictionary_utils import get_latest_custom_dictionary
+from data.dictionary_utils import get_custom_dictionary
 from spelling_bee_solvers import preprocess_get_radix_tree, get_bee_solutions_radix_tree
 
 parser = argparse.ArgumentParser(
@@ -18,7 +18,7 @@ args = parser.parse_args()
 center = args.center[0]
 others = args.others[0]
 
-radix_tree = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
+radix_tree = preprocess_get_radix_tree(get_custom_dictionary(), {})
 solutions = get_bee_solutions_radix_tree(center, others, radix_tree)
 
 print(f"Spelling Bee Solutions - [{center.upper()} | {' '.join(c.upper() for c in others)}]:")
