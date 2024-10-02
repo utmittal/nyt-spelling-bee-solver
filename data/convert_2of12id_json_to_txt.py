@@ -1,6 +1,5 @@
 import json
 
-from data.dictionary_utils import write_words_to_dictionary
 from util.project_path import project_path
 
 

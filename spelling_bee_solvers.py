@@ -1,7 +1,7 @@
 import string
 
 
-def _validate_character_args(center: str, others: str):
+def validate_character_args(center: str, others: str):
     if len(others) > len(set(others)):
         raise ValueError(f"List of other characters ({others}) cannot contain repeated characters.")
     if len(set(others)) != 6:
@@ -23,7 +23,7 @@ def get_bee_solutions_naive(center: str, others: str | list[str], dictionary: li
     :param dictionary: list of words to search in
     :return: List of solutions
     """
-    _validate_character_args(center, others)
+    validate_character_args(center, others)
 
     valid_bee_words = []
     letter_set = set(others + center)
@@ -79,7 +79,7 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     the values are the string representation of the words
     :return: list of solutions
     """
-    _validate_character_args(center, others)
+    validate_character_args(center, others)
 
     """
     Truth table to derive a SoP equation. SoP is better than PoS here I think because we have more 0 terms (though I 
@@ -200,7 +200,7 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
     :param prefix_tree: dict of prefix strings to corresponding valid succeeding characters
     :return: list of solutions
     """
-    _validate_character_args(center, others)
+    validate_character_args(center, others)
 
     return _traverse_prefix_tree('', center, set(center + others), prefix_tree)
 
@@ -253,7 +253,7 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     :return: list of valid words formed from the letters
     """
     valid_words = []
-    
+
     if '$' in curr_dict and center in current_prefix:
         valid_words.append(current_prefix)
 
@@ -274,6 +274,6 @@ def get_bee_solutions_radix_tree(center: str, others: str, radix_tree: NestedStr
     :param radix_tree: word tree
     :return: list of solutions
     """
-    _validate_character_args(center, others)
+    validate_character_args(center, others)
 
     return _traverse_radix_tree('', radix_tree, center, set(center + others))
