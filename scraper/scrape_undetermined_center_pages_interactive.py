@@ -1,11 +1,11 @@
-from dictionaries.dictionary_utils import get_latest_custom_dictionary, get_dictionary_from_path, \
+from data.dictionary_utils import get_latest_custom_dictionary, get_dictionary_from_path, \
     write_words_to_dictionary, add_new_words, delete_words
 from scraper.nyt_bee_scraper import get_url_date_dict_from_logfile, get_url_from_date, get_raw_page, \
     get_answer_list_from_nyt_page, write_url_date_dict_to_logfile
 from spelling_bee_solvers import get_bee_solutions_radix_tree, preprocess_get_radix_tree
 
 undetermined_center_urls = get_url_date_dict_from_logfile('scraper/logs/undetermined_center_pages.txt')
-unique_words = set(get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'))
+unique_words = set(get_dictionary_from_path('data/raw/nytbee_dot_com_scraped_answers.txt'))
 
 radix_tree = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
 
@@ -59,8 +59,8 @@ for current_url in undetermined_center_urls:
 
 for url in determined_urls:
     undetermined_center_urls.pop(url)
-    
+
 write_url_date_dict_to_logfile(undetermined_center_urls, 'scraper/logs/undetermined_center_pages.txt')
-write_words_to_dictionary(unique_words, 'dictionaries/raw/nytbee_dot_com_scraped_answers.txt')
+write_words_to_dictionary(unique_words, 'data/raw/nytbee_dot_com_scraped_answers.txt')
 add_new_words(words_to_add)
 delete_words(words_to_delete)

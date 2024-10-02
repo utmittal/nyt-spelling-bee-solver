@@ -10,9 +10,9 @@ def get_latest_custom_dictionary() -> list[str]:
     """
     :return: list of words from latest custom dictionary
     """
-    dicts = os.listdir(project_path('dictionaries/custom'))
+    dicts = os.listdir(project_path('data/custom'))
     dicts.sort(reverse=True)
-    return get_dictionary_from_path(f'dictionaries/custom/{dicts[0]}')
+    return get_dictionary_from_path(f'data/custom/{dicts[0]}')
 
 
 def get_benchmarking_dictionary() -> list[str]:
@@ -20,7 +20,7 @@ def get_benchmarking_dictionary() -> list[str]:
     :return: list of words from dictionary used for benchmarking
     """
     # Use the biggest dictionary for benchmarking
-    return get_dictionary_from_path('dictionaries/raw/words_alpha.txt')
+    return get_dictionary_from_path('data/raw/words_alpha.txt')
 
 
 def get_dictionary_from_path(path: str | Path) -> list[str]:
@@ -54,12 +54,12 @@ def write_words_to_custom_dictionary(word_list: list[str] | set[str]) -> None:
     """
     Writes words to the custom NYT spelling bee dictionary.
     """
-    write_words_to_dictionary(word_list, f'dictionaries/custom/nyt_spelling_bee_dictionary.txt')
+    write_words_to_dictionary(word_list, f'data/custom/nyt_spelling_bee_dictionary.txt')
 
 
 def analyze_dictionary(dictionary: list[str]) -> None:
     """
-    Prints various stats for a given list of words. Useful for analyzing different dictionaries to figure out which
+    Prints various stats for a given list of words. Useful for analyzing different data to figure out which
     to use in the project.
 
     :param dictionary: list of words
@@ -118,13 +118,13 @@ def analyze_dictionary(dictionary: list[str]) -> None:
 
 
 def _convert_categorized_json_to_wordlist_file() -> None:
-    with open(project_path('dictionaries/raw/2of12id.json'), 'r') as f:
+    with open(project_path('data/raw/2of12id.json'), 'r') as f:
         json_words = json.load(f)
     word_list = []
     for key in json_words:
         word_list.extend(json_words[key])
 
-    write_words_to_dictionary(word_list, 'dictionaries/raw/words_common.txt')
+    write_words_to_dictionary(word_list, 'data/raw/words_common.txt')
 
 
 def _remove_small_words(dictionary: list[str]) -> list[str]:

@@ -4,7 +4,7 @@ Simple web scraping script to download all correct answers from unscraped pages 
 from datetime import datetime, timedelta
 from urllib.error import HTTPError
 
-from dictionaries.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary, \
+from data.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary, \
     get_latest_custom_dictionary, add_new_words, delete_words
 from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, \
     get_answer_list_from_nyt_page, get_url_date_dict_from_logfile, \
@@ -19,7 +19,7 @@ print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(start
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
 undetermined_center_urls = get_url_date_dict_from_logfile('scraper/logs/undetermined_center_pages.txt')
-unique_words = set(get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'))
+unique_words = set(get_dictionary_from_path('data/raw/nytbee_dot_com_scraped_answers.txt'))
 
 radix_tree = preprocess_get_radix_tree(get_latest_custom_dictionary(), {})
 
@@ -105,7 +105,7 @@ try:
         scraped_urls[current_url] = get_date_string(date_object)
 finally:
     try:
-        write_words_to_dictionary(unique_words, 'dictionaries/raw/nytbee_dot_com_scraped_answers.txt')
+        write_words_to_dictionary(unique_words, 'data/raw/nytbee_dot_com_scraped_answers.txt')
         write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
         write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
         write_url_date_dict_to_logfile(undetermined_center_urls, 'scraper/logs/undetermined_center_pages.txt')

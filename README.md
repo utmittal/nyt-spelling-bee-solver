@@ -100,7 +100,7 @@ This is mostly supposed to be a space optimization, but it turned out to be sign
 
 ### Algorithm Benchmarks
 
-For benchmarking, a [large dictionary](dictionaries/raw/words_alpha.txt) of words was used (370104 unique words). Each
+For benchmarking, a [large dictionary](data/raw/words_alpha.txt) of words was used (370104 unique words). Each
 algorithm was run 10,000 times and the runtime was averaged across these runs. Each run of 10,000 iterations was
 repeated 5 times and the lowest value was taken (in line with best practices from the `timeit` library).
 
@@ -126,7 +126,7 @@ website). It's still not fully correct and will often generate extra words that 
 rare cases, the NYT spelling bee will accept words that aren't included in my dictionary.
 
 If you want to use this dictionary yourself, you can find the latest dictionary
-in [this directory](dictionaries/custom).
+in [this directory](data/custom).
 
 ## Running the solver script
 

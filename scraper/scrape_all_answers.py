@@ -4,7 +4,7 @@ Simple web scraping script to download all known correct answers from nytbee.com
 from datetime import datetime, timedelta
 from urllib.error import HTTPError
 
-from dictionaries.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary
+from data.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary
 from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, \
     get_answer_list_from_nyt_page, get_url_date_dict_from_logfile, \
     write_url_date_dict_to_logfile, get_max_unique_words
@@ -15,7 +15,7 @@ print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(date_
 
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
-unique_words = set(get_dictionary_from_path('dictionaries/raw/nytbee_dot_com_scraped_answers.txt'))
+unique_words = set(get_dictionary_from_path('data/raw/nytbee_dot_com_scraped_answers.txt'))
 
 try:
     consecutive_404 = False
@@ -53,6 +53,6 @@ try:
 
         scraped_urls[current_url] = get_date_string(date_object)
 finally:
-    write_words_to_dictionary(unique_words, 'dictionaries/raw/nytbee_dot_com_scraped_answers.txt')
+    write_words_to_dictionary(unique_words, 'data/raw/nytbee_dot_com_scraped_answers.txt')
     write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
     write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
