@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import date
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import urlopen, Request
@@ -153,12 +153,12 @@ def get_max_unique_words(url: str) -> int:
         return int(max_unique_words.replace(',', ''))
 
 
-def get_date_string(date: datetime) -> str:
-    return date.strftime('%Y%m%d')
+def get_date_string(date_object: date) -> str:
+    return date_object.strftime('%Y%m%d')
 
 
-def get_url_from_date(date: datetime) -> str:
-    return "https://nytbee.com/Bee_" + get_date_string(date) + ".html"
+def get_url_from_date(date_object: date) -> str:
+    return "https://nytbee.com/Bee_" + get_date_string(date_object) + ".html"
 
 
 def get_url_date_dict_from_logfile(path: str | Path) -> dict[str, str]:
@@ -170,10 +170,10 @@ def get_url_date_dict_from_logfile(path: str | Path) -> dict[str, str]:
 
     url_date = {}
     for line in lines:
-        date, url = line.split(',')
+        date_str, url = line.split(',')
         # Why reverse for the dictionary? Because it makes checking easier and I can't be bothered rewriting the logs
         # to be url,date
-        url_date[url.strip()] = date.strip()
+        url_date[url.strip()] = date_str.strip()
 
     return url_date
 

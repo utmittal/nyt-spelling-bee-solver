@@ -12,8 +12,9 @@ class NYTBeePuzzle:
     __solutions: set[str]
     __puzzle_date: date
 
-    def __init__(self, puzzle_data: date, center: str, others: str | list[str], solutions: list[str] | set[str]):
-        others = ''.join(others)
+    def __init__(self, puzzle_data: date, center: str, others: str | list[str] | set[str],
+                 solutions: list[str] | set[str]):
+        others = ''.join(sorted(others))
 
         validate_character_args(center, others)
 

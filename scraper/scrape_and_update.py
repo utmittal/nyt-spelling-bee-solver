@@ -1,17 +1,19 @@
 """
 Simple web scraping script to download all correct answers from unscraped pages and update our dictionary.
 """
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from urllib.error import HTTPError
 
 from data.dictionary_utils import get_dictionary_from_path, write_words_to_dictionary, \
     get_custom_dictionary, add_words_to_custom, delete_words_from_custom
+from data.puzzles_utils import get_puzzles_from_file, NYTBeePuzzle, write_puzzles_to_file
 from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, \
     get_answer_list_from_nyt_page, get_url_date_dict_from_logfile, \
     write_url_date_dict_to_logfile, get_max_unique_words, get_non_official_answers_from_nyt_page
+from solve_nyt_bee import others
 from spelling_bee_solvers import preprocess_get_radix_tree, get_bee_solutions_radix_tree
 
-date_object = datetime.now()
+date_object = datetime.now().date()
 starting_date = date_object - timedelta(days=1)
 unique_words_aim = get_max_unique_words(get_url_from_date(starting_date))
 print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(starting_date)}")
@@ -20,6 +22,7 @@ scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
 undetermined_center_urls = get_url_date_dict_from_logfile('scraper/logs/undetermined_center_pages.txt')
 unique_words = set(get_dictionary_from_path('data/raw_word_lists/nytbee_dot_com_scraped_answers.txt'))
+scraped_puzzles = get_puzzles_from_file()
 
 radix_tree = preprocess_get_radix_tree(get_custom_dictionary(), {})
 
@@ -27,11 +30,11 @@ words_to_add = set()
 words_to_delete = set()
 try:
     consecutive_404 = False
-    while date_object > datetime(year=2018, month=7, day=28):  # oldest nytbee.com page
+    while date_object > date(year=2018, month=7, day=28):  # oldest nytbee.com page
         date_object = date_object - timedelta(days=1)
 
         current_url = get_url_from_date(date_object)
-        if current_url in scraped_urls or current_url in known_missing_urls:
+        if current_url in known_missing_urls or (current_url in scraped_urls and date_object in scraped_puzzles):
             consecutive_404 = False
             continue
 
@@ -99,6 +102,8 @@ try:
             print(f"\t{new_words} to be added.")
             words_to_add.update(new_words)
 
+            scraped_puzzles[date_object] = NYTBeePuzzle(date_object, center_letter, other_letters, answer_list)
+
         unique_words.update(answer_list)
         print("Unique word count - " + str(len(unique_words)))
 
@@ -106,6 +111,7 @@ try:
 finally:
     try:
         write_words_to_dictionary(unique_words, 'data/raw_word_lists/nytbee_dot_com_scraped_answers.txt')
+        write_puzzles_to_file([scraped_puzzles[p] for p in scraped_puzzles])
         write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
         write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
         write_url_date_dict_to_logfile(undetermined_center_urls, 'scraper/logs/undetermined_center_pages.txt')
