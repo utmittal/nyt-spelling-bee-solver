@@ -1,6 +1,8 @@
 import string
 import time
 
+from util.project_path import project_path
+
 
 def _validate_character_args(center: str, others: str):
     if len(others) > len(set(others)):
@@ -185,6 +187,9 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
     :param prefix_tree: Prefix tree as a dict of prefixes to valid next characters
     :return:
     """
+    with open(project_path('trie_order.txt'), 'a') as f:
+        f.write(f"{prefix}\n")
+
     global prefix_max_depth
     global prefix_leaf_nodes_touched
     global prefix_aborted_early
@@ -198,22 +203,26 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
     end = time.time()
     prefix_find_next_chars[0] += (end - start)
 
-    # can't form a valid word
-    start = time.time()
-    if center not in prefix and center not in next_char_set:
-        prefix_aborted_early[0] += 1
-        return valid_words
-    end = time.time()
-    prefix_abort_early_time[0] += (end - start)
+    # # can't form a valid word
+    # start = time.time()
+    # if center not in prefix and center not in next_char_set:
+    #     prefix_aborted_early[0] += 1
+    #     with open(project_path('trie_aborts.txt'), 'a') as f:
+    #         f.write(f"{prefix}\n")
+    #     return valid_words
+    # end = time.time()
+    # prefix_abort_early_time[0] += (end - start)
 
     start = time.time()
     if '$' in next_char_set and center in prefix:
         prefix_leaf_nodes_touched[0] += 1
+        with open(project_path('trie_leafs.txt'), 'a') as f:
+            f.write(f"{prefix}\n")
         valid_words.append(prefix)
     end = time.time()
     prefix_add_words[0] += (end - start)
 
-    for letter in next_char_set:
+    for letter in sorted(next_char_set):
         if letter in valid_letters:
             valid_words.extend(
                 _traverse_prefix_tree(prefix + letter, center, valid_letters, prefix_tree, depth_counter))
@@ -291,6 +300,9 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     :param valid_letters: The list of valid letters from which we can form words
     :return: list of valid words formed from the letters
     """
+    with open(project_path('radix_order.txt'), 'a') as f:
+        f.write(f"{current_prefix}\n")
+
     global radix_max_depth
     global radix_leaf_nodes_touched
     global radix_aborted_early
@@ -302,11 +314,13 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     valid_words = []
     if '$' in curr_dict and center in current_prefix:
         radix_leaf_nodes_touched[0] += 1
+        with open(project_path('radix_leafs.txt'), 'a') as f:
+            f.write(f"{current_prefix}\n")
         valid_words.append(current_prefix)
     end = time.time()
     radix_add_words[0] += (end - start)
 
-    for letter in curr_dict:
+    for letter in sorted(curr_dict):
         if letter in valid_letters:
             valid_words.extend(
                 _traverse_radix_tree(current_prefix + letter, curr_dict[letter], center, valid_letters, depth_counter))

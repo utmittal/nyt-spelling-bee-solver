@@ -16,8 +16,8 @@ prefix_tree = preprocess_get_prefix_tree(benchmarking_word_list)
 radix_tree = preprocess_get_radix_tree(benchmarking_word_list, {})
 
 start = time.time()
-for _ in range(1000):
-    get_bee_solutions_prefix_tree(benchmark_center, benchmark_others, prefix_tree)
+for _ in range(1):
+    print(get_bee_solutions_prefix_tree(benchmark_center, benchmark_others, prefix_tree))
 end = time.time()
 print(f"Prefix tree total time: {end - start}")
 print(
@@ -26,8 +26,8 @@ print(
     f"{prefix_abort_early_time}\n\tAdd words time: {prefix_add_words}")
 
 start = time.time()
-for _ in range(1000):
-    get_bee_solutions_radix_tree(benchmark_center, benchmark_others, radix_tree)
+for _ in range(1):
+    print(get_bee_solutions_radix_tree(benchmark_center, benchmark_others, radix_tree))
 end = time.time()
 print(f"Radix tree total time: {end - start}")
 print(
