@@ -10,7 +10,6 @@ from data.puzzles_utils import get_puzzles_from_file, NYTBeePuzzle, write_puzzle
 from scraper.nyt_bee_scraper import get_date_string, get_url_from_date, get_raw_page, \
     get_answer_list_from_nyt_page, get_url_date_dict_from_logfile, \
     write_url_date_dict_to_logfile, get_max_unique_words, get_non_official_answers_from_nyt_page
-from solve_nyt_bee import others
 from spelling_bee_solvers import preprocess_get_radix_tree, get_bee_solutions_radix_tree
 
 date_object = datetime.now().date()
@@ -21,7 +20,7 @@ print(f"Max unique word count = {unique_words_aim} from {get_url_from_date(start
 scraped_urls = get_url_date_dict_from_logfile('scraper/logs/scraped_dates.txt')
 known_missing_urls = get_url_date_dict_from_logfile('scraper/logs/known_missing_pages.txt')
 undetermined_center_urls = get_url_date_dict_from_logfile('scraper/logs/undetermined_center_pages.txt')
-unique_words = set(get_dictionary_from_path('data/raw_word_lists/nytbee_dot_com_scraped_answers.txt'))
+unique_words = set(get_dictionary_from_path('data/processed/nytbee_dot_com_scraped_answers.txt'))
 scraped_puzzles = get_puzzles_from_file()
 
 radix_tree = preprocess_get_radix_tree(get_custom_dictionary(), {})
@@ -58,7 +57,7 @@ try:
         # Only used for determining the puzzle for today.
         non_official_answers = []
         # nytbee.com didn't publish non-official words before this date.
-        if date_object > datetime(year=2019, month=11, day=13):
+        if date_object > date(year=2019, month=11, day=13):
             non_official_answers = get_non_official_answers_from_nyt_page(raw_page)
             print(f"Found {str(len(non_official_answers))} non-official words.")
 
@@ -110,16 +109,17 @@ try:
         scraped_urls[current_url] = get_date_string(date_object)
 finally:
     try:
-        write_words_to_dictionary(unique_words, 'data/raw_word_lists/nytbee_dot_com_scraped_answers.txt')
+        write_words_to_dictionary(unique_words, 'data/processed/nytbee_dot_com_scraped_answers.txt')
         write_puzzles_to_file([scraped_puzzles[p] for p in scraped_puzzles])
         write_url_date_dict_to_logfile(scraped_urls, 'scraper/logs/scraped_dates.txt')
         write_url_date_dict_to_logfile(known_missing_urls, 'scraper/logs/known_missing_pages.txt')
         write_url_date_dict_to_logfile(undetermined_center_urls, 'scraper/logs/undetermined_center_pages.txt')
         add_words_to_custom(words_to_add)
         delete_words_from_custom(words_to_delete)
-    except Exception:
+    except Exception as e:
         print('-------------------------')
         print(
             f"Unique Words: {unique_words}\nScraped URLs: {scraped_urls}\nKnown Missing URLs: "
             f"{known_missing_urls}\nUndetermined center URLs: {undetermined_center_urls}\nWords to add: "
             f"{words_to_add}\nWords to delete: {words_to_delete}")
+        raise e

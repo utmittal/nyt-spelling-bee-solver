@@ -1,6 +1,5 @@
 import json
-from datetime import date
-from time import strptime
+from datetime import date, datetime
 
 from spelling_bee_solvers import validate_character_args
 from util.project_path import project_path
@@ -49,7 +48,7 @@ def write_puzzles_to_file(puzzle_list: list[NYTBeePuzzle]) -> None:
     for puzzle in puzzle_list:
         json_dict[puzzle.get_puzzle_date().strftime('%Y%m%d')] = {'center': puzzle.get_center(),
                                                                   'others': puzzle.get_others(),
-                                                                  'solutions': puzzle.get_solutions()}
+                                                                  'solutions': list(puzzle.get_solutions())}
     with open(project_path('data/puzzles/scraped_puzzles.json'), 'w+') as f:
         json.dump(json_dict, f, indent=4, sort_keys=True)
 
@@ -63,9 +62,9 @@ def get_puzzles_from_file() -> dict[date, NYTBeePuzzle]:
         json_dict = json.load(f)
 
     puzzles: dict[date, NYTBeePuzzle] = dict()
-    for date_str, puzzle in json_dict:
-        puzzle_date = strptime(date_str, '%Y%m%d').date()
-        puzzles[puzzle_date] = NYTBeePuzzle(puzzle_date, puzzle.get_center(), puzzle.get_others(),
-                                            puzzle.get_solutions())
+    for date_str, puzzle in json_dict.items():
+        puzzle_date = datetime.strptime(date_str, '%Y%m%d').date()
+        puzzles[puzzle_date] = NYTBeePuzzle(puzzle_date, puzzle['center'], puzzle['others'],
+                                            puzzle['solutions'])
 
     return puzzles
