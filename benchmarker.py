@@ -6,7 +6,7 @@ from data.dictionary_utils import get_benchmarking_dictionary
 # noinspection PyUnresolvedReferences
 from spelling_bee_solvers import preprocess_get_bit_to_word_dict, preprocess_get_prefix_tree, \
     preprocess_get_radix_tree, get_bee_solutions_naive, get_bee_solutions_bitwise, get_bee_solutions_prefix_tree, \
-    get_bee_solutions_radix_tree
+    get_bee_solutions_radix_tree, preprocess_get_nested_prefix_tree, get_bee_solutions_nested_prefix_tree
 
 # NYT Spelling Bee Puzzle from 2019/06/08 which had the most official solutions
 benchmark_center = 'o'
@@ -15,6 +15,7 @@ benchmarking_word_list = get_benchmarking_dictionary()
 
 bit_to_word_dict = preprocess_get_bit_to_word_dict(benchmarking_word_list)
 prefix_tree = preprocess_get_prefix_tree(benchmarking_word_list)
+nested_prefix_tree = preprocess_get_nested_prefix_tree('', benchmarking_word_list, {})
 radix_tree = preprocess_get_radix_tree(benchmarking_word_list, {})
 
 naive_solution_stmt = """
@@ -27,6 +28,10 @@ get_bee_solutions_bitwise(benchmark_center, benchmark_others, bit_to_word_dict)
 
 prefix_tree_solution_stmt = """
 get_bee_solutions_prefix_tree(benchmark_center, benchmark_others, prefix_tree)
+"""
+
+nested_prefix_tree_solution_stmt = """
+get_bee_solutions_nested_prefix_tree(benchmark_center, benchmark_others, nested_prefix_tree)
 """
 
 radix_tree_solution_stmt = """
@@ -46,6 +51,10 @@ prefix_tree_results = timeit.repeat(stmt=prefix_tree_solution_stmt, number=itera
                                     globals=globals())
 prefix_tree_min = min([r / iterations for r in prefix_tree_results])
 
+nested_prefix_tree_results = timeit.repeat(stmt=nested_prefix_tree_solution_stmt, number=iterations, repeat=repetitions,
+                                           globals=globals())
+nested_prefix_tree_min = min([r / iterations for r in nested_prefix_tree_results])
+
 radix_tree_results = timeit.repeat(stmt=radix_tree_solution_stmt, number=iterations, repeat=repetitions,
                                    globals=globals())
 radix_tree_min = min([r / iterations for r in radix_tree_results])
@@ -53,8 +62,10 @@ radix_tree_min = min([r / iterations for r in radix_tree_results])
 print(f"Iterations:\t\t{iterations}")
 print(f"Repetitions:\t{repetitions}")
 print()
-print(tabulate([['Naive', naive_min, naive_min / naive_min], ['Bitwise', bitwise_min, naive_min / bitwise_min],
+print(tabulate([['Naive', naive_min, naive_min / naive_min],
+                ['Bitwise', bitwise_min, naive_min / bitwise_min],
                 ['Prefix Tree', prefix_tree_min, naive_min / prefix_tree_min],
+                ['Nested Prefix Tree', nested_prefix_tree_min, naive_min / nested_prefix_tree_min],
                 ['Radix Tree', radix_tree_min, naive_min / radix_tree_min]],
                headers=['Strategy', 'Min Time (s)', 'Speedup']))
 
