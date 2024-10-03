@@ -33,7 +33,7 @@ radix_tree_solution_stmt = """
 get_bee_solutions_radix_tree(benchmark_center, benchmark_others, radix_tree)
 """
 
-iterations = 10000
+iterations = 100
 repetitions = 5  # default
 
 naive_results = timeit.repeat(stmt=naive_solution_stmt, number=iterations, repeat=repetitions, globals=globals())

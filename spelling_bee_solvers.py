@@ -187,8 +187,8 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
     :param prefix_tree: Prefix tree as a dict of prefixes to valid next characters
     :return:
     """
-    with open(project_path('trie_order.txt'), 'a') as f:
-        f.write(f"{prefix}\n")
+    # with open(project_path('trie_order.txt'), 'a') as f:
+    #     f.write(f"{prefix}\n")
 
     global prefix_max_depth
     global prefix_leaf_nodes_touched
@@ -216,8 +216,8 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
     start = time.time()
     if '$' in next_char_set and center in prefix:
         prefix_leaf_nodes_touched[0] += 1
-        with open(project_path('trie_leafs.txt'), 'a') as f:
-            f.write(f"{prefix}\n")
+        # with open(project_path('trie_leafs.txt'), 'a') as f:
+        #     f.write(f"{prefix}\n")
         valid_words.append(prefix)
     end = time.time()
     prefix_add_words[0] += (end - start)
@@ -300,8 +300,8 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     :param valid_letters: The list of valid letters from which we can form words
     :return: list of valid words formed from the letters
     """
-    with open(project_path('radix_order.txt'), 'a') as f:
-        f.write(f"{current_prefix}\n")
+    # with open(project_path('radix_order.txt'), 'a') as f:
+    #     f.write(f"{current_prefix}\n")
 
     global radix_max_depth
     global radix_leaf_nodes_touched
@@ -314,8 +314,8 @@ def _traverse_radix_tree(current_prefix: str, curr_dict: NestedStrDict, center, 
     valid_words = []
     if '$' in curr_dict and center in current_prefix:
         radix_leaf_nodes_touched[0] += 1
-        with open(project_path('radix_leafs.txt'), 'a') as f:
-            f.write(f"{current_prefix}\n")
+        # with open(project_path('radix_leafs.txt'), 'a') as f:
+        #     f.write(f"{current_prefix}\n")
         valid_words.append(current_prefix)
     end = time.time()
     radix_add_words[0] += (end - start)
