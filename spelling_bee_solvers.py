@@ -35,7 +35,7 @@ def get_bee_solutions_naive(center: str, others: str | list[str], dictionary: li
     return valid_bee_words
 
 
-def preprocess_get_bit_to_word_dict(dictionary: list[str]) -> dict[int: [str]]:
+def preprocess_get_bit_to_word_dict(dictionary: list[str]) -> dict[int, [str]]:
     """
     Generates a dictionary where the keys are the bit representation of the word (as an integer) and the values are
     a list of corresponding words. Bit representations ignore letter ordering and letter duplicates. So a single bit
@@ -61,7 +61,7 @@ def preprocess_get_bit_to_word_dict(dictionary: list[str]) -> dict[int: [str]]:
     return bit_dict
 
 
-def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int: str]) -> list[str]:
+def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int, str]) -> list[str]:
     """
     Uses bit operations to check if a word is valid.
 
@@ -130,7 +130,7 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     return valid_bee_words
 
 
-def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
+def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str, set[str]]:
     """
     Converts the list of words into a prefix tree (trie) where each node is a string prefix and each child represents
     a prefix that can be formed by adding a letter to the parent. I.e. Node 'ro' will have a path to 'rob' and a
@@ -166,7 +166,7 @@ def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str: set[str]]:
 
 
 def _traverse_prefix_tree(prefix: str, center: str, valid_letters: set[str],
-                          prefix_tree: dict[str: set[str]]) -> list[str]:
+                          prefix_tree: dict[str, set[str]]) -> list[str]:
     """
     Recursive function to traverse through prefix tree to find all words formed by the given letters.
 
@@ -189,7 +189,7 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: set[str],
     return valid_words
 
 
-def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_tree: dict[str: set[str]]) -> list[
+def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_tree: dict[str, set[str]]) -> list[
     str]:
     """
     Uses a prefix tree to find all valid words. Each node in the tree is a string prefix and each path is a valid letter
@@ -205,7 +205,7 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
     return _traverse_prefix_tree('', center, set(center + others), prefix_tree)
 
 
-type NestedStrDict = dict[str: NestedStrDict | None]
+type NestedStrDict = dict[str, NestedStrDict | None]
 
 
 def preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
