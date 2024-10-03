@@ -14,7 +14,7 @@ benchmark_others = 'ctpnme'
 benchmarking_word_list = get_benchmarking_dictionary()
 
 bit_to_word_dict = preprocess_get_bit_to_word_dict(benchmarking_word_list)
-prefix_tree = preprocess_get_prefix_tree(benchmarking_word_list)
+prefix_tree = preprocess_get_prefix_tree('', benchmarking_word_list, {})
 radix_tree = preprocess_get_radix_tree(benchmarking_word_list, {})
 
 naive_solution_stmt = """

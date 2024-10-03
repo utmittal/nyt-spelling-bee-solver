@@ -12,7 +12,7 @@ benchmark_center = 'o'
 benchmark_others = 'ctpnme'
 benchmarking_word_list = get_benchmarking_dictionary()
 
-prefix_tree = preprocess_get_prefix_tree(benchmarking_word_list)
+prefix_tree = preprocess_get_prefix_tree('', benchmarking_word_list, {})
 radix_tree = preprocess_get_radix_tree(benchmarking_word_list, {})
 
 start = time.time()
@@ -36,7 +36,7 @@ print(
 
 small_dict = ["rot", "rob", "rat"]
 
-small_prefix_dict = preprocess_get_prefix_tree(small_dict)
+small_prefix_dict = preprocess_get_prefix_tree('', small_dict, {})
 print(small_prefix_dict)
 small_radix_dict = preprocess_get_radix_tree(small_dict, {})
 print(small_radix_dict)

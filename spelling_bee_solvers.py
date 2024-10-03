@@ -133,7 +133,10 @@ def get_bee_solutions_bitwise(center: str, others: str, bit_dictionary: dict[int
     return valid_bee_words
 
 
-def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str, set[str]]:
+type NestedStrDict = dict[str, NestedStrDict | None]
+
+
+def preprocess_get_prefix_tree(prefix: str, suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
     """
     Converts the list of words into a prefix tree (trie) where each node is a string prefix and each child represents
     a prefix that can be formed by adding a letter to the parent. I.e. Node 'ro' will have a path to 'rob' and a
@@ -147,25 +150,23 @@ def preprocess_get_prefix_tree(dictionary: list[str]) -> dict[str, set[str]]:
     This tree is represented as a prefix dictionary, where the keys are all possible prefixes and the values are the
     set of possible next characters corresponding to that prefix.
 
-    :param dictionary: list of words to use
+    :param suffix_list: list of words to use
     :return: dictionary of prefix to list of next characters
     """
-    big_massive_dict = {}
+    if suffix_list == ['']:
+        curr_dict['$'] = None  # '$' character to indicate end of word
+        return curr_dict
 
-    for word in dictionary:
-        word_with_end = word + "$"  # gives us an ending character to know the word has finished
-        word_length = len(word_with_end)
-        for i in range(1, word_length):
-            prefix, next_char = word_with_end[:i], word_with_end[i]
-            if prefix not in big_massive_dict:
-                big_massive_dict[prefix] = {next_char}
-            else:
-                big_massive_dict[prefix].add(next_char)
+    for suffix in suffix_list:
+        first_char = suffix[0]
 
-    # starting node
-    big_massive_dict[''] = set(string.ascii_lowercase)
+        if prefix + first_char in curr_dict:
+            curr_dict[prefix + first_char] = preprocess_get_prefix_tree(prefix + first_char, [suffix[1:]],
+                                                                        curr_dict[prefix + first_char])
+        else:
+            curr_dict[prefix + first_char] = preprocess_get_prefix_tree(prefix + first_char, [suffix[1:]], {})
 
-    return big_massive_dict
+    return curr_dict
 
 
 prefix_leaf_nodes_touched = [0]
@@ -198,10 +199,10 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
         prefix_max_depth[0] = depth_counter
 
     valid_words = []
-    start = time.time()
-    next_char_set = prefix_tree[prefix]
-    end = time.time()
-    prefix_find_next_chars[0] += (end - start)
+    # start = time.time()
+    # next_char_set = prefix_tree[prefix]
+    # end = time.time()
+    # prefix_find_next_chars[0] += (end - start)
 
     # # can't form a valid word
     # start = time.time()
@@ -214,7 +215,7 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
     # prefix_abort_early_time[0] += (end - start)
 
     start = time.time()
-    if '$' in next_char_set and center in prefix:
+    if '$' in prefix_tree and center in prefix:
         prefix_leaf_nodes_touched[0] += 1
         # with open(project_path('trie_leafs.txt'), 'a') as f:
         #     f.write(f"{prefix}\n")
@@ -222,10 +223,11 @@ def _traverse_prefix_tree(prefix: str, center: str, valid_letters: str | set[str
     end = time.time()
     prefix_add_words[0] += (end - start)
 
-    for letter in sorted(next_char_set):
-        if letter in valid_letters:
+    for pref in sorted(prefix_tree):
+        if pref[-1:] in valid_letters:
             valid_words.extend(
-                _traverse_prefix_tree(prefix + letter, center, valid_letters, prefix_tree, depth_counter))
+                _traverse_prefix_tree(pref, center, valid_letters, prefix_tree[pref],
+                                      depth_counter))
 
     return valid_words
 
@@ -244,9 +246,6 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
     _validate_character_args(center, others)
 
     return _traverse_prefix_tree('', center, set(center + others), prefix_tree, 0)
-
-
-type NestedStrDict = dict[str, NestedStrDict | None]
 
 
 def preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
