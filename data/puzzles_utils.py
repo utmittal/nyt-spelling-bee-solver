@@ -48,7 +48,7 @@ def write_puzzles_to_file(puzzle_list: list[NYTBeePuzzle]) -> None:
     for puzzle in puzzle_list:
         json_dict[puzzle.get_puzzle_date().strftime('%Y%m%d')] = {'center': puzzle.get_center(),
                                                                   'others': puzzle.get_others(),
-                                                                  'solutions': list(puzzle.get_solutions())}
+                                                                  'solutions': sorted(list(puzzle.get_solutions()))}
     with open(project_path('data/puzzles/scraped_puzzles.json'), 'w+') as f:
         json.dump(json_dict, f, indent=4, sort_keys=True)
 
