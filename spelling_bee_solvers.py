@@ -1,5 +1,7 @@
 import string
 
+type NestedStrDict = dict[str, NestedStrDict | None]
+
 
 def validate_character_args(center: str, others: str):
     if len(others) > len(set(others)):
@@ -205,7 +207,72 @@ def get_bee_solutions_prefix_tree(center: str, others: str | list[str], prefix_t
     return _traverse_prefix_tree('', center, set(center + others), prefix_tree)
 
 
-type NestedStrDict = dict[str, NestedStrDict | None]
+def preprocess_get_nested_prefix_tree(prefix: str, suffix_list: list[str], curr_tree: NestedStrDict) -> NestedStrDict:
+    """
+    Similar to `preprocess_get_prefix_tree`, converts the list of words into a prefix tree (trie) where each node is
+    a string prefix and each child represents a prefix that can be formed by adding a letter to the parent. However,
+    this tree is represented as a *nested* prefix dictionary, where the keys are prefixes and the values are
+    dictionaries whose keys are the child prefixes.
+
+    :param prefix: current prefix
+    :param suffix_list: current list of suffixes to evaluate
+    :param curr_tree: the prefix tree at this level of nesting
+    :return: the full nested prefix tree
+    """
+    if suffix_list == ['']:
+        curr_tree['$'] = None  # '$' character to indicate end of word
+        return curr_tree
+
+    for suffix in suffix_list:
+        new_prefix = prefix + suffix[0]
+
+        if new_prefix in curr_tree:
+            curr_tree[new_prefix] = preprocess_get_nested_prefix_tree(new_prefix, [suffix[1:]], curr_tree[new_prefix])
+        else:
+            curr_tree[new_prefix] = preprocess_get_nested_prefix_tree(new_prefix, [suffix[1:]], {})
+
+    return curr_tree
+
+
+def _traverse_nested_prefix_tree(current_prefix: str, center: str, valid_letters: str | set[str],
+                                 nested_prefix_tree: NestedStrDict) -> list[str]:
+    """
+    Recursive function to traverse through nested prefix tree to find all words formed by the given letters.
+
+    :param current_prefix: Current prefix string.
+    :param center: Central letter that must appear in a valid word
+    :param valid_letters: List of letters that we are trying to form words from.
+    :param nested_prefix_tree: Nested prefix tree to use as source of words
+    :return: list of words
+    """
+    valid_words = []
+    if '$' in nested_prefix_tree and center in current_prefix:
+        valid_words.append(current_prefix)
+
+    for child_prefix in nested_prefix_tree:
+        if child_prefix[-1:] in valid_letters:
+            valid_words.extend(
+                _traverse_nested_prefix_tree(child_prefix, center, valid_letters, nested_prefix_tree[child_prefix]))
+
+    return valid_words
+
+
+def get_bee_solutions_nested_prefix_tree(center: str, others: str | list[str], nested_prefix_tree: NestedStrDict) -> \
+        list[str]:
+    """
+    Uses a nested prefix tree to find all valid words. Each node in the tree is a string prefix and each path is a
+    valid letter
+    that can succeed the prefix.
+
+    :param center: Central character that must appear in word. Length = 1
+    :param others: Other characters that must appear in word. Excludes center character and must be of length = 6
+    :param nested_prefix_tree: dict of prefix strings to corresponding dictionaries where keys in child dictionaries
+    represent child prefixes
+    :return: list of solutions
+    """
+    validate_character_args(center, others)
+
+    return _traverse_nested_prefix_tree('', center, set(center + others), nested_prefix_tree)
 
 
 def preprocess_get_radix_tree(suffix_list: list[str], curr_dict: NestedStrDict) -> NestedStrDict:
