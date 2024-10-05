@@ -3246,6 +3246,7 @@ drippy
 droid
 droll
 drolly
+droning
 drool
 drooly
 droop
@@ -4659,6 +4660,7 @@ gray
 graying
 grazing
 grid
+gridiron
 griffin
 griffon
 grift
@@ -4697,6 +4699,7 @@ grouch
 grouchy
 ground
 groundhog
+grounding
 group
 grout
 grow
@@ -8567,7 +8570,9 @@ rototill
 rotund
 rotunda
 rough
+rouging
 round
+rounding
 roundup
 rout
 rowan
@@ -9396,6 +9401,7 @@ undid
 undimmed
 undivided
 undo
+undoing
 undone
 undoubted
 undue

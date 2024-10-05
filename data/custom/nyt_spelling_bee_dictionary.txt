@@ -19692,7 +19692,6 @@ griddles
 griddling
 gridiron
 gridironed
-gridironing
 gridirons
 grids
 grief
@@ -29938,7 +29937,6 @@ nonprint
 nonprofit
 nonracial
 nonrandom
-nonrigid
 nonroyal
 nonscoring
 nonseasonal
@@ -38049,7 +38047,6 @@ rocky
 rococo
 rococos
 rodded
-rodding
 rode
 rodent
 rodents
@@ -38269,6 +38266,7 @@ roughing
 roughly
 roughs
 roughshod
+rouging
 roulette
 rouletted
 roulettes
