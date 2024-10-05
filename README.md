@@ -79,6 +79,45 @@ Sample of prefix tree formed from a dictionary of english words:
 rot  rob     rat
 ```
 
+For this approach, I also ended up with two different implementations because the first one seemed slower than I
+expected it to be.
+
+#### Flat Dictionary Implementation
+
+All the prefixes are stored in one flat dictionary and the corresponding values are possible next letters. Example for
+the above tree:
+
+```
+{
+    r: {o, a},
+    ro: {t, b},
+    ra: {t},
+    rot: {$},
+    rob: {$},
+    rat: {$},
+}
+```
+
+#### Nested Dictionary Implementation
+
+The prefixes are stored in a nested dictionary where each prefix corresponds to a dictionary containing child prefixes.
+This was faster. Mostly because we are using recursion I think, and passing in the child dictionaries saves on access?
+Not entirely sure.
+
+```
+{
+    r: {
+        ro: {
+            rot: {$},
+            rob: {$},
+        }
+        ra: {
+            rat: {$},
+        }
+    },
+}
+```
+
 ### Radix Tree
 
 The [radix Tree](https://en.wikipedia.org/wiki/Radix_tree) is a variation of the prefix tree where instead of storing
@@ -108,12 +147,13 @@ repeated 5 times and the lowest value was taken (in line with best practices fro
 Note: any preprocessing steps were not counted in the time taken. Where a preprocessing step is anything that can be
 performed once regardless of the puzzle, such as generating the radix tree or prefix tree.
 
-| Algorithm   | Time (s)    | Speedup |
-|-------------|-------------|---------|
-| Naive       | 0.0556735   | 1.00    |
-| Bitwise     | 0.0133129   | 4.18    |
-| Prefix Tree | 0.00074135  | 75.10   |
-| Radix Tree  | 0.000483715 | 115.10  |
+| Algorithm          | Time (s)    | Speedup |
+|--------------------|-------------|---------|
+| Naive              | 0.0530078   | 1       |
+| Bitwise            | 0.0129828   | 4.08294 |
+| Prefix Tree        | 0.000655576 | 80.8569 |
+| Nested Prefix Tree | 0.000531249 | 99.7797 |
+| Radix Tree         | 0.000426973 | 124.148 |
 
 ## Note on dictionaries
 

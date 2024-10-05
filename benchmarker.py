@@ -73,10 +73,11 @@ print(tabulate([['Naive', naive_min, naive_min / naive_min],
 Iterations:		10000
 Repetitions:	5
 
-Strategy       Min Time (s)    Speedup
------------  --------------  ---------
-Naive           0.0556735      1
-Bitwise         0.0133129      4.18194
-Prefix Tree     0.00074135    75.0975
-Radix Tree      0.000483715  115.096
+Strategy              Min Time (s)    Speedup
+------------------  --------------  ---------
+Naive                  0.0530078      1
+Bitwise                0.0129828      4.08294
+Prefix Tree            0.000655576   80.8569
+Nested Prefix Tree     0.000531249   99.7797
+Radix Tree             0.000426973  124.148
 """
