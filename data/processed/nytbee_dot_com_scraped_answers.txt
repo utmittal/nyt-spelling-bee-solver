@@ -430,6 +430,7 @@ angelic
 angelica
 angina
 angle
+angled
 angling
 angora
 angry
@@ -515,6 +516,7 @@ aortal
 aortic
 apace
 apart
+apathetic
 apathy
 aped
 apeman
@@ -1525,6 +1527,7 @@ burbling
 burbot
 burg
 burgh
+burglar
 burglary
 burgling
 burgoo
@@ -1844,6 +1847,7 @@ chantey
 chanty
 chaotic
 chap
+chapati
 chapped
 chapping
 char
@@ -2670,6 +2674,8 @@ dandily
 dandling
 dandy
 dang
+dangle
+dangled
 dangling
 dank
 daphne
@@ -3286,6 +3292,7 @@ duet
 duetted
 duff
 duffel
+duffing
 duffle
 dugong
 dugout
@@ -3305,6 +3312,7 @@ dumbfound
 dumdum
 dummied
 dump
+dumped
 dunce
 dune
 dung
@@ -3605,6 +3613,8 @@ epicene
 epileptic
 epilog
 epiphany
+epitaph
+epithet
 epitome
 epoch
 epode
@@ -4129,6 +4139,7 @@ foldout
 folic
 folio
 folk
+folktale
 follow
 followed
 following
@@ -4184,6 +4195,7 @@ foul
 fouled
 foully
 found
+founding
 foundry
 fount
 four
@@ -4236,6 +4248,7 @@ fuddle
 fuddled
 fudge
 fudged
+fudging
 fuel
 fueled
 fueling
@@ -4251,6 +4264,7 @@ fumed
 function
 fund
 funded
+funding
 fungi
 fungo
 funnel
@@ -4471,6 +4485,8 @@ giving
 glace
 glacial
 glad
+gladden
+gladdened
 glade
 gladly
 glam
@@ -4488,6 +4504,7 @@ glazy
 gleam
 gleamy
 glean
+gleaned
 glee
 gleeful
 glen
@@ -4849,6 +4866,7 @@ happen
 happened
 happening
 happy
+haptic
 haram
 harbor
 hard
@@ -4988,6 +5006,8 @@ henchmen
 henge
 henna
 hennaed
+hepatic
+hepcat
 heptad
 heptane
 heptathlete
@@ -7111,6 +7131,7 @@ nene
 neocon
 neolith
 neon
+neonatal
 neonate
 neophyte
 nepenthe
@@ -7705,6 +7726,7 @@ patentable
 patentee
 patently
 path
+pathetic
 patience
 patient
 patina
@@ -8050,6 +8072,7 @@ pledge
 pledged
 plena
 plenty
+plenum
 pliable
 pliant
 pliantly
@@ -8287,6 +8310,7 @@ puma
 pummel
 pummeled
 pump
+pumped
 pumping
 punctuate
 pungency
@@ -8670,6 +8694,7 @@ tainting
 take
 takeback
 taken
+takeoff
 talc
 tale
 talent
@@ -9331,6 +9356,7 @@ ululate
 ululated
 umami
 umlaut
+umped
 umping
 umpiring
 umpteen

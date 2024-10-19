@@ -1436,7 +1436,6 @@ anesthetist
 anesthetists
 anew
 angel
-angeled
 angelic
 angelica
 angeling
@@ -7388,6 +7387,7 @@ chaotic
 chap
 chaparral
 chaparrals
+chapati
 chapbook
 chapeau
 chapeaus
@@ -18051,7 +18051,6 @@ funereal
 fungal
 fungi
 fungo
-fungoid
 fungous
 fungus
 funguses
@@ -20461,6 +20460,7 @@ happiness
 happinesses
 happy
 haps
+haptic
 haram
 harangue
 haranguing
@@ -21034,6 +21034,7 @@ hens
 heparin
 hepatic
 hepatitis
+hepcat
 hepper
 heppest
 heptad
@@ -33326,6 +33327,7 @@ plena
 plenary
 plenties
 plenty
+plenum
 pleura
 pleurae
 pleuras
@@ -34764,7 +34766,6 @@ puddled
 puddles
 puddling
 pudenda
-pudendum
 pudgier
 pudgy
 pueblo
