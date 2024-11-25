@@ -296,6 +296,7 @@ allege
 alleged
 allegedly
 allegiance
+alleging
 allele
 alleviate
 alleviated
@@ -450,6 +451,7 @@ anklet
 annal
 anneal
 annealed
+annealing
 annex
 annexed
 annihilate
@@ -1501,6 +1503,7 @@ bull
 bullet
 bulletin
 bullfrog
+bullheaded
 bullock
 bullring
 bully
@@ -1812,6 +1815,7 @@ cellmate
 cello
 cellule
 cement
+cemented
 cent
 centime
 cento
@@ -1861,6 +1865,8 @@ charring
 chart
 chary
 chat
+chateau
+chateaux
 chatroom
 chatty
 chaw
@@ -1928,6 +1934,7 @@ chintzy
 chip
 chipped
 chipping
+chirp
 chit
 chitchat
 chitin
@@ -3112,11 +3119,14 @@ dole
 doled
 doleful
 dolefully
+doling
 doll
 dollar
 dolled
 dollied
+dolling
 dollop
+dolloping
 dolly
 dolma
 dolor
@@ -3146,6 +3156,7 @@ doobie
 doodad
 doodle
 doodled
+doodling
 doom
 doomed
 doomy
@@ -3323,6 +3334,7 @@ dunning
 dunno
 duodenum
 duopoly
+duotone
 dupe
 duped
 duple
@@ -3360,6 +3372,7 @@ ebbing
 ebon
 ebony
 ebullient
+echelon
 echinacea
 echo
 echoic
@@ -3451,6 +3464,7 @@ elegant
 elegiac
 elegize
 elegized
+elegizing
 elegy
 element
 elemental
@@ -3538,6 +3552,7 @@ enclave
 encode
 encoded
 ended
+endemic
 endgame
 ending
 endive
@@ -3642,6 +3657,7 @@ etymon
 eunuch
 evade
 evaded
+evading
 evaluate
 evaluated
 even
@@ -4408,6 +4424,7 @@ gemology
 gene
 genealogy
 genetic
+genial
 genie
 genii
 genome
@@ -4505,6 +4522,7 @@ gleam
 gleamy
 glean
 gleaned
+gleaning
 glee
 gleeful
 glen
@@ -5444,6 +5462,7 @@ indicia
 indict
 indicted
 indicting
+indictment
 indie
 indigene
 indignant
@@ -5595,6 +5614,7 @@ inurning
 inutile
 invade
 invaded
+invading
 invalid
 invalidly
 invariant
@@ -5680,6 +5700,8 @@ jean
 jeep
 jejune
 jell
+jelly
+jellybean
 jenny
 jete
 jetted
@@ -6009,6 +6031,7 @@ leak
 leaked
 lean
 leaned
+leaning
 leanly
 leant
 leap
@@ -6032,6 +6055,7 @@ legal
 legality
 legalize
 legalized
+legalizing
 legally
 legate
 legatee
@@ -6157,10 +6181,13 @@ limo
 limp
 limpet
 limply
+linage
 linchpin
 line
+lineage
 lineal
 lineally
+lined
 linemen
 linen
 lineup
@@ -6258,6 +6285,7 @@ locution
 lode
 lodge
 lodged
+lodging
 loft
 logbook
 loge
@@ -6637,6 +6665,7 @@ mediated
 medic
 medicate
 medicated
+medicine
 medico
 medieval
 meditate
@@ -6669,6 +6698,7 @@ melty
 meme
 memed
 memento
+memetic
 meming
 memo
 menace
@@ -6715,6 +6745,7 @@ mice
 mick
 micro
 microcopy
+microcrack
 microfilm
 microform
 micromini
@@ -6728,6 +6759,7 @@ middling
 midge
 midi
 midland
+midline
 midpoint
 midrib
 midtown
@@ -6766,6 +6798,7 @@ mimicking
 mimicry
 miming
 mince
+minced
 mincing
 mind
 minded
@@ -7273,6 +7306,7 @@ noob
 noodging
 noodle
 noodled
+noodling
 noogie
 nook
 noon
@@ -7531,6 +7565,7 @@ outcrop
 outcry
 outdid
 outdo
+outdone
 outdoor
 outed
 outfit
@@ -7604,6 +7639,7 @@ pageant
 pageboy
 paged
 paginal
+paginating
 paging
 pagoda
 paid
@@ -7615,6 +7651,7 @@ paining
 painkilling
 paint
 paintball
+painting
 pair
 pairing
 palace
@@ -7639,6 +7676,7 @@ palling
 pallor
 palm
 palmed
+palmetto
 palmy
 palmyra
 palooka
@@ -7646,6 +7684,7 @@ palp
 palpable
 palpably
 palpate
+paltry
 pampa
 panacea
 panama
@@ -7670,6 +7709,7 @@ pant
 pantaloon
 pantheon
 pantie
+panting
 panty
 papa
 papacy
@@ -7715,6 +7755,7 @@ parry
 part
 participant
 partita
+partly
 partook
 party
 patch
@@ -7735,7 +7776,9 @@ patly
 patrician
 patriot
 patriotic
+patrol
 patted
+patting
 patty
 paunch
 paunchy
@@ -7755,6 +7798,7 @@ payee
 payment
 payola
 payphone
+payroll
 peace
 peaceable
 peach
@@ -7913,6 +7957,7 @@ picky
 picnic
 picnicked
 picot
+piddling
 piddly
 pidgin
 piece
@@ -8080,6 +8125,7 @@ plie
 plink
 plinking
 plod
+plodding
 plop
 plopping
 plot
@@ -8179,12 +8225,14 @@ pork
 porn
 porno
 port
+portal
 portfolio
 portico
 portion
 portly
 portrait
 portray
+portrayal
 potable
 potation
 potato
@@ -8384,6 +8432,8 @@ quintet
 quit
 quite
 quitting
+quote
+quoted
 quoting
 rabbi
 rabbinic
@@ -8464,6 +8514,7 @@ rapini
 rapping
 rapport
 rapt
+raptly
 raptor
 rarity
 ratatat
@@ -8745,9 +8796,11 @@ tanzanite
 tapa
 tape
 taped
+taping
 tapioca
 tapir
 tapped
+tapping
 taproot
 tarantula
 tardy
@@ -9134,6 +9187,7 @@ toponymy
 topped
 topping
 topple
+toque
 torah
 torch
 tori
@@ -9538,6 +9592,7 @@ unmuzzling
 unnatural
 unnaturally
 unneeded
+unnoted
 unopen
 unopened
 unpeeled
@@ -9552,6 +9607,8 @@ unpinned
 unpinning
 unpopular
 unquiet
+unquote
+unquoted
 unrig
 unrigging
 unroll

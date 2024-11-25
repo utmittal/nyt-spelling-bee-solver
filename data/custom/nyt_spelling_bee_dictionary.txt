@@ -1438,7 +1438,6 @@ anew
 angel
 angelic
 angelica
-angeling
 angels
 anger
 angered
@@ -5844,7 +5843,6 @@ bulleted
 bulletin
 bullets
 bullfrog
-bullhead
 bullheaded
 bullhorn
 bullied
@@ -13744,6 +13742,7 @@ duodenum
 duodenums
 duopoly
 duos
+duotone
 dupe
 duped
 duper
@@ -13855,7 +13854,6 @@ eagled
 eagles
 eaglet
 eaglets
-eagling
 earache
 earaches
 earbud
@@ -14270,6 +14268,7 @@ elegiacs
 elegies
 elegize
 elegized
+elegizing
 elegy
 element
 elemental
@@ -25757,7 +25756,6 @@ linage
 linages
 linchpin
 linchpins
-linden
 lindens
 line
 lineage
@@ -27443,7 +27441,6 @@ medicare
 medicate
 medicated
 medicine
-medicined
 medicines
 medicining
 medico
@@ -27534,6 +27531,7 @@ memento
 mementoes
 mementos
 memes
+memetic
 meming
 memo
 memoir
@@ -27788,6 +27786,7 @@ microcopy
 microcosm
 microcosmic
 microcosms
+microcrack
 microdot
 microfilm
 microform
@@ -27819,6 +27818,7 @@ midis
 midland
 midlands
 midlife
+midline
 midlives
 midmost
 midnight
@@ -33091,7 +33091,6 @@ pita
 pitapat
 pitapats
 pitapatted
-pitapatting
 pitas
 pitch
 pitched
@@ -33937,7 +33936,6 @@ powered
 powerless
 powers
 powwow
-powwowed
 powwows
 poxes
 practical
@@ -35058,7 +35056,6 @@ puzzler
 puzzlers
 puzzles
 puzzling
-pwned
 pwns
 pygmies
 pygmy
@@ -37740,7 +37737,6 @@ ricketier
 ricketiest
 rickets
 rickety
-rickrack
 rickracks
 ricks
 ricksha
@@ -48702,6 +48698,7 @@ unnerve
 unnerved
 unnerves
 unnerving
+unnoted
 unnumbered
 unopen
 unopened
